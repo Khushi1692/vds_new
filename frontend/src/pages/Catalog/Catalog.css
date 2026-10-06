@@ -4,11 +4,17 @@
 }
 
 .catalog__inner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
-  padding-top: var(--space-xl);
-  padding-bottom: var(--space-3xl);
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: var(--space-2xl);
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-4xl);
+}
+
+@media (max-width: 900px) {
+  .catalog__inner {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Catalog Hero Section */
@@ -74,60 +80,139 @@
   margin: 0 auto var(--space-xl);
 }
 
-/* ── Standalone Search Bar ── */
-.catalog__search-row {
+/* ── Sidebar Filters ── */
+.catalog__sidebar {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.filter-title {
+  font-family: var(--font-family-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-xs);
+}
+
+.filter-search-input {
   width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--ink);
+  transition: border-color var(--transition-fast);
 }
 
-.catalog__search-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 640px;
-}
-
-.catalog__search-icon {
-  position: absolute;
-  left: var(--space-md);
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-outline);
-  pointer-events: none;
-}
-
-.catalog__search {
-  width: 100%;
-  height: 54px;
-  padding: 0 var(--space-base) 0 46px;
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
-  border-radius: var(--radius-lg);
-  font-size: 16.5px;
-  color: var(--color-on-surface);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-  box-shadow: var(--shadow-1);
-}
-
-.catalog__search:focus {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-2);
+.filter-search-input:focus {
   outline: none;
+  border-color: var(--blue);
 }
 
-.catalog__search::placeholder {
-  color: var(--color-outline);
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.filter-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  margin-right: 12px;
+  background: transparent;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.filter-checkbox::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--blue);
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  border-radius: 2px;
+}
+
+.filter-checkbox:checked {
+  border-color: var(--blue);
+}
+
+.filter-checkbox:checked::before {
+  transform: scale(1);
+}
+
+.filter-checkbox-text {
+  flex-grow: 1;
+}
+
+.filter-checkbox-count {
+  color: var(--blue);
+  font-family: var(--font-family-mono);
+  font-size: 14px;
+}
+
+/* ── Catalog Main Content ── */
+.catalog__main {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Results Bar ── */
 .catalog__results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--space-md);
   border-bottom: 1px solid var(--color-outline-variant);
   padding-bottom: var(--space-sm);
 }
 
+.catalog__clear-filters {
+  color: var(--blue);
+  font-family: var(--font-family-base);
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.catalog__clear-filters:hover {
+  color: var(--cyan);
+}
+
 .catalog__count {
-  font-size: 16px;
+  font-family: var(--font-family-mono);
+  font-size: 14px;
   color: var(--color-on-surface-variant);
 }
 

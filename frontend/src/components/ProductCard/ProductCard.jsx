@@ -93,7 +93,7 @@ export default function ProductCard({
         </div>
         {product.bulkOrderAvailable && (
           <Link to={`/request-quote?product=${product.id}`} className="product-card__bulk-order">
-            Bulk Order? Request a Quote <ArrowRight size={14} />
+            Bulk Order? Talk to us <ArrowRight size={14} />
           </Link>
         )}
       </div>

@@ -25,6 +25,12 @@ import {
 import Button from '../../components/Button/Button';
 import './AboutUs.css';
 import aboutUsImg from '../../assets/aboutus.webp';
+import foundersImg from '../../assets/founders_vds.jpg';
+import imgHospitals from '../../assets/imaging_hospitals.jpg';
+import imgHospitalsDept from '../../assets/hospital_departments.jpg';
+import imgGp from '../../assets/gp_allied_health.jpg';
+import imgPhysio from '../../assets/physio_sports.jpg';
+import imgAgedCare from '../../assets/aged_care.jpg';
 
 export default function AboutUs() {
   useEffect(() => {
@@ -68,66 +74,30 @@ export default function AboutUs() {
   return (
     <>
       <main className="about-page">
-        {/* Hero Section */}
-        <section className="about-page__hero">
-          <div className="container about-page__hero-inner">
-            <div className="about-page__hero-content">
-              <span className="about-page__badge">About Us</span>
-              <h1 className="about-page__hero-title">A different starting question</h1>
-              <p className="about-page__hero-subtitle">
-                Victoria Diagnostic Supplies (VDS) supplies medical consumables and radiology equipment to Australian clinics, hospitals and imaging departments. 
-                That's the core of the business — real product, held and delivered reliably.
+        {/* New Founders Hero Section */}
+        <section className="about-page__hero-new">
+          <div className="container">
+            <div className="about-page__hero-new-header">
+              <h1 className="about-page__hero-new-title">Started by people<br/>who've worked the floor.</h1>
+              <p className="about-page__hero-new-subtitle">
+                VDS is an Australian-owned importer of medical consumables and clinical equipment, based in Clyde North, Victoria.
               </p>
-              <p className="about-page__hero-secondary">
-                We've built direct relationships with manufacturers and OEM partners, which means that when a standard product isn't quite the right fit — a configuration, a private-label version, something genuinely hard to find — we're usually able to find a path, rather than turning the request away.
-              </p>
-              
-              <div className="about-page__hero-actions">
-                <Button as={Link} to="/products" variant="primary" size="lg" iconRight={ArrowRight}>
-                  Browse Range
-                </Button>
-                <Button as={Link} to="/request-quote" variant="secondary" size="lg">
-                  Inquire B2B
-                </Button>
-              </div>
-
-              <div className="about-page__hero-stats">
-                <div>
-                  <strong>Direct OEMs</strong>
-                  <span>Direct manufacturer connection</span>
-                </div>
-                <div>
-                  <strong>True Stock</strong>
-                  <span>Held in Australian warehouses</span>
-                </div>
-                <div>
-                  <strong>Tailored</strong>
-                  <span>Custom sizes & solutions</span>
-                </div>
-              </div>
             </div>
-
-            <div className="about-page__hero-widget">
-              <div className="network-card">
-                <div className="network-card__glass">
-                  {/* Corner accents */}
-                  <span className="ncp1"></span>
-                  <span className="ncp2"></span>
-                  <span className="ncp3"></span>
-                  <span className="ncp4"></span>
-                  <span className="ncp5"></span>
-
-                  {/* Sweeping Glass Reflection Shine */}
-                  <div className="network-card-shine"></div>
-
-                  <div className="network-card__visual">
-                    <img 
-                      src={aboutUsImg} 
-                      alt="Victoria Diagnostic Supplies (VDS) Team and Facility" 
-                      className="network-card__image"
-                    />
-                  </div>
-                </div>
+            
+            <div className="about-page__hero-new-split">
+              <div className="about-page__hero-new-image-wrapper">
+                <img src={foundersImg} alt="VDS Founders" className="about-page__hero-new-img" />
+              </div>
+              <div className="about-page__hero-new-content">
+                <p>
+                  Harsh is an endorsed enrolled nurse who has led clinical teams in hospitals and aged care. Raghav brings the commercial side. Together they started VDS after seeing the same problem from both ends: clinics paying several layers of margin for everyday consumables, and getting slow answers when something went wrong.
+                </p>
+                <p>
+                  So we went to the source. We import directly from manufacturers, we hold ARTG sponsorship ourselves, and we supply clinics across Australia without the reseller chain in between.
+                </p>
+                <p>
+                  We're a young company, and we'd rather say so than dress it up. What we offer is direct pricing, people who know the products, and paperwork you can check.
+                </p>
               </div>
             </div>
           </div>
@@ -338,69 +308,59 @@ export default function AboutUs() {
               </p>
             </div>
 
-            <div className="facilities-cards-wrapper">
-              {/* Imaging centres */}
-              <div className="facility-card">
-                <div className="facility-card__icon-wrap">
-                  <Scan size={24} />
+            <div className="facilities-photo-grid">
+              {/* RAD */}
+              <div className="facility-photo-card" style={{ backgroundImage: `url(${imgHospitals})` }}>
+                <div className="facility-photo-card__overlay">
+                  <span className="facility-photo-card__badge">RAD</span>
+                  <div className="facility-photo-card__content">
+                    <h3 className="facility-photo-card__title">Radiology & imaging centres</h3>
+                    <p className="facility-photo-card__desc">Gel, protection, probe disinfection and MRI transfer for busy rooms.</p>
+                  </div>
                 </div>
-                <div className="facility-card__body">
-                  <h3 className="facility-card__title">Imaging centres</h3>
-                  <p className="facility-card__desc">
-                    High-volume consumables on standing orders, so the list runs on time.
-                  </p>
+              </div>
+              
+              {/* HOS */}
+              <div className="facility-photo-card" style={{ backgroundImage: `url(${imgHospitalsDept})` }}>
+                <div className="facility-photo-card__overlay">
+                  <span className="facility-photo-card__badge">HOS</span>
+                  <div className="facility-photo-card__content">
+                    <h3 className="facility-photo-card__title">Hospital imaging departments</h3>
+                    <p className="facility-photo-card__desc">Documentation-first supply for procurement teams.</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Hospital departments */}
-              <div className="facility-card">
-                <div className="facility-card__icon-wrap">
-                  <Hospital size={24} />
-                </div>
-                <div className="facility-card__body">
-                  <h3 className="facility-card__title">Hospital departments</h3>
-                  <p className="facility-card__desc">
-                    Supplier documents ready for your procurement team, and a contact who knows your account.
-                  </p>
+              {/* GP */}
+              <div className="facility-photo-card" style={{ backgroundImage: `url(${imgGp})` }}>
+                <div className="facility-photo-card__overlay">
+                  <span className="facility-photo-card__badge">GP</span>
+                  <div className="facility-photo-card__content">
+                    <h3 className="facility-photo-card__title">GP & specialist clinics</h3>
+                    <p className="facility-photo-card__desc">Everyday clinical consumables without the wholesaler markup.</p>
+                  </div>
                 </div>
               </div>
 
-              {/* GP clinics */}
-              <div className="facility-card">
-                <div className="facility-card__icon-wrap">
-                  <Stethoscope size={24} />
-                </div>
-                <div className="facility-card__body">
-                  <h3 className="facility-card__title">GP clinics</h3>
-                  <p className="facility-card__desc">
-                    The imaging and exam essentials, without minimum orders built for hospitals.
-                  </p>
+              {/* AH */}
+              <div className="facility-photo-card" style={{ backgroundImage: `url(${imgPhysio})` }}>
+                <div className="facility-photo-card__overlay">
+                  <span className="facility-photo-card__badge">AH</span>
+                  <div className="facility-photo-card__content">
+                    <h3 className="facility-photo-card__title">Allied health</h3>
+                    <p className="facility-photo-card__desc">Gel, sheets and gowns for physio, sports and sonography practices.</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Allied health */}
-              <div className="facility-card">
-                <div className="facility-card__icon-wrap">
-                  <HeartPulse size={24} />
-                </div>
-                <div className="facility-card__body">
-                  <h3 className="facility-card__title">Allied health</h3>
-                  <p className="facility-card__desc">
-                    Ultrasound and treatment-room supplies for physio, sports medicine and sonography.
-                  </p>
-                </div>
-              </div>
-
-              {/* Aged care */}
-              <div className="facility-card">
-                <div className="facility-card__icon-wrap">
-                  <Heart size={24} />
-                </div>
-                <div className="facility-card__body">
-                  <h3 className="facility-card__title">Aged care</h3>
-                  <p className="facility-card__desc">
-                    Linen, gowns and warming equipment from a team that has worked in aged care.
-                  </p>
+              {/* AC */}
+              <div className="facility-photo-card" style={{ backgroundImage: `url(${imgAgedCare})` }}>
+                <div className="facility-photo-card__overlay">
+                  <span className="facility-photo-card__badge">AC</span>
+                  <div className="facility-photo-card__content">
+                    <h3 className="facility-photo-card__title">Aged care</h3>
+                    <p className="facility-photo-card__desc">Warming cabinets, gowns and sheets for residential care.</p>
+                  </div>
                 </div>
               </div>
             </div>

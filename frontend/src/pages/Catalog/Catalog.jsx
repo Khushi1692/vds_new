@@ -6,11 +6,19 @@ import { fetchProducts } from '../../data/products';
 import './Catalog.css';
 
 export default function Catalog() {
-  const [searchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const activeCat = searchParams.get('cat') || 'all';
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q !== null) {
+      setSearchQuery(q);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     document.title = "Radiology Supplies | VDS — Victoria Diagnostic Supplies";
@@ -33,10 +41,55 @@ export default function Catalog() {
     });
   }, []);
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const categoryCounts = useMemo(() => {
+    const predefinedCategories = [
+      "Imaging consumables",
+      "Radiation protection",
+      "Infection prevention",
+      "Patient & contrast warming",
+      "Patient transfer",
+      "Linen & apparel"
+    ];
+
+    const counts = {};
+    predefinedCategories.forEach(cat => counts[cat] = 0);
+
+    products.forEach(p => {
+      if (!p.category) return;
+      const match = predefinedCategories.find(c => c.toLowerCase() === p.category.toLowerCase());
+      if (match) {
+        counts[match] += 1;
+      } else {
+        counts[p.category] = (counts[p.category] || 0) + 1;
+      }
+    });
+
+    const extraCategories = Object.keys(counts)
+      .filter(c => !predefinedCategories.includes(c))
+      .sort((a, b) => a.localeCompare(b));
+    
+    return [
+      ...predefinedCategories.map(cat => [cat, counts[cat]]),
+      ...extraCategories.map(cat => [cat, counts[cat]])
+    ];
+  }, [products]);
+
+  const handleCategoryChange = (cat) => {
+    setSelectedCategories(prev => 
+      prev.includes(cat) 
+        ? prev.filter(c => c !== cat) 
+        : [...prev, cat]
+    );
+  };
+
   const filtered = useMemo(() => {
     let result = [...products];
 
-    if (activeCat !== 'all') {
+    if (selectedCategories.length > 0) {
+      result = result.filter(p => selectedCategories.includes(p.category));
+    } else if (activeCat !== 'all') {
       result = result.filter((p) => p.category === activeCat);
     }
 
@@ -51,7 +104,15 @@ export default function Catalog() {
     }
 
     return result;
-  }, [products, activeCat, searchQuery]);
+  }, [products, activeCat, searchQuery, selectedCategories]);
+
+  const handleClearFilters = () => {
+    setSelectedCategories([]);
+    setSearchQuery('');
+    setSearchParams({});
+  };
+
+  const hasFilters = selectedCategories.length > 0 || searchQuery.trim() !== '' || activeCat !== 'all';
 
   return (
     <>
@@ -64,32 +125,59 @@ export default function Catalog() {
             <p className="catalog__lead">
               Certified radiology consumables and equipment developed using state-of-the-art scientific innovation.
             </p>
-            {/* Standalone Search Bar within Hero */}
-            <div className="catalog__search-row">
-              <div className="catalog__search-wrap">
-                <Search size={18} className="catalog__search-icon" />
-                <input
-                  type="text"
-                  className="catalog__search"
-                  placeholder="Search radiology consumables, accessories, SKUs..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
           </div>
         </section>
 
         <div className="container catalog__inner">
+          {/* Sidebar */}
+          <aside className="catalog__sidebar">
+            <div className="filter-group">
+              <h3 className="filter-title">Search</h3>
+              <input
+                type="text"
+                className="filter-search-input"
+                placeholder="Product, use or clinical term"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            
+            <div className="filter-group">
+              <h3 className="filter-title">CATEGORY</h3>
+              <div className="filter-options">
+                {categoryCounts.map(([cat, count]) => (
+                  <label key={cat} className="filter-checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      className="filter-checkbox"
+                      checked={selectedCategories.includes(cat)}
+                      onChange={() => handleCategoryChange(cat)}
+                    />
+                    <span className="filter-checkbox-text">{cat}</span>
+                    <span className="filter-checkbox-count">{count}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </aside>
+
           {/* Catalog Main Content */}
           <div className="catalog__main">
             {/* Results Count bar */}
             <div className="catalog__results-bar">
               <span className="catalog__count">
                 {loading ? 'Loading catalog items...' : (
-                  <>Showing <strong>{filtered.length}</strong> clinical consumables & equipment</>
+                  <>{filtered.length} of {products.length} product lines</>
                 )}
               </span>
+              <button 
+                className="catalog__clear-filters" 
+                onClick={handleClearFilters}
+                style={{ opacity: hasFilters ? 1 : 0.4, cursor: hasFilters ? 'pointer' : 'default' }}
+                disabled={!hasFilters}
+              >
+                Clear filters
+              </button>
             </div>
 
             <div className="catalog__grid">

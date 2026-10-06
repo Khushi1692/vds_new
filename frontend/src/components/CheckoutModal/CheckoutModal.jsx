@@ -123,7 +123,13 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
         },
         body: JSON.stringify({ items, userId: user.id })
       })
-      .then(res => res.json())
+      .then(async res => {
+        const data = await res.json();
+        if (res.status === 401) {
+          throw new Error('Your session has expired. Please sign out and sign in again.');
+        }
+        return data;
+      })
       .then(data => {
         if (data.clientSecret) {
           setClientSecret(data.clientSecret);
@@ -133,7 +139,7 @@ export default function CheckoutModal({ isOpen, onClose, cartItems, totalAmount,
         }
       })
       .catch(err => {
-        setError('Network error');
+        setError(err.message === 'Failed to fetch' ? 'Network error' : err.message);
       });
     }
   }, [isOpen, cartItems, user, token]);

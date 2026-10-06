@@ -107,7 +107,8 @@ export default function Footer() {
           <ul className="footer__list">
             <li><Link to="/categories">Categories</Link></li>
             <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/request-quote">Request Quote</Link></li>
+            <li><Link to="/why-vds">Why VDS</Link></li>
+            <li><Link to="/request-quote">Talk to Us</Link></li>
           </ul>
         </div>
 

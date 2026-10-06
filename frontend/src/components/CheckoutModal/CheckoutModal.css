@@ -81,7 +81,7 @@ textarea.checkout-input {
 
 .checkout-pay-btn {
   margin-top: 1rem;
-  background: #66bb6a;
+  background: var(--blue);
   color: white;
   border: none;
   padding: 16px;

@@ -118,6 +118,20 @@ export default function Header() {
           >
             About Us
           </NavLink>
+          <NavLink
+            to="/why-vds"
+            className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            Why VDS
+          </NavLink>
+          <NavLink
+            to="/quality"
+            className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            Quality & ARTG
+          </NavLink>
 
           {/* Mobile-only CTA */}
           <div className="header__mobile-cta">
@@ -136,7 +150,7 @@ export default function Header() {
               className="header__btn-quote"
               onClick={() => setMobileOpen(false)}
             >
-              <span>Request Quote</span>
+              <span>Talk to Us</span>
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -207,7 +221,7 @@ export default function Header() {
                     onClick={() => setDropdownOpen(false)}
                   >
                     <FileText size={17} className="header__dropdown-icon" />
-                    <span>Request Custom Quote</span>
+                    <span>Talk to Us</span>
                   </Link>
 
                   <Link
@@ -250,7 +264,7 @@ export default function Header() {
             to="/request-quote"
             className="header__btn-quote header__btn-quote--desktop"
           >
-            <span>Request Quote</span>
+            <span>Talk to Us</span>
             <ArrowRight size={15} />
           </Link>
 
