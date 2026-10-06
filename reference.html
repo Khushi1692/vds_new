@@ -1,0 +1,1161 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Victoria Diagnostic Supplies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a cool "lightbox" ground on a 12-column grid. Dark scanner plates carry the imaging world; everything else is quiet, precise, data-led. */
+:root{
+  --bg:#F1F3F6; --surface:#FFFFFF; --sunk:#E6EAF0; --ink:#0D1520; --muted:#566273; --line:#D5DBE3;
+  --accent:#2236D4; --accent-soft:#E2E6FF; --on-accent:#FFFFFF;
+  --warm:#B35A12; --ok:#16704A; --ok-soft:#DCF0E5; --warn:#8A5A00; --warn-soft:#F7EBD2;
+  --plate:#0A1019; --plate-ink:#C7D2E4; --plate-dim:#5E6C82;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"Hanken Grotesk","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --s-1:.75rem; --s0:1rem; --s1:1.25rem; --s2:1.6rem; --s3:2.2rem; --s4:3.1rem; --s5:4.4rem;
+  --r:6px; --wrap:1240px; --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A0F16; --surface:#111924; --sunk:#0D141D; --ink:#E7ECF3; --muted:#95A2B5; --line:#223041;
+  --accent:#8C9EFF; --accent-soft:#1A2350; --on-accent:#0A0F16;
+  --warm:#F0A35E; --ok:#62D39C; --ok-soft:#10301F; --warn:#F2C46B; --warn-soft:#33270C;
+  --plate:#04070C; --plate-ink:#BAC7DC; --plate-dim:#56637A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A0F16; --surface:#111924; --sunk:#0D141D; --ink:#E7ECF3; --muted:#95A2B5; --line:#223041;
+  --accent:#8C9EFF; --accent-soft:#1A2350; --on-accent:#0A0F16;
+  --warm:#F0A35E; --ok:#62D39C; --ok-soft:#10301F; --warn:#F2C46B; --warn-soft:#33270C;
+  --plate:#04070C; --plate-ink:#BAC7DC; --plate-dim:#56637A; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--on-accent);padding:.6rem 1rem;z-index:100}
+.skip:focus{left:1rem}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+h1,h2,h3{font-family:var(--f-display);font-stretch:115%;font-weight:700;letter-spacing:-.02em;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.3rem,5.6vw,4.6rem)}
+h2{font-size:clamp(1.7rem,3.4vw,2.7rem)}
+h3{font-size:1.2rem;font-stretch:105%;letter-spacing:-.01em;line-height:1.2}
+p{margin:0;max-width:65ch}
+.lede{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--muted);max-width:56ch}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:.6rem;align-items:center}
+.eyebrow::before{content:"";width:18px;height:1px;background:currentColor}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.stack{display:grid;gap:var(--s0)}
+.stack-lg{display:grid;gap:var(--s2)}
+section.band{padding-block:clamp(3rem,7vw,6rem)}
+.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+/* Buttons */
+.btn{--b:var(--ink);display:inline-flex;align-items:center;gap:.55rem;font:600 .95rem/1 var(--f-body);padding:.85rem 1.2rem;border-radius:var(--r);border:1px solid var(--b);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer;transition:background .2s var(--ease),color .2s,transform .2s var(--ease)}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn.small{padding:.55rem .8rem;font-size:.85rem}
+.btn .arr{transition:transform .2s var(--ease)}
+.btn:hover .arr{transform:translateX(3px)}
+.link{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;background:none;border:0;padding:0;font:inherit;cursor:pointer}
+.chip{display:inline-flex;align-items:center;gap:.4rem;font:500 .72rem/1 var(--f-mono);letter-spacing:.04em;padding:.38rem .55rem;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.chip.ok::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.ask{background:var(--sunk);border-color:transparent}
+.chip.now{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.next{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.chip.later{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+
+/* Header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.hdr .wrap{display:flex;align-items:center;gap:1.25rem;height:68px}
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;flex-shrink:0}
+.logo-mark{width:30px;height:30px}
+.logo-word{font:800 1.25rem/1 var(--f-display);font-stretch:125%;letter-spacing:.02em}
+.logo-sub{font:500 .62rem/1.15 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);padding-left:.6rem}
+.nav{display:flex;gap:.2rem;margin-left:auto}
+.nav a{font-size:.92rem;font-weight:500;text-decoration:none;padding:.5rem .7rem;border-radius:var(--r);color:var(--muted);transition:color .15s}
+.nav a:hover,.nav a[aria-current="page"]{color:var(--ink)}
+.nav a[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
+.tools{display:flex;gap:.5rem;align-items:center}
+.icon-btn{display:inline-flex;align-items:center;gap:.45rem;height:40px;padding:0 .75rem;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .85rem var(--f-body);cursor:pointer}
+.icon-btn:hover{border-color:var(--ink)}
+.icon-btn kbd{font:500 .7rem var(--f-mono);color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:.1rem .3rem}
+.count{min-width:1.3rem;height:1.3rem;border-radius:999px;background:var(--accent);color:var(--on-accent);font:600 .72rem/1.3rem var(--f-mono);text-align:center;padding:0 .3rem}
+.count[data-n="0"]{background:var(--sunk);color:var(--muted)}
+.menu-btn{display:none}
+@media (max-width:1080px){.nav{display:none}.menu-btn{display:inline-flex}.tools{margin-left:auto}.hide-md{display:none}}
+@media (max-width:560px){.logo-sub{display:none}.icon-btn .lbl{display:none}.icon-btn kbd{display:none}}
+
+/* Drawer */
+.drawer{position:fixed;inset:0;z-index:60;display:grid;grid-template-columns:1fr min(420px,100%)}
+.drawer .scrim{background:color-mix(in srgb,var(--ink) 40%,transparent)}
+.drawer nav{background:var(--surface);padding:calc(env(safe-area-inset-top,0px) + 1.25rem) 1.5rem 2rem;overflow:auto;display:grid;align-content:start;gap:.2rem}
+.drawer nav a{font:600 1.35rem/1.2 var(--f-display);font-stretch:110%;text-decoration:none;padding:.65rem 0;border-bottom:1px solid var(--line)}
+.drawer nav a.minor{font:500 1rem var(--f-body);border:0;padding:.4rem 0;color:var(--muted)}
+
+/* Hero */
+.hero{padding-block:clamp(2.2rem,5vw,4.5rem) clamp(2rem,4vw,3.5rem)}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(1.5rem,4vw,4rem);align-items:center}
+.hero-grid>*{min-width:0}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:.75rem}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+
+.plate{position:relative;background:var(--plate);color:var(--plate-ink);border-radius:10px;overflow:hidden;aspect-ratio:5/4;max-width:100%;box-shadow:0 30px 60px -30px rgba(10,16,25,.55)}
+.plate canvas{position:absolute;inset:0;width:100%;height:100%}
+.plate .hud{position:absolute;inset:0;padding:clamp(.8rem,2vw,1.2rem);display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;font:500 .68rem/1.5 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.hud-row{display:flex;justify-content:space-between;gap:1rem}
+.hud-dim{color:var(--plate-dim)}
+.hud .tag{color:var(--plate-ink);border:1px solid rgba(199,210,228,.25);padding:.25rem .45rem;border-radius:3px;display:inline-block}
+.hud-scale{display:flex;flex-direction:column;gap:.25rem;align-items:flex-end}
+
+.searchbar{display:flex;align-items:center;gap:.6rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.35rem .35rem .35rem 1rem;max-width:560px;box-shadow:0 1px 0 var(--line)}
+.searchbar:focus-within{border-color:var(--accent)}
+.searchbar input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 1rem var(--f-body);padding:.6rem 0;outline:none}
+.searchbar svg{flex-shrink:0;color:var(--muted)}
+
+.trust{border-block:1px solid var(--line);background:var(--surface)}
+.trust .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.trust div{padding:1.1rem 1rem;border-left:1px solid var(--line);display:grid;gap:.15rem}
+.trust div:first-child{border-left:0;padding-left:0}
+.trust b{font:600 .95rem var(--f-body)}
+.trust span{font:400 .75rem var(--f-mono);color:var(--muted);letter-spacing:.03em}
+@media (max-width:800px){.trust .wrap{grid-template-columns:1fr 1fr}.trust div:nth-child(3){border-left:0;padding-left:0}.trust div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+/* Section heads */
+.shead{display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:end;margin-bottom:clamp(1.6rem,3vw,2.6rem)}
+.shead>*{min-width:0}
+@media (max-width:700px){.shead{grid-template-columns:1fr}}
+
+/* Category grid */
+.cats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cat{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.4rem 1.4rem 1.2rem;text-decoration:none;display:grid;grid-template-columns:1fr 84px;gap:.6rem 1rem;align-items:start;background:var(--surface);transition:background .2s}
+.cat:hover{background:var(--accent-soft)}
+.cat h3{grid-column:1}
+.cat p{grid-column:1;font-size:.92rem;color:var(--muted)}
+.cat .art{grid-column:2;grid-row:1/4;width:84px;height:84px;color:var(--ink)}
+.cat .n{grid-column:1;font:500 .72rem var(--f-mono);color:var(--muted);letter-spacing:.05em}
+@media (max-width:900px){.cats{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.cats{grid-template-columns:1fr}}
+.art .acc{stroke:var(--accent)}
+.art .accf{fill:var(--accent);stroke:none}
+.art .warmf{fill:var(--warm);stroke:none}
+.art .warm{stroke:var(--warm)}
+.art .dim{stroke:var(--muted);stroke-width:1}
+.art text{fill:var(--accent);stroke:none;font:600 13px var(--f-mono)}
+
+/* Pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.2rem,3vw,2.5rem)}
+.pillar{display:grid;gap:.7rem;align-content:start;border-top:2px solid var(--ink);padding-top:1.1rem}
+.pillar .k{font:500 .72rem var(--f-mono);letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+.pillar p{color:var(--muted)}
+@media (max-width:860px){.pillars{grid-template-columns:1fr}}
+
+/* Supply chain diagram */
+.chain{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:clamp(1.2rem,3vw,2rem);overflow-x:auto}
+.chain svg{display:block;min-width:620px;width:100%;height:auto}
+.chain text{font-family:var(--f-mono);font-size:12px}
+.chain .t-ink{fill:var(--ink)}
+.chain .t-muted{fill:var(--muted)}
+.chain .t-acc{fill:var(--accent)}
+.chain .box{fill:var(--bg);stroke:var(--line)}
+.chain .box-acc{fill:var(--accent);stroke:none}
+.chain .box-strike{fill:var(--sunk);stroke:var(--line);stroke-dasharray:3 3}
+.chain .ln{stroke:var(--muted);stroke-width:1.2;fill:none}
+.chain .ln-acc{stroke:var(--accent);stroke-width:2;fill:none}
+.chain .on-acc{fill:var(--on-accent)}
+
+/* Invoice match */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,4rem);background:var(--ink);color:var(--bg);border-radius:12px;padding:clamp(1.6rem,4vw,3.5rem)}
+.match>*{min-width:0}
+.match .lede{color:color-mix(in srgb,var(--bg) 72%,var(--ink))}
+.match ol{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.match li{display:grid;grid-template-columns:2.4rem 1fr;gap:.8rem;padding:1rem 0;border-top:1px solid color-mix(in srgb,var(--bg) 18%,var(--ink))}
+.match li b{display:block;font-weight:600}
+.match li span{color:color-mix(in srgb,var(--bg) 70%,var(--ink));font-size:.93rem}
+.match .num{font:500 .8rem var(--f-mono);color:color-mix(in srgb,var(--accent) 60%,var(--bg))}
+.match .btn{border-color:var(--bg);color:var(--bg)}
+.match .btn.primary{background:var(--bg);color:var(--ink)}
+@media (max-width:860px){.match{grid-template-columns:1fr}}
+
+/* Industries */
+.inds{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.ind{background:var(--surface);padding:1.3rem 1.1rem;text-decoration:none;display:grid;gap:.6rem;align-content:space-between;min-height:190px;transition:background .2s}
+.ind:hover{background:var(--accent-soft)}
+.ind .code{font:500 .72rem var(--f-mono);color:var(--muted)}
+.ind h3{font-size:1.05rem}
+.ind p{font-size:.86rem;color:var(--muted)}
+@media (max-width:1000px){.inds{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.inds{grid-template-columns:1fr}.ind{min-height:0}}
+
+/* Founder strip */
+.founder{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.2rem,4vw,3rem);align-items:start}
+.founder blockquote{margin:0;font:600 clamp(1.3rem,2.6vw,2rem)/1.25 var(--f-display);font-stretch:105%;letter-spacing:-.01em;max-width:30ch;text-wrap:balance}
+.founder .meta{margin-top:1rem;color:var(--muted);font-size:.95rem}
+.monogram{width:clamp(72px,10vw,120px);aspect-ratio:1;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font:700 1.6rem var(--f-display);font-stretch:125%;color:var(--accent)}
+.imgslot{position:relative;background:repeating-linear-gradient(135deg,var(--sunk) 0 10px,var(--bg) 10px 20px);border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;text-align:center;padding:1.2rem;color:var(--muted);font:500 .75rem/1.5 var(--f-mono);letter-spacing:.03em;min-height:220px}
+.imgslot b{display:block;color:var(--ink);font-weight:500;margin-bottom:.3rem}
+
+/* Page head */
+.phead{padding-block:clamp(2.2rem,5vw,4rem) clamp(1.6rem,3vw,2.6rem);border-bottom:1px solid var(--line)}
+.crumbs{font:500 .75rem var(--f-mono);color:var(--muted);display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{color:var(--ink)}
+
+/* Catalogue */
+.cat-layout{display:grid;grid-template-columns:240px 1fr;gap:clamp(1.5rem,3vw,3rem);padding-block:2rem 4rem}
+.cat-layout>*{min-width:0}
+.filters{display:grid;gap:1.6rem;align-content:start;position:sticky;top:calc(env(safe-area-inset-top,0px) + 90px)}
+.filters fieldset{border:0;padding:0;margin:0;display:grid;gap:.45rem}
+.filters legend{font:500 .72rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.check{display:flex;gap:.6rem;align-items:center;font-size:.93rem;cursor:pointer}
+.check input{accent-color:var(--accent);width:16px;height:16px}
+.check .c{margin-left:auto;font:400 .75rem var(--f-mono);color:var(--muted)}
+select,input[type=text],input[type=email],input[type=tel],input[type=number],textarea{font:500 .95rem var(--f-body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:.7rem .8rem;width:100%}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.results-bar{display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;margin-block:1rem 1.2rem}
+.grid-prod{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;transition:border-color .2s,transform .25s var(--ease)}
+.pcard:hover{border-color:var(--ink);transform:translateY(-2px)}
+.pcard .vis{position:relative;background:var(--bg);aspect-ratio:4/3;display:grid;place-items:center;border-bottom:1px solid var(--line)}
+.pcard .vis .art{width:44%;height:auto;color:var(--ink)}
+.pcard .fig{position:absolute;left:.8rem;top:.7rem;font:500 .72rem var(--f-mono);color:var(--muted);letter-spacing:.05em}
+.pcard .body{padding:1rem 1rem .6rem;display:grid;gap:.45rem;align-content:start}
+.pcard h3 a{text-decoration:none}
+.pcard h3 a::after{content:"";position:absolute;inset:0}
+.pcard{position:relative}
+.pcard .body p{font-size:.9rem;color:var(--muted)}
+.pcard .foot{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.7rem 1rem 1rem;position:relative;z-index:1}
+.cmp{display:flex;gap:.4rem;align-items:center;font-size:.82rem;color:var(--muted);cursor:pointer}
+.cmp input{accent-color:var(--accent)}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:2.5rem 1.5rem;text-align:center;display:grid;gap:.7rem;justify-items:center}
+@media (max-width:820px){.cat-layout{grid-template-columns:1fr}.filters{position:static;grid-template-columns:1fr 1fr;gap:1rem}}
+@media (max-width:480px){.filters{grid-template-columns:1fr}}
+
+.compare-bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:45;background:var(--ink);color:var(--bg);border-radius:999px;padding:.45rem .45rem .45rem 1.1rem;display:flex;gap:.8rem;align-items:center;font-size:.9rem;box-shadow:0 12px 30px -10px rgba(0,0,0,.4);max-width:calc(100% - 32px)}
+.compare-bar .btn{border-color:var(--bg);color:var(--bg);border-radius:999px}
+.compare-bar .btn.primary{background:var(--bg);color:var(--ink)}
+
+/* Product detail */
+.pd{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,4rem);padding-block:2rem 3rem}
+.pd>*{min-width:0}
+.pd-vis{background:var(--surface);border:1px solid var(--line);border-radius:12px;aspect-ratio:1;display:grid;place-items:center;position:relative;max-width:100%}
+.pd-vis .art{width:58%;height:auto}
+.pd-vis .fig{position:absolute;left:1.2rem;bottom:1rem;font:600 clamp(2rem,5vw,3.4rem)/1 var(--f-display);font-stretch:120%;color:var(--accent);letter-spacing:-.02em}
+.pd-vis .figcap{position:absolute;right:1.2rem;bottom:1.2rem;font:500 .72rem var(--f-mono);color:var(--muted);text-align:right;max-width:18ch}
+.pd-vis .gridlines{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;opacity:.35;border-radius:12px;pointer-events:none}
+.spec{width:100%;border-collapse:collapse;font-size:.93rem}
+.spec th,.spec td{text-align:left;padding:.75rem 0;border-bottom:1px solid var(--line);vertical-align:top}
+.spec th{font:500 .75rem var(--f-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);width:40%;padding-right:1rem}
+.buy{display:flex;gap:.6rem;flex-wrap:wrap;align-items:stretch}
+.qty{display:flex;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.qty button{width:40px;border:0;background:none;color:var(--ink);font-size:1.1rem;cursor:pointer}
+.qty input{width:56px;border:0;text-align:center;padding:.5rem 0;background:transparent;box-shadow:none!important}
+.needs{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+.needs li{display:grid;grid-template-columns:20px 1fr;gap:.6rem;font-size:.95rem}
+.needs li::before{content:"";width:12px;height:12px;border:1.5px solid var(--accent);border-radius:2px;margin-top:.35rem}
+.docs{display:grid;gap:0;border-top:1px solid var(--line)}
+.doc{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--line);font-size:.93rem}
+@media (max-width:860px){.pd{grid-template-columns:1fr}}
+
+/* Generic two-col content */
+.split{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(1.5rem,5vw,5rem)}
+.split>*{min-width:0}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+.prose{display:grid;gap:1.1rem}
+.prose h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-top:1rem}
+.prose h3{margin-top:.6rem}
+.prose ul,.prose ol{margin:0;padding-left:1.2rem;display:grid;gap:.45rem;max-width:62ch}
+.callout{border-left:3px solid var(--accent);background:var(--surface);padding:1rem 1.2rem;border-radius:0 var(--r) var(--r) 0}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tbl{width:100%;border-collapse:collapse;font-size:.92rem;min-width:560px}
+.tbl th,.tbl td{text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl thead th{font:500 .72rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--sunk)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .vds{background:var(--accent-soft)}
+
+/* Roadmap */
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.road>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.3rem;display:grid;gap:1rem;align-content:start}
+.road ul{list-style:none;margin:0;padding:0;display:grid;gap:.9rem}
+.road li b{display:block;font-weight:600}
+.road li span{font-size:.88rem;color:var(--muted)}
+.road .dep{display:block;margin-top:.25rem;font:400 .72rem var(--f-mono);color:var(--muted)}
+@media (max-width:900px){.road{grid-template-columns:1fr}}
+
+/* Forms */
+.form{display:grid;gap:1rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.field{display:grid;gap:.35rem}
+.field label{font-weight:600;font-size:.88rem}
+.field .hint{font-size:.8rem;color:var(--muted)}
+.field .err{font-size:.82rem;color:#C0362C;display:none}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-color:#C0362C}
+.field.invalid .err{display:block}
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.6rem}
+.topic{position:relative}
+.topic input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.topic span{display:grid;gap:.15rem;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:.8rem .9rem;font-weight:600;font-size:.92rem;height:100%}
+.topic small{font-weight:400;color:var(--muted);font-size:.8rem}
+.topic input:checked+span{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.topic input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:clamp(1.2rem,3vw,2rem)}
+.done{display:grid;gap:1rem}
+.done pre{white-space:pre-wrap;background:var(--sunk);border-radius:var(--r);padding:1rem;font:400 .82rem/1.6 var(--f-mono);margin:0;max-height:300px;overflow:auto}
+.contact-cards{display:grid;gap:0;border-top:1px solid var(--line)}
+.contact-cards div{padding:1rem 0;border-bottom:1px solid var(--line);display:grid;gap:.2rem}
+.contact-cards .k{font:500 .72rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.contact-cards .v{font-weight:600;font-size:1.05rem;user-select:all}
+.urgent{background:var(--warn-soft);border-radius:10px;padding:1.1rem 1.2rem;display:grid;gap:.3rem}
+.urgent b{color:var(--warn)}
+
+/* Quote list */
+.qitems{display:grid;border-top:1px solid var(--line)}
+.qitem{display:grid;grid-template-columns:56px 1fr auto auto;gap:1rem;align-items:center;padding:.9rem 0;border-bottom:1px solid var(--line)}
+.qitem .art{width:56px;height:56px;background:var(--bg);border-radius:var(--r);padding:6px}
+@media (max-width:520px){.qitem{grid-template-columns:44px 1fr;}.qitem .qty,.qitem .rm{grid-column:2}}
+
+/* Accordions */
+details.faq{border-bottom:1px solid var(--line)}
+details.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:1rem;padding:1.1rem 0;font-weight:600;font-size:1.02rem}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";font:400 1.3rem/1 var(--f-mono);color:var(--accent);transition:transform .2s}
+details.faq[open] summary::after{transform:rotate(45deg)}
+details.faq div{padding-bottom:1.1rem;color:var(--muted);display:grid;gap:.6rem}
+.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;counter-reset:s}
+.steps li{counter-increment:s;border-top:2px solid var(--ink);padding-top:.9rem;display:grid;gap:.35rem;align-content:start}
+.steps li::before{content:"0" counter(s);font:500 .75rem var(--f-mono);color:var(--accent)}
+.steps b{font-weight:600}
+.steps span{font-size:.88rem;color:var(--muted)}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* Insights */
+.articles{display:grid;grid-template-columns:1.4fr 1fr;gap:1rem}
+.articles>*{min-width:0}
+.art-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.4rem;display:grid;gap:.7rem;text-decoration:none;align-content:start}
+a.art-card:hover{border-color:var(--ink)}
+.art-card.lead{grid-row:span 3;background:var(--plate);color:var(--plate-ink);border-color:transparent;align-content:end;min-height:380px;position:relative;overflow:hidden}
+.art-card.lead h3{font-size:clamp(1.4rem,2.6vw,2rem);color:#fff}
+.art-card.lead p{color:var(--plate-ink)}
+.art-card.lead .chip{border-color:rgba(255,255,255,.2);color:var(--plate-ink)}
+.art-card.lead canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+.art-card.lead>*:not(canvas){position:relative}
+@media (max-width:860px){.articles{grid-template-columns:1fr}.art-card.lead{grid-row:auto}}
+
+/* Values */
+.values{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.values>div{background:var(--surface);padding:1.5rem;display:grid;gap:.5rem}
+.values h3{font-size:1.15rem}
+.values p{color:var(--muted);font-size:.95rem}
+@media (max-width:700px){.values{grid-template-columns:1fr}}
+
+/* Footer */
+footer{margin-top:clamp(3rem,6vw,5rem);background:var(--plate);color:var(--plate-ink);padding-block:3rem calc(2rem + env(safe-area-inset-bottom,0px))}
+footer a{text-decoration:none;color:var(--plate-ink)}
+footer a:hover{color:#fff}
+.fgrid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:2rem}
+.fgrid>*{min-width:0}
+.fgrid h4{font:500 .72rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--plate-dim);margin:0 0 .8rem}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem;font-size:.92rem}
+.fbrand p{color:var(--plate-ink);opacity:.85;font-size:.95rem;margin-top:.9rem;max-width:36ch}
+.hu{margin-top:2.5rem;display:grid;gap:.4rem}
+.hu-bar{height:10px;border-radius:2px;background:linear-gradient(90deg,#000 0%,#2a2a2a 20%,#5a5a5a 45%,#8f8f8f 55%,#c9c9c9 75%,#fff 100%)}
+.hu-lbl{display:flex;justify-content:space-between;font:400 .68rem var(--f-mono);color:var(--plate-dim);letter-spacing:.05em}
+.fbase{margin-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--plate-dim)}
+.proto{font:500 .7rem var(--f-mono);letter-spacing:.06em;border:1px solid rgba(186,199,220,.25);padding:.25rem .5rem;border-radius:3px}
+@media (max-width:800px){.fgrid{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+
+/* Search modal */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:start center;padding:calc(env(safe-area-inset-top,0px) + 10vh) 16px 16px}
+.modal .scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 45%,transparent)}
+.modal .box{position:relative;width:min(640px,100%);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 30px 70px -20px rgba(0,0,0,.45);overflow:hidden}
+.modal .box header{display:flex;gap:.7rem;align-items:center;padding:.4rem 1rem;border-bottom:1px solid var(--line)}
+.modal .box input{border:0;box-shadow:none!important;padding:.9rem 0;font-size:1.05rem;background:transparent}
+.modal .res{max-height:min(420px,55vh);overflow:auto;padding:.4rem}
+.modal .grp{font:500 .68rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.7rem .7rem .3rem}
+.modal .hit{display:flex;justify-content:space-between;gap:1rem;padding:.65rem .7rem;border-radius:var(--r);text-decoration:none}
+.modal .hit[aria-selected="true"],.modal .hit:hover{background:var(--accent-soft)}
+.modal .hit small{color:var(--muted);font-size:.8rem}
+.modal .note{padding:.7rem 1rem;border-top:1px solid var(--line);font:400 .72rem var(--f-mono);color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+dialog.cmpd{border:1px solid var(--line);border-radius:12px;padding:0;background:var(--surface);color:var(--ink);width:min(900px,calc(100% - 32px))}
+dialog.cmpd::backdrop{background:color-mix(in srgb,var(--ink) 45%,transparent)}
+dialog.cmpd header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--line)}
+
+.toast{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:90;background:var(--ink);color:var(--bg);padding:.8rem 1rem;border-radius:var(--r);font-size:.9rem;display:flex;gap:.8rem;align-items:center;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)}
+.toast a{color:var(--bg);font-weight:600}
+
+main{min-height:60vh}
+main h1:focus,main:focus{outline:none}
+main.enter{animation:enter .45s var(--ease)}
+@keyframes enter{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<a class="skip" href="#main" id="skiplink">Skip to content</a>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#home" aria-label="VDS home">
+      <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 L29 27 H3 Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 3 L22.5 15" stroke="var(--accent)" stroke-width="3"/><circle cx="16" cy="21" r="2.4" fill="var(--accent)"/></svg>
+      <span class="logo-word">VDS</span>
+      <span class="logo-sub">Victoria Diagnostic<br>Supplies</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#products">Range</a>
+      <a href="#industries">Industries</a>
+      <a href="#why">Why VDS</a>
+      <a href="#quality">Quality &amp; ARTG</a>
+      <a href="#procurement">Procurement</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="tools">
+      <button class="icon-btn" type="button" data-open-search aria-label="Search the range">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span class="lbl">Search</span><kbd>/</kbd>
+      </button>
+      <a class="icon-btn" href="#quote" aria-label="Quote list">
+        <span class="lbl">Quote</span><span class="count" id="qcount" data-n="0" aria-live="polite">0</span>
+      </a>
+      <a class="btn primary small hide-md" href="#contact">Talk to us</a>
+      <button class="icon-btn menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="drawer">Menu</button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="scrim" data-close-drawer></div>
+  <nav aria-label="Mobile">
+    <button class="icon-btn" type="button" data-close-drawer style="justify-self:end;margin-bottom:.5rem">Close</button>
+    <a href="#products">Range</a>
+    <a href="#industries">Industries</a>
+    <a href="#why">Why VDS</a>
+    <a href="#quality">Quality &amp; ARTG</a>
+    <a href="#procurement">Smart procurement</a>
+    <a href="#about">About</a>
+    <a href="#insights">Insights</a>
+    <a href="#contact">Contact</a>
+    <div style="height:1rem"></div>
+    <a class="minor" href="#support">Ordering &amp; support</a>
+    <a class="minor" href="#account">Open a trade account</a>
+    <a class="minor" href="#quote">Your quote list</a>
+  </nav>
+</div>
+
+<main id="main" tabindex="-1"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fbrand">
+        <span class="logo-word" style="color:#fff">VDS</span>
+        <p>Victoria Diagnostic Supplies imports radiology and clinical consumables direct from the manufacturer and supplies clinics across Australia.</p>
+      </div>
+      <div><h4>Range</h4><ul id="fcats"></ul></div>
+      <div><h4>Company</h4><ul>
+        <li><a href="#about">About VDS</a></li><li><a href="#why">Why VDS</a></li><li><a href="#quality">Quality &amp; ARTG</a></li><li><a href="#procurement">Smart procurement</a></li><li><a href="#insights">Insights</a></li></ul></div>
+      <div><h4>Get in touch</h4><ul>
+        <li><a href="#contact">Contact &amp; quotes</a></li><li><a href="#support">Ordering &amp; delivery</a></li><li><a href="#account">Trade account</a></li>
+        <li class="mono" style="margin-top:.6rem">0422 228 496</li><li class="mono">info@vdsupplies.com.au</li><li style="font-size:.85rem;opacity:.8">16 Welsh Crescent<br>Clyde North VIC 3978</li></ul></div>
+    </div>
+    <div class="hu" aria-hidden="true">
+      <div class="hu-bar"></div>
+      <div class="hu-lbl"><span>−1000 HU · air</span><span>0 · water</span><span>+1000 HU · bone</span></div>
+    </div>
+    <div class="fbase">
+      <span>© 2026 Victoria Diagnostic Supplies Pty Ltd · Clyde North, Victoria · Australian owned</span>
+      <span class="proto">Prototype build · forms don't send yet</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal" id="search" hidden role="dialog" aria-modal="true" aria-label="Search">
+  <div class="scrim" data-close-search></div>
+  <div class="box">
+    <header>
+      <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" style="color:var(--muted)"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+      <label for="sq" class="sr">Search products, pages and guides</label>
+      <input id="sq" type="text" autocomplete="off" placeholder="Try “probe disinfection” or “x-ray apron”" role="combobox" aria-controls="sres" aria-expanded="true">
+      <button class="icon-btn" type="button" data-close-search>Esc</button>
+    </header>
+    <div class="res" id="sres" role="listbox"></div>
+    <div class="note"><span>↑↓ to move · Enter to open</span><span>Matches clinical terms and common names</span></div>
+  </div>
+</div>
+
+<dialog class="cmpd" id="cmpd" aria-label="Compare products">
+  <header><h3>Compare</h3><button class="icon-btn" type="button" id="cmpClose">Close</button></header>
+  <div id="cmpBody" style="padding:1.2rem;overflow-x:auto"></div>
+</dialog>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+/* ---------- Data ---------- */
+const ARTG_URL = "https://www.tga.gov.au/resources/artg/530981";
+const ARTG_SEARCH = "https://www.tga.gov.au/resources/artg";
+
+const CATS = [
+  {id:"imaging",   name:"Imaging consumables",      desc:"Coupling gel and print media for ultrasound and imaging rooms.", art:"gel"},
+  {id:"protection",name:"Radiation protection",     desc:"Lead aprons for X-ray, fluoroscopy and theatre teams.", art:"apron"},
+  {id:"infection", name:"Infection prevention",     desc:"UV-C disinfection for ultrasound probes between patients.", art:"uvc"},
+  {id:"warming",   name:"Patient & contrast warming",desc:"Contrast media warmers and warming cabinets.", art:"warmer"},
+  {id:"handling",  name:"Patient transfer",         desc:"Non-ferromagnetic wheelchairs for the MRI suite.", art:"mri"},
+  {id:"linen",     name:"Linen & apparel",          desc:"Examination gowns and couch sheets.", art:"gown"}
+];
+
+const P = [
+  {id:"ultrasound-gel", name:"Ultrasound coupling gel", cat:"imaging", art:"gel", fig:"ARTG 530981", figcap:"Included on the ARTG · 4 Sep 2026", artg:"530981",
+   short:"Coupling gel for diagnostic ultrasound, sponsored on the ARTG by VDS.",
+   long:"Coupling gel for diagnostic ultrasound. It's included on the ARTG with VDS as the sponsor, so the regulatory paperwork, product questions and any recall come from us directly.",
+   specs:[["ARTG entry","530981 · Gel, ultrasonic coupling"],["Sponsor","Victoria Diagnostic Supplies Pty Ltd"],["Included","4 September 2026"],["Pack formats","Confirmed at quote"]],
+   needs:["Brand and pack size you use now","Roughly how much you go through each month","Delivery sites, if you have more than one"],
+   docs:[["Public ARTG entry","link"],["Instructions for use","request"],["Safety data sheet","request"]],
+   inds:["radiology","gp","allied","hospitals"], kw:"gel jelly coupling sono sonography ultrasound scan transmission bottle"},
+  {id:"lead-aprons", name:"Lead aprons", cat:"protection", art:"apron", fig:"mm Pb", figcap:"Lead equivalence, matched to your current spec",
+   short:"Radiation protection aprons for X-ray, fluoroscopy and theatre.",
+   long:"Radiation protection aprons for X-ray, fluoroscopy and theatre teams. Tell us the lead equivalence, style and sizes your staff wear now and we'll quote a like-for-like set.",
+   specs:[["Lead equivalence","Specified at quote"],["Styles","Matched to your current aprons"],["Sizing","Quoted per staff member"],["Regulatory details","Sent before you order"]],
+   needs:["Lead equivalence and style you use now","Number of staff and their sizes","Whether you also need thyroid protection or storage"],
+   docs:[["Product datasheet","request"],["Regulatory details","request"]],
+   inds:["radiology","hospitals"], kw:"lead apron x-ray xray radiation protection shield pb fluoroscopy cath lab theatre ppe vest"},
+  {id:"uvc-probe-disinfector", name:"UV-C probe disinfector", cat:"infection", art:"uvc", fig:"UV-C", figcap:"Automated probe disinfection between patients",
+   short:"Automated UV-C disinfection for ultrasound probes between patients.",
+   long:"Automated UV-C disinfection for ultrasound probes between patients. Before you commit, ask us for the validation data and the list of probe types it's suitable for. We'd rather you check than assume.",
+   specs:[["Use","Ultrasound probe reprocessing between patients"],["Compatible probes","Confirmed against your probe models"],["Validation data","Sent on request"],["Regulatory details","Sent before you order"]],
+   needs:["Probe makes and models in each room","How you reprocess probes now","How many rooms need a unit"],
+   docs:[["Product datasheet","request"],["Validation summary","request"],["Regulatory details","request"]],
+   inds:["radiology","gp","hospitals"], kw:"uv uvc disinfect disinfection probe reprocessing hld high level transvaginal endocavity infection control steriliser sterilizer"},
+  {id:"contrast-media-warmer", name:"Contrast media warmer", cat:"warming", art:"warmer", fig:"37°", figcap:"Body temperature, the usual warming target", warm:true,
+   short:"Keeps contrast media at a set temperature ahead of injection.",
+   long:"Keeps contrast media at a set temperature before injection. Warmer contrast is less viscous, which is easier on the injection and on the patient.",
+   specs:[["Use","Warming contrast media before injection"],["Capacity","Confirmed at quote"],["Mounting","Bench or mobile, to suit your room"],["Regulatory details","Sent before you order"]],
+   needs:["Contrast volumes and bottle sizes you use","Number of CT or angio rooms","Bench space or mobile preference"],
+   docs:[["Product datasheet","request"],["Regulatory details","request"]],
+   inds:["radiology","hospitals"], kw:"contrast warmer warming iodinated ct injector viscosity heater media bottle"},
+  {id:"mri-wheelchair", name:"MRI-compatible wheelchair", cat:"handling", art:"mri", fig:"MR", figcap:"Check MR labelling against your magnet",
+   short:"Non-ferromagnetic wheelchairs for moving patients into the MRI suite.",
+   long:"Non-ferromagnetic wheelchairs for taking patients into the MRI suite. Check the MR safety labelling against your magnet strength. We'll send it to you before you order.",
+   specs:[["Use","Patient transfer into Zone IV"],["MR safety labelling","Sent before you order"],["Load rating","Confirmed at quote"],["Regulatory details","Sent before you order"]],
+   needs:["Magnet strength (for example 1.5T or 3T)","Patient weight range you need to cover","Number of MRI rooms"],
+   docs:[["MR safety labelling","request"],["Product datasheet","request"]],
+   inds:["radiology","hospitals"], kw:"mri mr wheelchair chair non magnetic nonferrous transfer patient transport tesla zone"},
+  {id:"warming-cabinet", name:"Warming cabinet", cat:"warming", art:"cabinet", fig:"Warm", figcap:"Blankets, fluids or both", warm:true,
+   short:"Cabinets for warming blankets and fluids.",
+   long:"Cabinets for warming blankets and fluids, sized for imaging departments, theatres, recovery and aged care.",
+   specs:[["Use","Warming blankets, fluids or both"],["Size and capacity","Matched to your space"],["Installation","Discussed at quote"],["Regulatory details","Sent before you order"]],
+   needs:["What you warm: blankets, fluids or both","Floor or bench space available","Capacity you need per shift"],
+   docs:[["Product datasheet","request"],["Regulatory details","request"]],
+   inds:["hospitals","aged","radiology"], kw:"warming cabinet blanket warmer fluid warmer heated cupboard theatre recovery hypothermia"},
+  {id:"examination-gowns", name:"Examination gowns", cat:"linen", art:"gown", fig:"Gowns", figcap:"Quoted like-for-like against your spec",
+   short:"Patient examination gowns for imaging and procedure rooms.",
+   long:"Patient examination gowns for imaging, procedure and consult rooms. Send us the gown you use now and we'll quote a like-for-like.",
+   specs:[["Use","Patient examination and imaging"],["Material and sizing","Matched to your current spec"],["Pack quantities","Confirmed at quote"]],
+   needs:["The gown you use now (a photo of the label helps)","Sizes and monthly use","Delivery sites"],
+   docs:[["Product datasheet","request"]],
+   inds:["radiology","gp","hospitals","aged","allied"], kw:"gown gowns patient gown exam apparel disposable linen change"},
+  {id:"examination-sheets", name:"Examination sheets", cat:"linen", art:"sheet", fig:"Sheets", figcap:"Rolls or flat, cut to your couch",
+   short:"Couch sheets and rolls for exam tables and imaging beds.",
+   long:"Couch sheets and rolls for examination tables and imaging beds. Tell us your couch widths and whether you prefer rolls or flat sheets.",
+   specs:[["Use","Exam couches and imaging tables"],["Format","Roll or flat, matched to your couch"],["Pack quantities","Confirmed at quote"]],
+   needs:["Couch or table widths","Roll or flat sheets","Monthly use"],
+   docs:[["Product datasheet","request"]],
+   inds:["gp","allied","radiology","aged"], kw:"sheet sheets couch roll table cover paper bed exam"},
+  {id:"thermal-paper", name:"Thermal print media", cat:"imaging", art:"paper", fig:"Print", figcap:"Compatibility checked against your printer",
+   short:"Thermal paper for ultrasound and medical printers.",
+   long:"Thermal paper for ultrasound and medical printers. Send us your printer make and model and the media you use now, and we'll confirm compatibility before we quote.",
+   specs:[["Use","Ultrasound and medical thermal printers"],["Compatibility","Confirmed against your printer model"],["Pack quantities","Confirmed at quote"]],
+   needs:["Printer make and model","Media you use now (the code on the box)","Monthly use"],
+   docs:[["Compatibility confirmation","request"]],
+   inds:["radiology","gp","allied"], kw:"thermal paper print printer media roll sony upp ultrasound print film video printer"}
+];
+
+const INDS = [
+  {id:"radiology", code:"RAD", name:"Radiology & imaging centres", short:"Gel, protection, probe disinfection and MRI transfer for busy rooms.",
+   head:"Keep every room running.", lede:"Imaging centres run on consumables nobody notices until they're out. We supply the everyday lines at direct-import prices and pick up the phone when a room is about to stop.",
+   points:[["One supplier for the room","Gel, print media, aprons, probe disinfection, contrast warming and MRI transfer from one importer."],["Paperwork your accreditation needs","ARTG details, IFUs and datasheets sent before you order, not chased after."],["After-hours supply","If a room is about to go down out of hours, call us and we'll work out the fastest way to get stock to you."]]},
+  {id:"hospitals", code:"HOS", name:"Hospital imaging departments", short:"Documentation-first supply for procurement teams.",
+   head:"Paperwork procurement can sign off.", lede:"Hospital buying runs on evidence. Every quote from VDS comes with the regulatory details, datasheets and sponsor information your procurement and biomed teams ask for.",
+   points:[["Sponsor-level answers","For lines we sponsor on the ARTG, we answer the regulatory questions ourselves."],["Public-sector pathways","We're working through supplier registrations for public health procurement. Ask us where we're at."],["Like-for-like quotes","Send your current line items and we'll quote against them directly."]]},
+  {id:"gp", code:"GP", name:"GP & specialist clinics", short:"Everyday clinical consumables without the wholesaler markup.",
+   head:"Clinic supplies, priced from the source.", lede:"Practice managers juggle dozens of suppliers. We cover the imaging and exam-room lines you reorder most and keep the ordering simple.",
+   points:[["Simple reordering","Tell us what you go through each month and we'll quote it as a standing list."],["Exam-room basics","Gowns, couch sheets and coupling gel, quoted against what you use now."],["Real people","Questions go to the people who import the product, not a call centre."]]},
+  {id:"allied", code:"AH", name:"Allied health", short:"Gel, sheets and gowns for physio, sports and sonography practices.",
+   head:"The basics, done properly.", lede:"Physio, sports medicine and sonography practices go through gel and couch sheets fast. We supply them direct, in the formats you already use.",
+   points:[["ARTG-included gel","Our coupling gel is on the ARTG under VDS as sponsor (ARTG 530981)."],["Matched formats","Rolls or flat sheets, bottle or bulk gel, quoted to match."],["Small and multi-site practices","Quotes per site or consolidated, whichever suits your books."]]},
+  {id:"aged", code:"AC", name:"Aged care", short:"Warming cabinets, gowns and sheets for residential care.",
+   head:"Supplies chosen by someone who's worked the floor.", lede:"VDS was founded by a nurse who's led clinical teams in aged care. We know what gets used on a night shift and what sits in the storeroom.",
+   points:[["Warming cabinets","For blankets and fluids, sized to the space you actually have."],["Gowns and sheets","Quoted like-for-like against what your facility uses now."],["Straight answers","If a product isn't right for your residents, we'll say so."]]}
+];
+
+const ARTICLES = [
+  {id:"artg-check", title:"How to check an ARTG entry before you buy", tag:"Procurement guide", mins:5, ready:true,
+   dek:"A five-minute check that tells you whether a medical device is legally supplied in Australia, and who answers for it."},
+  {id:"apron-care", title:"Lead aprons: what to record between inspections", tag:"In draft", ready:false, dek:"Storage, handling and the records worth keeping between scheduled checks."},
+  {id:"contrast-warming", title:"Warming contrast media: questions to ask a supplier", tag:"In draft", ready:false, dek:"Capacity, temperature control and the details to confirm before buying."},
+  {id:"uvc-where", title:"Where UV-C fits in probe reprocessing", tag:"In draft", ready:false, dek:"What to check against your probe manufacturer's instructions before changing your process."}
+];
+
+const PAGES = [
+  ["home","Home","Overview of VDS"],["products","Range","Browse every product"],["industries","Industries","Who we supply"],["why","Why VDS","How direct import changes the price"],
+  ["quality","Quality & ARTG","Regulatory information and documents"],["procurement","Smart procurement","What the platform does now and next"],["about","About VDS","Our story and principles"],
+  ["insights","Insights","Guides for buyers"],["support","Ordering & delivery","How ordering works, FAQs"],["contact","Contact & quotes","Talk to the team"],["account","Trade account","Apply for an account"],["quote","Quote list","Products you've added"]
+];
+
+/* ---------- Line-art plates ---------- */
+const ART = {
+ gel:`<path d="M44 46h32v52a6 6 0 0 1-6 6H50a6 6 0 0 1-6-6z"/><path d="M48 46l3-8h18l3 8"/><path d="M55 38l2-12h6l2 12"/><circle class="accf" cx="60" cy="18" r="3.2"/><path class="dim" d="M32 46v58M29 46h6M29 104h6"/><path class="acc" d="M48 70h24"/>`,
+ apron:`<path d="M40 32q20 8 40 0l6 14-4 56q-22 6-44 0l-4-56z"/><path d="M48 32q12-14 24 0"/><path class="acc" d="M37 66h46"/><path class="dim" d="M94 46v56M91 46h6M91 102h6"/>`,
+ uvc:`<rect x="30" y="20" width="60" height="84" rx="4"/><rect x="40" y="30" width="40" height="52" rx="2"/><path d="M60 36v28M55 64h10l-2 9h-6z"/><path class="acc" d="M46 34v44M74 34v44" stroke-dasharray="3 4"/><circle class="accf" cx="60" cy="94" r="3"/>`,
+ warmer:`<rect x="24" y="48" width="72" height="40" rx="4"/><rect x="34" y="60" width="40" height="14" rx="2"/><path d="M74 67h10M30 67h4"/><rect x="80" y="54" width="10" height="6" rx="1"/><path class="warm" d="M40 40q4-7 8 0t8 0t8 0t8 0"/><path class="dim" d="M24 96h72M24 93v6M96 93v6"/>`,
+ mri:`<circle cx="48" cy="86" r="18"/><circle cx="48" cy="86" r="3"/><circle cx="88" cy="98" r="6"/><path d="M38 34l10 38h38v20"/><path d="M48 72l-4-26"/><path d="M60 72V56h24"/><rect class="acc" x="78" y="22" width="22" height="16" rx="2"/><text x="81.5" y="34.5">MR</text>`,
+ cabinet:`<rect x="32" y="16" width="56" height="90" rx="3"/><path d="M60 16v90M36 42h20M36 64h20M36 86h20M64 42h20M64 64h20M64 86h20"/><path d="M57 54v14M63 54v14"/><rect class="warmf" x="68" y="22" width="14" height="6" rx="1"/>`,
+ gown:`<path d="M42 28l12-6q6 7 12 0l12 6 14 18-10 6-4-6 2 58H40l2-58-4 6-10-6z"/><path d="M54 22v16q6 4 12 0V22"/><path class="acc" d="M46 62h28"/>`,
+ sheet:`<ellipse cx="36" cy="54" rx="7" ry="18"/><path d="M36 36h50M36 72h50"/><ellipse cx="86" cy="54" rx="7" ry="18"/><path d="M36 72l-8 30h58l8-30"/><path class="acc" d="M31 88h59" stroke-dasharray="3 3"/>`,
+ paper:`<rect x="30" y="24" width="60" height="30" rx="4"/><circle cx="60" cy="39" r="7"/><path d="M38 54v46h44V54"/><path class="acc" d="M42 82l6-10 5 16 6-22 5 18 5-8 5 6"/>`
+};
+const svg = (k,cls="art")=>`<svg class="${cls}" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${ART[k]}</svg>`;
+
+/* ---------- Utils ---------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const byId=id=>P.find(p=>p.id===id);
+const catName=id=>CATS.find(c=>c.id===id)?.name||"";
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let quote=store.get("vds-quote",[]).filter(i=>byId(i.id));
+let compare=[];
+let pendingTopic=null, pendingProduct=null;
+const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function saveQuote(){store.set("vds-quote",quote);const n=quote.reduce((a,b)=>a+b.qty,0);const c=$("#qcount");c.textContent=n;c.dataset.n=n}
+function addQuote(id,qty=1){const it=quote.find(i=>i.id===id);if(it)it.qty+=qty;else quote.push({id,qty});saveQuote();toast(`${esc(byId(id).name)} added to your quote list. <a href="#quote">View list</a>`)}
+let tt;function toast(html){const t=$("#toast");t.innerHTML=html;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3800)}
+function chipFor(p){return p.artg?`<span class="chip ok">ARTG ${p.artg}</span>`:`<span class="chip ask">Docs on request</span>`}
+
+function pcard(p){return `<article class="pcard">
+  <div class="vis"><span class="fig">${esc(catName(p.cat))}</span>${svg(p.art)}</div>
+  <div class="body"><h3><a href="#product-${p.id}">${esc(p.name)}</a></h3><p>${esc(p.short)}</p></div>
+  <div class="foot">${chipFor(p)}<span style="display:flex;gap:.5rem;align-items:center">
+    <label class="cmp"><input type="checkbox" data-compare="${p.id}" ${compare.includes(p.id)?"checked":""}> Compare</label>
+    <button class="btn small" type="button" data-add="${p.id}" aria-label="Add ${esc(p.name)} to quote">+ Quote</button></span></div>
+</article>`}
+
+/* ---------- Pages ---------- */
+const V = {};
+
+V.home = ()=>`
+<section class="hero"><div class="wrap hero-grid">
+  <div class="stack-lg">
+    <span class="eyebrow">Direct importer · Medical consumables · Australia</span>
+    <h1>Diagnostic supplies, <em>direct.</em></h1>
+    <p class="lede">VDS imports radiology and clinical consumables straight from the manufacturer, holds the ARTG sponsorship itself, and supplies clinics across Australia. Put us next to your current supplier, line by line.</p>
+    <div class="ctas"><a class="btn primary" href="#contact" data-topic="quote">Request a quote <span class="arr">→</span></a><a class="btn" href="#products">Browse the range</a></div>
+    <form class="searchbar" id="heroSearch" role="search">
+      <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+      <label for="hq" class="sr">Search the range</label>
+      <input id="hq" type="text" placeholder="What do you need? Try “probe disinfection”" autocomplete="off">
+      <button class="btn primary small" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="plate" role="img" aria-label="Animated ultrasound sector scan">
+    <canvas id="scan"></canvas>
+    <div class="hud" aria-hidden="true">
+      <div class="hud-row"><span>VDS · Direct supply<br><span class="hud-dim">Clyde North · VIC</span></span><span style="text-align:right">Gain 62<br><span class="hud-dim">Depth 14 cm</span></span></div>
+      <div class="hud-row" style="align-items:flex-end"><span class="tag">Coupling gel · ARTG 530981</span><span class="hud-scale hud-dim"><span>0</span><span>5</span><span>10</span></span></div>
+    </div>
+  </div>
+</div></section>
+
+<div class="trust"><div class="wrap">
+  <div><b>ARTG 530981</b><span>Coupling gel · VDS is sponsor</span></div>
+  <div><b>Direct import</b><span>Manufacturer → VDS → you</span></div>
+  <div><b>Nurse-founded</b><span>Clinical teams, hospitals &amp; aged care</span></div>
+  <div><b>Australia-wide</b><span>Based in Clyde North, VIC</span></div>
+</div></div>
+
+<section class="band"><div class="wrap">
+  <div class="shead"><div class="stack"><span class="eyebrow">The range</span><h2>What we supply</h2></div><a class="btn" href="#products">All ${P.length} product lines <span class="arr">→</span></a></div>
+  <div class="cats">${CATS.map(c=>{const n=P.filter(p=>p.cat===c.id).length;return `<a class="cat" href="#products" data-cat="${c.id}"><span class="n">${n} line${n>1?"s":""}</span><h3>${esc(c.name)}</h3><p>${esc(c.desc)}</p>${svg(c.art)}</a>`}).join("")}</div>
+  <p class="muted" style="margin-top:1rem;font-size:.92rem">Need something that isn't listed? We source from manufacturers, so <a class="link" href="#contact" data-topic="product">ask us</a>.</p>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="shead"><div class="stack"><span class="eyebrow">Why VDS</span><h2>Three things that change what you pay and who you deal with</h2></div></div>
+  <div class="pillars">
+    <div class="pillar"><span class="k">Fewer hands</span><h3>We import it ourselves</h3><p>Product comes from the manufacturer to us and then to you. No wholesaler in between taking a margin.</p></div>
+    <div class="pillar"><span class="k">One accountable party</span><h3>We hold the sponsorship</h3><p>For lines we sponsor on the ARTG, regulatory questions and recalls come straight to us. The first, our coupling gel, is ARTG 530981.</p></div>
+    <div class="pillar"><span class="k">Clinical judgement</span><h3>Founded by a nurse</h3><p>VDS was started by an endorsed enrolled nurse who's led clinical teams in hospitals and aged care. We choose products the way a clinician would.</p></div>
+  </div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">${chainSVG()}</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap"><div class="match">
+  <div class="stack-lg"><span class="eyebrow" style="color:inherit;opacity:.7">Price check</span><h2>Send us your last invoice.</h2><p class="lede">We'll quote the same lines, in the same quantities, so you can compare without doing the legwork.</p>
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap"><a class="btn primary" href="#contact" data-topic="pricecheck">Start a price check <span class="arr">→</span></a><a class="btn" href="#account">Open a trade account</a></div></div>
+  <ol>
+    <li><span class="num">01</span><div><b>Share what you buy now</b><span>An invoice, a product list or a photo of the storeroom shelf.</span></div></li>
+    <li><span class="num">02</span><div><b>We match it line by line</b><span>Same product types and quantities, with the regulatory details attached.</span></div></li>
+    <li><span class="num">03</span><div><b>You compare and decide</b><span>No lock-in. Switch the lines that make sense.</span></div></li>
+  </ol>
+</div></div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="shead"><div class="stack"><span class="eyebrow">Who we supply</span><h2>Built for the people who keep clinics stocked</h2></div><a class="btn" href="#industries">All industries <span class="arr">→</span></a></div>
+  <div class="inds">${INDS.map(i=>`<a class="ind" href="#industry-${i.id}"><span class="code">${i.code}</span><div class="stack" style="gap:.4rem"><h3>${esc(i.name)}</h3><p>${esc(i.short)}</p></div></a>`).join("")}</div>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
+  <div class="founder"><div class="monogram" aria-hidden="true">VDS</div>
+    <div><blockquote>“I've stood in the storeroom at 2am looking for something that wasn't there. VDS exists so that happens less.”</blockquote>
+    <p class="meta">Harsh, co-founder · Endorsed enrolled nurse · <a class="link" href="#about">Read our story</a></p></div></div>
+</div></section>`;
+
+function chainSVG(){return `<figure class="chain" style="margin:0">
+<svg viewBox="0 0 900 250" role="img" aria-labelledby="chT"><title id="chT">Supply chain comparison: the usual route passes through a wholesaler and a distributor; VDS goes from manufacturer to VDS to your clinic.</title>
+<text x="0" y="22" class="t-muted">USUAL ROUTE</text>
+<rect class="box" x="0" y="38" width="170" height="54" rx="6"/><text x="16" y="70" class="t-ink">Manufacturer</text>
+<path class="ln" d="M170 65h50"/>
+<rect class="box-strike" x="220" y="38" width="170" height="54" rx="6"/><text x="236" y="62" class="t-ink">Wholesaler</text><text x="236" y="80" class="t-muted">+ margin</text>
+<path class="ln" d="M390 65h50"/>
+<rect class="box-strike" x="440" y="38" width="170" height="54" rx="6"/><text x="456" y="62" class="t-ink">Distributor</text><text x="456" y="80" class="t-muted">+ margin</text>
+<path class="ln" d="M610 65h70"/>
+<rect class="box" x="680" y="38" width="200" height="54" rx="6"/><text x="696" y="70" class="t-ink">Your clinic</text>
+<text x="0" y="152" class="t-acc">WITH VDS</text>
+<rect class="box" x="0" y="168" width="170" height="54" rx="6"/><text x="16" y="200" class="t-ink">Manufacturer</text>
+<path class="ln-acc" d="M170 195h160"/>
+<rect class="box-acc" x="330" y="168" width="200" height="54" rx="6"/><text x="346" y="192" class="on-acc">VDS</text><text x="346" y="210" class="on-acc">importer + ARTG sponsor</text>
+<path class="ln-acc" d="M530 195h150"/>
+<rect class="box" x="680" y="168" width="200" height="54" rx="6"/><text x="696" y="200" class="t-ink">Your clinic</text>
+</svg>
+<figcaption class="muted" style="font-size:.85rem;margin-top:.8rem">Illustrative. Routes vary by product and supplier; ask us how a specific line reaches you.</figcaption></figure>`}
+
+V.products = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Range</span></div>
+<h1>The range</h1><p class="lede">Radiology and clinical consumables, imported direct. Every line comes with its regulatory details before you order.</p></div></div>
+<div class="wrap cat-layout">
+  <aside class="filters" aria-label="Filters">
+    <div class="field"><label for="rq">Search</label><input id="rq" type="text" placeholder="Product, use or clinical term" autocomplete="off"></div>
+    <fieldset><legend>Category</legend>${CATS.map(c=>`<label class="check"><input type="checkbox" name="cat" value="${c.id}"> ${esc(c.name)}<span class="c">${P.filter(p=>p.cat===c.id).length}</span></label>`).join("")}</fieldset>
+    <fieldset><legend>Setting</legend><label class="sr" for="rind">Setting</label><select id="rind"><option value="">All settings</option>${INDS.map(i=>`<option value="${i.id}">${esc(i.name)}</option>`).join("")}</select></fieldset>
+    <fieldset><legend>Regulatory</legend><label class="check"><input type="checkbox" id="rartg"> ARTG number published here</label></fieldset>
+  </aside>
+  <div>
+    <div class="results-bar"><p class="mono muted" id="rcount" aria-live="polite" style="font-size:.85rem"></p><button class="link" type="button" id="rclear">Clear filters</button></div>
+    <div class="grid-prod" id="rgrid"></div>
+  </div>
+</div>`;
+
+V.product = id=>{const p=byId(id);if(!p)return V.notfound();
+ const rel=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.inds.some(i=>p.inds.includes(i)))).slice(0,3);
+ return `<div class="wrap"><div class="crumbs" style="margin-top:2rem"><a href="#home">Home</a>/<a href="#products">Range</a>/<span>${esc(catName(p.cat))}</span></div></div>
+<div class="wrap pd">
+  <div class="pd-vis"><div class="gridlines"></div>${svg(p.art)}<span class="fig" ${p.warm?'style="color:var(--warm)"':""}>${esc(p.fig)}</span><span class="figcap">${esc(p.figcap)}</span></div>
+  <div class="stack-lg">
+    <div class="stack"><span class="eyebrow">${esc(catName(p.cat))}</span><h1 style="font-size:clamp(2rem,4.4vw,3.3rem)">${esc(p.name)}</h1><div>${chipFor(p)}</div></div>
+    <p class="lede">${esc(p.long)}</p>
+    <div class="buy"><div class="qty"><button type="button" data-step="-1" aria-label="Decrease quantity">−</button><label class="sr" for="pq">Quantity</label><input id="pq" type="number" min="1" value="1" inputmode="numeric"><button type="button" data-step="1" aria-label="Increase quantity">+</button></div>
+      <button class="btn primary" type="button" data-add-qty="${p.id}">Add to quote</button>
+      <a class="btn" href="#contact" data-topic="product" data-product="${p.id}">Ask a question</a></div>
+    <p class="muted" style="font-size:.85rem">Prices are quoted to your account. Quantities are in the pack units we confirm with you.</p>
+    <div class="stack"><h3>For an accurate quote, tell us</h3><ul class="needs">${p.needs.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></div>
+  </div>
+</div>
+<div class="wrap split" style="padding-bottom:3rem">
+  <div class="stack"><h2 style="font-size:1.6rem">Specifications</h2><p class="muted">We only list a figure here once it's on the manufacturer's datasheet and confirmed for the Australian market. Anything marked “at quote” is confirmed in writing with your quote.</p></div>
+  <div class="stack-lg"><table class="spec"><tbody>${p.specs.map(s=>`<tr><th scope="row">${esc(s[0])}</th><td>${s[0]==="ARTG entry"?`<a class="link" href="${ARTG_URL}" target="_blank" rel="noopener">${esc(s[1])}</a>`:esc(s[1])}</td></tr>`).join("")}</tbody></table>
+  <div class="stack"><h3>Documents</h3><div class="docs">${p.docs.map(d=>`<div class="doc"><span>${esc(d[0])}</span>${d[1]==="link"?`<a class="link" href="${ARTG_URL}" target="_blank" rel="noopener">View on tga.gov.au ↗</a>`:`<a class="link" href="#contact" data-topic="docs" data-product="${p.id}">Request</a>`}</div>`).join("")}</div></div></div>
+</div>
+<section class="band" style="padding-top:1rem"><div class="wrap"><div class="shead"><h2 style="font-size:1.6rem">Often quoted together</h2></div><div class="grid-prod">${rel.map(pcard).join("")}</div></div></section>`};
+
+V.industries = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Industries</span></div><h1>Who we supply</h1><p class="lede">Different settings buy differently. Pick yours to see the lines that matter and how we work with you.</p></div></div>
+<section class="band"><div class="wrap"><div class="inds">${INDS.map(i=>`<a class="ind" href="#industry-${i.id}"><span class="code">${i.code}</span><div class="stack" style="gap:.4rem"><h3>${esc(i.name)}</h3><p>${esc(i.short)}</p></div></a>`).join("")}</div></div></section>`;
+
+V.industry = id=>{const i=INDS.find(x=>x.id===id);if(!i)return V.notfound();const ps=P.filter(p=>p.inds.includes(i.id));
+ return `<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<a href="#industries">Industries</a>/<span>${esc(i.name)}</span></div>
+ <span class="eyebrow">${esc(i.name)}</span><h1>${esc(i.head)}</h1><p class="lede">${esc(i.lede)}</p>
+ <div style="display:flex;gap:.7rem;flex-wrap:wrap"><a class="btn primary" href="#contact" data-topic="quote">Request a quote <span class="arr">→</span></a><a class="btn" href="#contact" data-topic="pricecheck">Price-check your current supplier</a></div></div></div>
+ <section class="band"><div class="wrap"><div class="pillars">${i.points.map((pt,n)=>`<div class="pillar"><h3>${esc(pt[0])}</h3><p>${esc(pt[1])}</p></div>`).join("")}</div></div></section>
+ <section class="band" style="padding-top:0"><div class="wrap"><div class="shead"><h2>Lines for ${esc(i.name.toLowerCase())}</h2><a class="btn" href="#products">Full range <span class="arr">→</span></a></div><div class="grid-prod">${ps.map(pcard).join("")}</div></div></section>`};
+
+V.why = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Why VDS</span></div><h1>A shorter supply line.</h1><p class="lede">Most clinics buy through layers of resellers. We import directly and take on the regulatory responsibility ourselves. Here's what that means for you, and what we won't claim.</p></div></div>
+<section class="band"><div class="wrap">${chainSVG()}</div></section>
+<section class="band" style="padding-top:0"><div class="wrap"><div class="pillars" style="row-gap:2.5rem">
+  <div class="pillar"><span class="k">Price</span><h3>No wholesaler margin</h3><p>We buy from the manufacturer. Send us your current invoice and judge the difference on your own numbers.</p></div>
+  <div class="pillar"><span class="k">Accountability</span><h3>The sponsor answers</h3><p>For products we sponsor on the ARTG, you deal with the company legally responsible for them in Australia.</p></div>
+  <div class="pillar"><span class="k">Judgement</span><h3>Clinician-led</h3><p>Our founder has run clinical teams. We test products against how they're really used on shift.</p></div>
+  <div class="pillar"><span class="k">Service</span><h3>After-hours supply</h3><p>When a room is about to stop, call us outside business hours and we'll work out the fastest route to stock.</p></div>
+  <div class="pillar"><span class="k">Evidence</span><h3>Documents first</h3><p>Datasheets, IFUs and regulatory details go out with the quote, so procurement isn't left chasing them.</p></div>
+  <div class="pillar"><span class="k">Reach</span><h3>Melbourne-based, national</h3><p>Run from Clyde North, Victoria, supplying clinics across Australia.</p></div>
+</div></div></section>
+<section class="band" style="padding-top:0"><div class="wrap"><div class="shead"><div class="stack"><span class="eyebrow">Side by side</span><h2>What changes when you switch</h2></div></div>
+<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Question</th><th>Through a reseller chain</th><th class="vds">With VDS</th></tr></thead><tbody>
+<tr><td>Who sets the price?</td><td>Each layer adds a margin</td><td class="vds">Importer price, quoted to your account</td></tr>
+<tr><td>Who answers regulatory questions?</td><td>Passed up the chain to the sponsor</td><td class="vds">We do, for lines we sponsor</td></tr>
+<tr><td>Who handles a recall?</td><td>Sponsor notifies distributor, who notifies you</td><td class="vds">We trace by batch and contact you directly</td></tr>
+<tr><td>Who picks up the phone?</td><td>Account manager or call centre</td><td class="vds">The people who import the product</td></tr>
+</tbody></table></div>
+<p class="muted" style="font-size:.85rem;margin-top:.8rem">General comparison. Some distributors are also sponsors; ask any supplier who sponsors the product you're buying.</p></div></section>`;
+
+V.quality = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Quality &amp; ARTG</span></div><h1>If it isn't linked, we don't claim it.</h1><p class="lede">We publish an ARTG number only when you can click through to the public entry and check it yourself. For everything else, we send the regulatory details before you order.</p></div></div>
+<section class="band"><div class="wrap split">
+  <div class="stack"><span class="eyebrow">Published inclusions</span><h2>ARTG entries sponsored by VDS</h2><p class="muted">Victoria Diagnostic Supplies Pty Ltd is an ARTG sponsor. We'll add each inclusion here as it's confirmed.</p></div>
+  <div class="stack-lg"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>ARTG ID</th><th>Entry</th><th>Included</th><th>Check it</th></tr></thead><tbody>
+    <tr><td class="mono">530981</td><td>Gel, ultrasonic coupling</td><td class="mono">04 Sep 2026</td><td><a class="link" href="${ARTG_URL}" target="_blank" rel="noopener">tga.gov.au ↗</a></td></tr></tbody></table></div>
+    <div class="callout"><p><b>Asking about another product?</b> We'll send its classification, ARTG details where they apply, and the manufacturer documents with your quote. <a class="link" href="#contact" data-topic="docs">Request documents</a></p></div></div>
+</div></section>
+<section class="band" style="padding-top:0"><div class="wrap split">
+  <div class="stack"><span class="eyebrow">What a sponsor does</span><h2>Why it matters who the sponsor is</h2></div>
+  <div class="prose"><p>In Australia, the sponsor is the company legally responsible for a medical device on the ARTG. They hold the evidence that the product meets the essential principles, report adverse events to the TGA and run any recall.</p><p>When the supplier you buy from is also the sponsor, there's no one else to chase. You get answers from the business that holds the evidence.</p>
+  <h3>What we keep for every line we supply</h3><ul><li>Manufacturer documentation and instructions for use</li><li>Supply records by batch, so a recall reaches the right clinics</li><li>A record of the regulatory basis for supply</li></ul>
+  <p><a class="link" href="#article-artg-check">How to check any ARTG entry yourself →</a></p></div>
+</div></section>
+<section class="band" style="padding-top:0"><div class="wrap"><div class="shead"><h2>Documents we can send</h2></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Document</th><th>What it tells you</th><th>How to get it</th></tr></thead><tbody>
+<tr><td>ARTG entry</td><td>The product is included for supply in Australia, and who the sponsor is</td><td>Public link, or with your quote</td></tr>
+<tr><td>Instructions for use</td><td>Intended use, cleaning and handling as set by the manufacturer</td><td>With your quote</td></tr>
+<tr><td>Datasheet</td><td>Dimensions, materials and performance figures</td><td>With your quote</td></tr>
+<tr><td>Safety data sheet</td><td>Handling and storage for chemical products such as gel</td><td>With your quote</td></tr>
+</tbody></table></div></div></section>`;
+
+V.procurement = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Smart procurement</span></div><h1>Ordering that remembers what you buy.</h1><p class="lede">We're building VDS to make reordering fast and quotes painless. Here's exactly what works today, what's being built, and what we're holding back until it earns its place.</p></div></div>
+<section class="band"><div class="wrap road">
+  <div><span class="chip now">Available now</span><h3>On this site</h3><ul>
+    <li><b>Search that speaks clinic</b><span>Finds products by everyday and clinical terms: “jelly”, “x-ray apron”, “probe reprocessing”.</span></li>
+    <li><b>Quote list</b><span>Add products and quantities as you browse, then send one request.</span></li>
+    <li><b>Side-by-side compare</b><span>Compare up to three products on use, documents and regulatory status.</span></li>
+    <li><b>Invoice price check</b><span>Share what you buy now and we quote the same lines.</span></li></ul></div>
+  <div><span class="chip next">In development</span><h3>Trade accounts</h3><ul>
+    <li><b>Account pricing</b><span>Your agreed prices shown when you sign in.</span><span class="dep">Needs: account system and pricing data</span></li>
+    <li><b>One-click reorder</b><span>Your usual list, ready to resend.</span><span class="dep">Needs: order history from our ordering system</span></li>
+    <li><b>Order and delivery tracking</b><span>Status and tracking for every order.</span><span class="dep">Needs: freight and inventory integration</span></li>
+    <li><b>Document library</b><span>Every IFU and certificate for what you've bought, in one place.</span></li></ul></div>
+  <div><span class="chip later">Later, if it earns it</span><h3>Assisted buying</h3><ul>
+    <li><b>Ask-in-plain-English assistant</b><span>“What do I need for a new ultrasound room?”, answered from our catalogue and documents.</span><span class="dep">Needs: a fuller catalogue and validated product data</span></li>
+    <li><b>Usage-based reorder reminders</b><span>A nudge when you're likely to run low.</span><span class="dep">Needs: several months of order history</span></li>
+    <li><b>Live stock visibility</b><span>Real availability before you order.</span><span class="dep">Needs: live inventory integration</span></li></ul></div>
+</div></section>
+<section class="band" style="padding-top:0"><div class="wrap"><div class="callout"><p>Nothing in the “in development” or “later” columns is live yet. If one of them would change how you buy, <a class="link" href="#contact" data-topic="product">tell us</a>. It moves up the list.</p></div></div></section>`;
+
+V.about = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>About</span></div><h1>Started by people who've worked the floor.</h1><p class="lede">VDS is an Australian-owned importer of medical consumables and clinical equipment, based in Clyde North, Victoria.</p></div></div>
+<section class="band"><div class="wrap split">
+  <div class="imgslot"><div><b>Photography slot · Founders</b>Founders in the warehouse or a clinic storeroom, natural light, 4:5. See imagery brief.</div></div>
+  <div class="prose">
+    <p>Harsh is an endorsed enrolled nurse who has led clinical teams in hospitals and aged care. Raghav brings the commercial side. Together they started VDS after seeing the same problem from both ends: clinics paying several layers of margin for everyday consumables, and getting slow answers when something went wrong.</p>
+    <p>So we went to the source. We import directly from manufacturers, we hold ARTG sponsorship ourselves, and we supply clinics across Australia without the reseller chain in between.</p>
+    <p>We're a young company, and we'd rather say so than dress it up. What we offer is direct pricing, people who know the products, and paperwork you can check.</p>
+  </div>
+</div></section>
+<section class="band" style="padding-top:0"><div class="wrap"><div class="shead"><div class="stack"><span class="eyebrow">How we work</span><h2>Four principles</h2></div></div>
+<div class="values">
+  <div><h3>Say what's on the datasheet</h3><p>No figure goes on this site unless the manufacturer's documentation backs it.</p></div>
+  <div><h3>Own the paperwork</h3><p>Where we're the sponsor, regulatory questions and recalls stop with us.</p></div>
+  <div><h3>Price it fairly the first time</h3><p>Our first quote is our real quote. You shouldn't have to haggle to get it.</p></div>
+  <div><h3>Answer the phone</h3><p>Including after hours, when a room is about to stop.</p></div>
+</div></div></section>`;
+
+V.insights = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Insights</span></div><h1>Guides for people who buy for clinics</h1><p class="lede">Practical notes on regulation, product care and procurement. Written to be useful, not to sell.</p></div></div>
+<section class="band"><div class="wrap articles">
+  ${ARTICLES.map((a,i)=>i===0?`<a class="art-card lead" href="#article-${a.id}"><canvas id="leadScan" aria-hidden="true"></canvas><span class="chip">${esc(a.tag)} · ${a.mins} min</span><h3>${esc(a.title)}</h3><p>${esc(a.dek)}</p></a>`
+  :`<div class="art-card"><span class="chip later" style="justify-self:start">${esc(a.tag)}</span><h3>${esc(a.title)}</h3><p class="muted" style="font-size:.92rem">${esc(a.dek)}</p></div>`).join("")}
+</div></section>`;
+
+V.article = id=>{if(id!=="artg-check")return V.notfound();return `
+<div class="phead"><div class="wrap stack-lg" style="max-width:860px"><div class="crumbs"><a href="#home">Home</a>/<a href="#insights">Insights</a>/<span>Procurement guide</span></div>
+<span class="eyebrow">Procurement guide · 5 min</span><h1 style="font-size:clamp(2rem,4.4vw,3.3rem)">How to check an ARTG entry before you buy</h1><p class="lede">A five-minute check tells you whether a medical device is legally supplied in Australia, and who is responsible for it.</p></div></div>
+<section class="band"><div class="wrap prose" style="max-width:860px">
+<p>The Australian Register of Therapeutic Goods (ARTG) lists the medical devices that can be legally supplied in Australia. Each entry names a sponsor: the company responsible for that product here. Checking an entry takes a few minutes and is worth doing for any device you buy for the first time.</p>
+<h2>The check</h2>
+<ol>
+<li>Go to the TGA's public ARTG search at <a class="link" href="${ARTG_SEARCH}" target="_blank" rel="noopener">tga.gov.au/resources/artg</a>.</li>
+<li>Search by the ARTG ID your supplier gave you. If you don't have one, search by product type or sponsor name.</li>
+<li>Check that the sponsor named on the entry is the company you're buying from, or that your supplier can explain their relationship to the sponsor.</li>
+<li>Check that the product described matches what you're actually buying.</li>
+<li>Check the entry is current, not cancelled.</li>
+<li>Record the ARTG ID against the product in your purchasing records.</li>
+</ol>
+<h2>When there's no entry</h2>
+<p>Not everything in a clinic is a therapeutic good. Some general-purpose items aren't regulated as medical devices, so a missing entry isn't always a problem. Ask the supplier how the product is classified and why. A good supplier will answer in writing.</p>
+<div class="callout"><p><b>Try it on ours.</b> Our coupling gel is ARTG 530981, sponsored by Victoria Diagnostic Supplies Pty Ltd. <a class="link" href="${ARTG_URL}" target="_blank" rel="noopener">View the entry ↗</a></p></div>
+<p class="muted" style="font-size:.88rem">General guidance only. For your obligations, refer to the TGA or your own regulatory adviser.</p>
+</div></section>`};
+
+V.support = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Ordering &amp; delivery</span></div><h1>How ordering works</h1><p class="lede">From first question to delivered stock, here's the process, and who to call at each step.</p></div></div>
+<section class="band"><div class="wrap"><ol class="steps">
+<li><b>Ask or upload</b><span>Send a product list, an invoice or a question.</span></li>
+<li><b>Quote</b><span>Prices, pack units and documents, in writing.</span></li>
+<li><b>Purchase order</b><span>Reply with a PO or approve the quote.</span></li>
+<li><b>Dispatch</b><span>We confirm the delivery date and send tracking.</span></li>
+<li><b>Invoice</b><span>On your trade account terms once approved.</span></li></ol></div></section>
+<section class="band" style="padding-top:0"><div class="wrap split">
+  <div class="stack"><span class="eyebrow">Questions</span><h2>Ordering FAQs</h2><div class="urgent" style="margin-top:1rem"><b>Running out today?</b><p>Call <span class="mono">0422 228 496</span>, including after hours, and tell us what you need and where.</p></div></div>
+  <div>
+    <details class="faq"><summary>Do you have minimum order quantities?</summary><div><p>It depends on the product. Tell us your monthly use and we'll quote the pack sizes that make sense for you.</p></div></details>
+    <details class="faq"><summary>Where do you deliver?</summary><div><p>We supply clinics across Australia from our base in Clyde North, Victoria. Delivery times depend on where you are; we confirm them with every quote.</p></div></details>
+    <details class="faq"><summary>How do I pay?</summary><div><p>Approved trade accounts are invoiced on agreed terms. New customers can pay on invoice before dispatch while an account is set up.</p></div></details>
+    <details class="faq"><summary>Can I get documents before I order?</summary><div><p>Yes. Datasheets, instructions for use and regulatory details go out with your quote. <a class="link" href="#contact" data-topic="docs">Request documents</a></p></div></details>
+    <details class="faq"><summary>Something arrived damaged or wrong. What now?</summary><div><p>Contact us first with your order details and a photo. We'll arrange a replacement or return. Please don't send stock back without talking to us.</p></div></details>
+    <details class="faq"><summary>How will I hear about a recall?</summary><div><p>For products we sponsor, we keep supply records by batch and contact affected customers directly, alongside any TGA notice.</p></div></details>
+  </div>
+</div></section>`;
+
+V.contact = ()=>{const pp=pendingProduct&&byId(pendingProduct);return `
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Contact</span></div><h1>Talk to the people who import it.</h1><p class="lede">Tell us what you need and we'll route it to the right person. Most enquiries get a reply the same business day.</p></div></div>
+<section class="band"><div class="wrap split">
+  <div class="stack-lg">
+    <div class="contact-cards">
+      <div><span class="k">Phone</span><span class="v mono">0422 228 496</span></div>
+      <div><span class="k">Email</span><span class="v mono">info@vdsupplies.com.au</span><button class="link" type="button" data-copy="info@vdsupplies.com.au" style="justify-self:start;font-size:.85rem">Copy address</button></div>
+      <div><span class="k">Office</span><span class="v">16 Welsh Crescent, Clyde North VIC 3978</span></div>
+    </div>
+    <div class="urgent"><b>Urgent or after hours</b><p>Call rather than email, and tell us the product and delivery address.</p></div>
+  </div>
+  <div class="panel">${formHTML("contact",pp)}</div>
+</div></section>`};
+
+function formHTML(kind,pp){
+ const topics=[["quote","Request a quote","Pricing for one or more products"],["pricecheck","Price check","Compare against your current supplier"],["product","Product question","Specs, compatibility, sourcing"],["docs","Documents","IFUs, datasheets, ARTG details"],["order","Existing order","Delivery or order query"],["partner","Manufacturers","Supply a product through VDS"]];
+ const pre=pendingTopic||"quote";
+ return `<form class="form" id="f-${kind}" novalidate>
+  ${kind==="contact"?`<fieldset style="border:0;padding:0;margin:0"><legend style="font-weight:600;font-size:.88rem;margin-bottom:.6rem">What do you need?</legend><div class="topics">${topics.map(t=>`<label class="topic"><input type="radio" name="topic" value="${t[0]}" ${t[0]===pre?"checked":""}><span>${t[1]}<small>${t[2]}</small></span></label>`).join("")}</div></fieldset>`:""}
+  <div class="row2">
+    <div class="field"><label for="${kind}-name">Your name</label><input id="${kind}-name" name="name" type="text" autocomplete="name" required><span class="err">Please add your name.</span></div>
+    <div class="field"><label for="${kind}-org">Practice or organisation</label><input id="${kind}-org" name="org" type="text" autocomplete="organization" required><span class="err">Please add your practice or organisation.</span></div>
+  </div>
+  <div class="row2">
+    <div class="field"><label for="${kind}-email">Work email</label><input id="${kind}-email" name="email" type="email" autocomplete="email" required><span class="err">Enter an email like name@clinic.com.au.</span></div>
+    <div class="field"><label for="${kind}-phone">Phone <span class="muted" style="font-weight:400">(optional)</span></label><input id="${kind}-phone" name="phone" type="tel" autocomplete="tel"></div>
+  </div>
+  <div class="field"><label for="${kind}-msg">${kind==="quote"?"Anything we should know?":"How can we help?"}</label><textarea id="${kind}-msg" name="msg" rows="4" ${kind==="contact"?"required":""} placeholder="${kind==="quote"?"Delivery sites, timing, the brand you use now…":"Product names, quantities, the printer or probe model…"}">${pp?esc(`About: ${pp.name}\n`):""}</textarea><span class="err">Tell us a little about what you need.</span></div>
+  <div class="field"><label for="${kind}-file">Attach an invoice or product list <span class="muted" style="font-weight:400">(optional)</span></label><input id="${kind}-file" type="file" accept=".pdf,.png,.jpg,.jpeg,.xlsx,.csv"><span class="hint">PDF, image or spreadsheet. Pricing you share stays confidential.</span></div>
+  <label class="check" style="align-items:flex-start"><input type="checkbox" name="consent" required style="margin-top:.2rem"> <span style="font-size:.88rem">VDS can use these details to respond to this enquiry. We don't share them or add you to marketing lists.</span></label>
+  <span class="err" id="${kind}-consent-err" style="color:#C0362C;font-size:.82rem" hidden>Please tick the box so we can reply.</span>
+  <div><button class="btn primary" type="submit">${kind==="quote"?"Send quote request":"Send enquiry"} <span class="arr">→</span></button></div>
+ </form>`}
+
+V.quote = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Quote list</span></div><h1>Your quote list</h1><p class="lede">Adjust quantities, add your details, and we'll come back with pricing, pack units and documents.</p></div></div>
+<section class="band"><div class="wrap split">
+  <div class="stack-lg" id="qlist"></div>
+  <div class="panel">${formHTML("quote")}</div>
+</div></section>`;
+
+function renderQuoteList(){const el=$("#qlist");if(!el)return;
+ if(!quote.length){el.innerHTML=`<div class="empty"><h3>Your quote list is empty</h3><p class="muted">Add products from the range, or just describe what you need in the form.</p><a class="btn" href="#products">Browse the range</a></div>`;return}
+ el.innerHTML=`<div class="qitems">${quote.map(i=>{const p=byId(i.id);return `<div class="qitem">${svg(p.art)}<div><b>${esc(p.name)}</b><div class="muted" style="font-size:.82rem">${esc(catName(p.cat))}</div></div>
+  <div class="qty"><button type="button" data-qstep="${p.id}" data-d="-1" aria-label="Decrease ${esc(p.name)}">−</button><label class="sr" for="q-${p.id}">Quantity of ${esc(p.name)}</label><input id="q-${p.id}" type="number" min="1" value="${i.qty}" data-qset="${p.id}"><button type="button" data-qstep="${p.id}" data-d="1" aria-label="Increase ${esc(p.name)}">+</button></div>
+  <button class="link rm" type="button" data-qrm="${p.id}">Remove</button></div>`}).join("")}</div><p class="muted" style="font-size:.85rem">Quantities are in pack units, which we confirm with your quote.</p>`}
+
+V.account = ()=>`
+<div class="phead"><div class="wrap stack-lg"><div class="crumbs"><a href="#home">Home</a>/<span>Trade account</span></div><h1>Open a trade account</h1><p class="lede">Accounts get agreed pricing, invoice terms and a named contact. It takes about three minutes to apply.</p></div></div>
+<section class="band"><div class="wrap split">
+  <div class="stack-lg"><ul class="needs"><li>Pricing agreed once, used on every order</li><li>Invoice terms once approved</li><li>Standing reorder lists</li><li>Documents for everything you buy, on request</li></ul>
+  <p class="muted" style="font-size:.9rem">We check ABNs against the Australian Business Register before approving an account.</p></div>
+  <div class="panel"><form class="form" id="f-account" novalidate>
+    <div class="row2"><div class="field"><label for="a-org">Registered business name</label><input id="a-org" type="text" required autocomplete="organization"><span class="err">Please add the business name.</span></div>
+    <div class="field"><label for="a-abn">ABN</label><input id="a-abn" type="text" inputmode="numeric" required placeholder="11 digits"><span class="err">An ABN has 11 digits.</span></div></div>
+    <div class="row2"><div class="field"><label for="a-type">Type of practice</label><select id="a-type" required><option value="">Choose one</option>${INDS.map(i=>`<option>${esc(i.name)}</option>`).join("")}<option>Other</option></select><span class="err">Choose the closest match.</span></div>
+    <div class="field"><label for="a-spend">Expected monthly spend</label><select id="a-spend"><option>Not sure yet</option><option>Under $1,000</option><option>$1,000–$5,000</option><option>$5,000–$20,000</option><option>Over $20,000</option></select></div></div>
+    <div class="row2"><div class="field"><label for="a-name">Contact name</label><input id="a-name" type="text" required autocomplete="name"><span class="err">Please add a contact name.</span></div>
+    <div class="field"><label for="a-email">Accounts email</label><input id="a-email" type="email" required autocomplete="email"><span class="err">Enter an email like accounts@clinic.com.au.</span></div></div>
+    <div class="field"><label for="a-addr">Delivery address</label><input id="a-addr" type="text" required autocomplete="street-address"><span class="err">Please add a delivery address.</span></div>
+    <div><button class="btn primary" type="submit">Apply for an account <span class="arr">→</span></button></div>
+  </form></div>
+</div></section>`;
+
+V.notfound = ()=>`<div class="phead"><div class="wrap stack-lg"><h1>We couldn't find that page</h1><p class="lede">It may have moved. Try the range or search.</p><div style="display:flex;gap:.7rem"><a class="btn primary" href="#products">Browse the range</a><button class="btn" type="button" data-open-search>Search</button></div></div></div>`;
+
+/* ---------- SEO per route ---------- */
+const META = {
+ home:["VDS · Diagnostic & radiology supplies, direct from the importer","Australian importer of radiology and clinical consumables. Direct-import pricing, ARTG sponsorship and documents with every quote."],
+ products:["Medical & radiology consumables range | VDS","Ultrasound gel, lead aprons, UV-C probe disinfectors, contrast warmers, MRI wheelchairs, warming cabinets, gowns and sheets."],
+ industries:["Who we supply | VDS","Imaging centres, hospitals, GP clinics, allied health and aged care across Australia."],
+ why:["Why buy direct from VDS","No wholesaler margin, sponsor-level answers and after-hours supply."],
+ quality:["Quality, ARTG & documents | VDS","ARTG entries sponsored by VDS, with public links. Documents sent before you order."],
+ procurement:["Smart procurement | VDS","What VDS ordering does today, what's in development and what's planned."],
+ about:["About VDS | Nurse-founded, Australian owned","Victoria Diagnostic Supplies is an Australian-owned importer based in Clyde North, Victoria."],
+ insights:["Insights for clinic buyers | VDS","Practical guides on ARTG checks, product care and procurement."],
+ support:["Ordering & delivery | VDS","How to order, delivery, payment, returns and recalls."],
+ contact:["Contact VDS | Quotes & enquiries","Phone 0422 228 496 or send an enquiry. Urgent supply available after hours."],
+ account:["Open a trade account | VDS","Agreed pricing, invoice terms and standing reorder lists."],
+ quote:["Your quote list | VDS","Send one quote request for all the products you need."]
+};
+function setMeta(t,d){document.title=t;let m=document.querySelector('meta[name="description"]');if(!m){m=document.createElement("meta");m.name="description";document.head.appendChild(m)}m.content=d}
+
+/* ---------- Router ---------- */
+function route(){
+ const h=(location.hash||"#home").slice(1);
+ const main=$("#main"); let html, key=h;
+ if(h.startsWith("product-")){html=V.product(h.slice(8));const p=byId(h.slice(8));if(p)setMeta(`${p.name}${p.artg?" · ARTG "+p.artg:""} | VDS`,p.short);key="products"}
+ else if(h.startsWith("industry-")){html=V.industry(h.slice(9));const i=INDS.find(x=>x.id===h.slice(9));if(i)setMeta(`${i.name} supplies | VDS`,i.lede);key="industries"}
+ else if(h.startsWith("article-")){html=V.article(h.slice(8));setMeta("How to check an ARTG entry before you buy | VDS","A five-minute check for any medical device you buy.");key="insights"}
+ else if(V[h]&&!["product","industry","article","notfound"].includes(h)){html=V[h]();setMeta(...META[h])}
+ else if(h==="main"){return}
+ else {html=V.notfound();key=""}
+ main.innerHTML=html; main.classList.remove("enter"); void main.offsetWidth; main.classList.add("enter");
+  $$(".nav a").forEach(a=>{if(a.getAttribute("href")==="#"+key)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+ closeDrawer(); window.scrollTo(0,0);
+ const h1=main.querySelector("h1"); if(h1){h1.tabIndex=-1;h1.focus({preventScroll:true})}
+ mount(h); pendingTopic=null; pendingProduct=null;
+}
+
+let pendingCat=null;
+function mount(h){
+ if(h==="home"||h==="") startScan($("#scan"),true);
+ if(h==="insights") startScan($("#leadScan"),false);
+ if(h==="products") mountRange();
+ if(h==="quote") renderQuoteList();
+ updateCompareBar();
+}
+
+/* ---------- Range filtering ---------- */
+const SYN = {jelly:"gel",sono:"gel",xray:"x-ray",radiation:"apron",pb:"apron",disinfect:"uvc",steriliser:"uvc",reprocess:"uvc",heater:"warmer",blanket:"cabinet",magnet:"mri",tesla:"mri",printer:"paper",couch:"sheet",linen:"gown"};
+function score(p,q){if(!q)return 1;const hay=(p.name+" "+p.kw+" "+catName(p.cat)+" "+p.short).toLowerCase();
+ const toks=q.toLowerCase().replace(/[^a-z0-9\- ]/g," ").split(/\s+/).filter(Boolean);let s=0;
+ for(let t of toks){const alt=SYN[t];if(hay.includes(t))s+=t.length>3?2:1;else if(alt&&hay.includes(alt))s+=2;else if(t.length>3&&hay.includes(t.slice(0,-1)))s+=1}
+ return s}
+function mountRange(){
+ const q=$("#rq"),ind=$("#rind"),artg=$("#rartg");
+ const st=store.get("vds-range",{q:"",cats:[],ind:"",artg:false});
+ if(pendingCat){st.cats=[pendingCat];st.q="";st.ind="";st.artg=false;pendingCat=null}
+ if(window._rangeQ!=null){st.q=window._rangeQ;st.cats=[];window._rangeQ=null}
+ q.value=st.q; ind.value=st.ind; artg.checked=st.artg; $$('input[name=cat]').forEach(c=>c.checked=st.cats.includes(c.value));
+ const run=()=>{const cats=$$('input[name=cat]:checked').map(c=>c.value);const s={q:q.value.trim(),cats,ind:ind.value,artg:artg.checked};store.set("vds-range",s);
+  let list=P.map(p=>({p,sc:score(p,s.q)})).filter(x=>x.sc>0&&(!cats.length||cats.includes(x.p.cat))&&(!s.ind||x.p.inds.includes(s.ind))&&(!s.artg||x.p.artg));
+  if(s.q)list.sort((a,b)=>b.sc-a.sc);
+  $("#rcount").textContent=`${list.length} of ${P.length} product lines`;
+  $("#rgrid").innerHTML=list.length?list.map(x=>pcard(x.p)).join(""):`<div class="empty" style="grid-column:1/-1"><h3>Nothing matches${s.q?` “${esc(s.q)}”`:" those filters"}</h3><p class="muted">Try a product type such as “gel” or “apron”, clear a filter, or ask us. We source beyond this list.</p><div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center"><button class="btn small" type="button" id="rclear2">Clear filters</button><a class="btn primary small" href="#contact" data-topic="product">Ask us to source it</a></div></div>`;
+ };
+ q.addEventListener("input",run); ind.addEventListener("change",run); artg.addEventListener("change",run); $$('input[name=cat]').forEach(c=>c.addEventListener("change",run));
+ const clear=()=>{q.value="";ind.value="";artg.checked=false;$$('input[name=cat]').forEach(c=>c.checked=false);run()};
+ $("#rclear").addEventListener("click",clear);
+ $("#rgrid").addEventListener("click",e=>{if(e.target.id==="rclear2")clear()});
+ run();
+}
+
+/* ---------- Compare ---------- */
+function updateCompareBar(){let b=$("#cmpbar");if(!compare.length){b&&b.remove();return}
+ if(!b){b=document.createElement("div");b.id="cmpbar";b.className="compare-bar";document.body.appendChild(b)}
+ b.innerHTML=`<span>${compare.length} selected${compare.length>=3?" (max 3)":""}</span><button class="btn small" type="button" data-cmp-clear>Clear</button><button class="btn primary small" type="button" data-cmp-open ${compare.length<2?"disabled":""}>Compare</button>`}
+function openCompare(){const ps=compare.map(byId);const rows=[["Category",p=>esc(catName(p.cat))],["What it's for",p=>esc(p.short)],["Regulatory",p=>p.artg?`<a class="link" href="${ARTG_URL}" target="_blank" rel="noopener">ARTG ${p.artg}</a>`:"Details sent before you order"],["Documents",p=>p.docs.map(d=>esc(d[0])).join("<br>")],["Settings",p=>p.inds.map(i=>esc(INDS.find(x=>x.id===i).name)).join("<br>")],["",p=>`<button class="btn small primary" type="button" data-add="${p.id}">+ Quote</button>`]];
+ $("#cmpBody").innerHTML=`<table class="tbl"><thead><tr><th></th>${ps.map(p=>`<th>${esc(p.name)}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr><td class="mono muted" style="font-size:.75rem">${r[0]}</td>${ps.map(p=>`<td>${r[1](p)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+ const d=$("#cmpd");if(d.showModal)d.showModal();else d.setAttribute("open","")}
+$("#cmpClose").addEventListener("click",()=>$("#cmpd").close?$("#cmpd").close():$("#cmpd").removeAttribute("open"));
+
+/* ---------- Search modal ---------- */
+let sel=0, hits=[];
+function openSearch(q=""){const m=$("#search");m.hidden=false;const i=$("#sq");i.value=q;renderSearch();setTimeout(()=>i.focus(),10)}
+function closeSearch(){$("#search").hidden=true}
+function renderSearch(){const q=$("#sq").value.trim();
+ const prods=P.map(p=>({p,s:score(p,q)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,6).map(x=>({href:"#product-"+x.p.id,t:x.p.name,d:catName(x.p.cat),g:"Products"}));
+ const ql=q.toLowerCase();
+ const pages=PAGES.filter(p=>!q||(p[1]+" "+p[2]).toLowerCase().includes(ql)).slice(0,q?4:6).map(p=>({href:"#"+p[0],t:p[1],d:p[2],g:"Pages"}));
+ const inds=INDS.filter(i=>q&&(i.name+" "+i.short).toLowerCase().includes(ql)).map(i=>({href:"#industry-"+i.id,t:i.name,d:"Industry",g:"Industries"}));
+ const arts=ARTICLES.filter(a=>a.ready&&q&&(a.title).toLowerCase().includes(ql)).map(a=>({href:"#article-"+a.id,t:a.title,d:"Guide",g:"Guides"}));
+ hits=[...prods,...inds,...arts,...pages]; sel=0;
+ const box=$("#sres");
+ if(!hits.length){box.innerHTML=`<div style="padding:1.2rem;display:grid;gap:.6rem"><b>No matches for “${esc(q)}”</b><span class="muted" style="font-size:.9rem">We source beyond what's listed. <a class="link" href="#contact" data-topic="product">Ask us to find it</a>.</span></div>`;return}
+ let g="",out="";hits.forEach((h,i)=>{if(h.g!==g){g=h.g;out+=`<div class="grp">${g}</div>`}out+=`<a class="hit" role="option" id="hit${i}" href="${h.href}" aria-selected="${i===0}"><span>${esc(h.t)}</span><small>${esc(h.d)}</small></a>`});box.innerHTML=out}
+$("#sq").addEventListener("input",renderSearch);
+$("#sq").addEventListener("keydown",e=>{const all=$$("#sres .hit");if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();if(!all.length)return;sel=(sel+(e.key==="ArrowDown"?1:-1)+all.length)%all.length;all.forEach((a,i)=>a.setAttribute("aria-selected",i===sel));all[sel].scrollIntoView({block:"nearest"})}
+ if(e.key==="Enter"&&all[sel]){e.preventDefault();location.hash=all[sel].getAttribute("href");closeSearch()}});
+$("#sres").addEventListener("click",e=>{if(e.target.closest("a"))closeSearch()});
+
+/* ---------- Drawer ---------- */
+function closeDrawer(){$("#drawer").hidden=true;$("#menuBtn").setAttribute("aria-expanded","false")}
+$("#menuBtn").addEventListener("click",()=>{$("#drawer").hidden=false;$("#menuBtn").setAttribute("aria-expanded","true");$("#drawer nav a").focus()});
+
+/* ---------- Forms ---------- */
+function validate(form){let ok=true;form.querySelectorAll("[required]").forEach(el=>{if(el.type==="checkbox")return;const f=el.closest(".field");let v=el.value.trim()!=="";
+ if(v&&el.type==="email")v=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim());
+ if(v&&el.id==="a-abn")v=el.value.replace(/\s/g,"").match(/^\d{11}$/);
+ if(f)f.classList.toggle("invalid",!v);if(!v)ok=false});
+ const c=form.querySelector('input[name=consent]');const ce=form.querySelector('[id$="consent-err"]');if(c){ce.hidden=c.checked;if(!c.checked)ok=false}
+ if(!ok){const first=form.querySelector(".invalid input,.invalid select,.invalid textarea")||c;first&&first.focus()}return ok}
+function summary(form,kind){const lines=[];
+ if(kind==="quote"&&quote.length){lines.push("Quote request:");quote.forEach(i=>lines.push(`- ${byId(i.id).name} × ${i.qty}`));lines.push("")}
+ form.querySelectorAll("input,select,textarea").forEach(el=>{if(el.type==="file"){if(el.files&&el.files[0])lines.push(`Attachment: ${el.files[0].name} (attach this to your email)`);return}
+  if(el.type==="checkbox")return;if(el.type==="radio"){if(el.checked)lines.push(`Topic: ${el.parentElement.querySelector("span").firstChild.textContent}`);return}
+  const lab=form.querySelector(`label[for="${el.id}"]`);if(el.value.trim())lines.push(`${lab?lab.firstChild.textContent.trim():el.name}: ${el.value.trim()}`)});
+ return lines.join("\n")}
+document.addEventListener("submit",e=>{const f=e.target;if(!f.id||!f.id.startsWith("f-"))return;e.preventDefault();
+ if(f.id==="f-account"||f.id==="f-contact"||f.id==="f-quote"){if(!validate(f))return;const kind=f.id.slice(2);const txt=summary(f,kind);
+  f.parentElement.innerHTML=`<div class="done" tabindex="-1" id="done"><span class="chip now" style="justify-self:start">Ready to send</span><h3>Your ${kind==="account"?"application":kind==="quote"?"quote request":"enquiry"} is prepared</h3>
+  <p class="muted">This is a preview build, so the form can't send yet. Copy the text below and email it to <b class="mono">info@vdsupplies.com.au</b>, or call <b class="mono">0422 228 496</b>.</p>
+  <pre id="donetxt">${esc(txt)}</pre><div style="display:flex;gap:.6rem;flex-wrap:wrap"><button class="btn primary" type="button" data-copy-el="donetxt">Copy enquiry</button><button class="btn" type="button" data-copy="info@vdsupplies.com.au">Copy email address</button></div></div>`;
+  $("#done").focus()}});
+document.addEventListener("input",e=>{const f=e.target.closest(".field.invalid");if(f)f.classList.remove("invalid");
+ if(e.target.dataset.qset){const it=quote.find(i=>i.id===e.target.dataset.qset);const v=Math.max(1,parseInt(e.target.value)||1);if(it){it.qty=v;saveQuote()}}});
+
+async function copy(text,el){try{await navigator.clipboard.writeText(text);toast("Copied to clipboard.")}catch(err){if(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}toast("Select and copy the highlighted text.")}}
+
+/* ---------- Global clicks ---------- */
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-add],[data-add-qty],[data-open-search],[data-close-search],[data-close-drawer],[data-topic],[data-cat],[data-step],[data-qstep],[data-qrm],[data-cmp-open],[data-cmp-clear],[data-copy],[data-copy-el]");
+ if(!t)return;
+ if(t.dataset.add){e.preventDefault();addQuote(t.dataset.add)}
+ if(t.dataset.addQty){addQuote(t.dataset.addQty,Math.max(1,parseInt($("#pq").value)||1))}
+ if(t.hasAttribute("data-open-search")){openSearch()}
+ if(t.hasAttribute("data-close-search")){closeSearch()}
+ if(t.hasAttribute("data-close-drawer")){closeDrawer()}
+ if(t.dataset.topic){pendingTopic=t.dataset.topic;pendingProduct=t.dataset.product||null;if(location.hash==="#contact"){e.preventDefault();route()}}
+ if(t.dataset.cat){pendingCat=t.dataset.cat;if(location.hash==="#products"){e.preventDefault();route()}}
+ if(t.dataset.step){const i=$("#pq");i.value=Math.max(1,(parseInt(i.value)||1)+ +t.dataset.step)}
+ if(t.dataset.qstep){const it=quote.find(i=>i.id===t.dataset.qstep);it.qty=Math.max(1,it.qty+ +t.dataset.d);saveQuote();renderQuoteList()}
+ if(t.dataset.qrm){quote=quote.filter(i=>i.id!==t.dataset.qrm);saveQuote();renderQuoteList()}
+ if(t.hasAttribute("data-cmp-open")){openCompare()}
+ if(t.hasAttribute("data-cmp-clear")){compare=[];$$("[data-compare]").forEach(c=>c.checked=false);updateCompareBar()}
+ if(t.dataset.copy){copy(t.dataset.copy)}
+ if(t.dataset.copyEl){const el=document.getElementById(t.dataset.copyEl);copy(el.textContent,el)}
+});
+document.addEventListener("change",e=>{const c=e.target.closest("[data-compare]");if(!c)return;const id=c.dataset.compare;
+ if(c.checked){if(compare.length>=3){c.checked=false;toast("You can compare up to three products.");return}compare.push(id)}else compare=compare.filter(x=>x!==id);updateCompareBar()});
+document.addEventListener("submit",e=>{if(e.target.id==="heroSearch"){e.preventDefault();window._rangeQ=$("#hq").value.trim();location.hash="#products"}});
+document.addEventListener("keydown",e=>{const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName);
+ if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k")){e.preventDefault();openSearch()}
+ if(e.key==="Escape"){closeSearch();closeDrawer()}});
+$("#skiplink").addEventListener("click",e=>{e.preventDefault();$("#main").focus()});
+
+/* ---------- Sector scan canvas ---------- */
+let scanRAF=[];
+function startScan(cv,full){if(!cv)return;const ctx=cv.getContext("2d");let W,H,dpr,dots=[];
+ function rnd(s){return()=>{s=(s*16807)%2147483647;return s/2147483647}}
+ function build(){dpr=Math.min(devicePixelRatio||1,2);const r=cv.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  dots=[];const R=rnd(7);const ax=W/2,ay=H*0.06,rad=H*0.9,half=0.62,n=full?4200:2600;
+  for(let k=0;k<n;k++){const a=(R()*2-1)*half,rr=0.08+Math.sqrt(R())*0.92;let I=Math.pow(R(),2.2);
+   const x=ax+Math.sin(a)*rr*rad,y=ay+Math.cos(a)*rr*rad;
+   if(rr<0.16)I*=1.7; const cx=0.12,cy=0.58,d=Math.hypot((a-cx)/0.28,(rr-cy)/0.14);
+   if(d<1)I*=0.06; else if(d<1.18)I=Math.min(1,I*2.4+0.35);
+   if(rr>cy+0.12&&Math.abs(a-cx)<0.22)I*=1.5;
+   const band=Math.abs(rr-(0.36+0.05*Math.sin(a*4)));if(band<0.012)I=Math.min(1,I+0.6);
+   dots.push({x,y,a,I,s:0.6+R()*1.4})}}
+ build();let sweep=-0.62,dir=1,last=performance.now();
+ function frame(now){const dt=Math.min(50,now-last)/1000;last=now;if(!cv.isConnected){return}
+  ctx.clearRect(0,0,W,H);sweep+=dir*dt*0.5;if(sweep>0.62){sweep=0.62;dir=-1}if(sweep<-0.62){sweep=-0.62;dir=1}
+  for(const d of dots){const lag=(sweep-d.a)*dir;let p=lag<0?0.25:Math.max(0.25,1-lag*0.9);const v=d.I*p;
+   ctx.fillStyle=`rgba(${200+55*v|0},${210+45*v|0},${230+25*v|0},${Math.min(1,v*0.95)})`;ctx.fillRect(d.x,d.y,d.s,d.s)}
+  if(full){const ax=W/2,ay=H*0.06,rad=H*0.9;ctx.strokeStyle="rgba(140,158,255,.55)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax+Math.sin(sweep)*rad,ay+Math.cos(sweep)*rad);ctx.stroke()}
+  if(!reduced)requestAnimationFrame(frame)}
+ requestAnimationFrame(frame);
+ const ro=new ResizeObserver(()=>{build();if(reduced)requestAnimationFrame(frame)});ro.observe(cv)}
+
+/* ---------- Boot ---------- */
+$("#fcats").innerHTML=CATS.map(c=>`<li><a href="#products" data-cat="${c.id}">${esc(c.name)}</a></li>`).join("");
+saveQuote();
+addEventListener("hashchange",route);
+route();
+</script>
+
+</body></html>

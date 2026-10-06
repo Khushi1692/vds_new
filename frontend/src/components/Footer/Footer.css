@@ -89,7 +89,7 @@
 }
 
 .footer__list a:hover {
-  color: var(--color-inverse-on-surface);
+  color: #fff;
 }
 
 .footer__list--contact li {

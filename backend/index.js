@@ -11,6 +11,7 @@ const path = require('path');
 const Product = require('./models/Product');
 const Order = require('./models/Order');
 const User = require('./models/User');
+const Quote = require('./models/Quote');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -181,11 +182,15 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
       // Send emails
       const formatAmount = (amount) => `$${(amount / 100).toFixed(2)}`;
       
-      let orderItemsHTML = '<ul>';
+      let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
       for (let item of items) {
         const prod = await Product.findOne({ id: item.productId });
         const pName = prod ? sanitizeHTML(prod.name) : `Product ID: ${sanitizeHTML(item.productId)}`;
-        orderItemsHTML += `<li>${item.quantity}x ${pName}</li>`;
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+        const pImg = prod && prod.image 
+          ? `<img src="${prod.image.startsWith('http') ? prod.image : clientUrl + prod.image}" alt="Product image" width="40" height="40" style="vertical-align: middle; margin-right: 10px; border-radius: 4px; object-fit: contain;" />` 
+          : '';
+        orderItemsHTML += `<li style="margin-bottom: 12px; display: flex; align-items: center;">${pImg} <span><strong>${item.quantity}x</strong> ${pName}</span></li>`;
       }
       orderItemsHTML += '</ul>';
 
@@ -194,11 +199,22 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
         to: customerEmail,
         subject: `Order Confirmation - ${newOrder.orderId}`,
         html: `
-          <h2>Thank you for your order!</h2>
-          <p>Hi ${sanitizeHTML(customerName) || 'Customer'},</p>
-          <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it now.</p>
-          <p><strong>Total Amount:</strong> ${formatAmount(totalAmount)}</p>
-          <p>Thanks for shopping with us!</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2 style="color: #1a56db;">Thank you for your order!</h2>
+            <p>Hi ${sanitizeHTML(customerName) || 'Customer'},</p>
+            <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it for dispatch.</p>
+            
+            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Order Summary</h3>
+              ${orderItemsHTML}
+              <div style="margin-top: 15px; border-top: 2px solid #e5e7eb; padding-top: 10px;">
+                <strong>Total Amount:</strong> ${formatAmount(totalAmount)}
+              </div>
+            </div>
+            
+            <p>If you have any questions, simply reply to this email.</p>
+            <p>Thanks for choosing Victoria Diagnostic Supplies!</p>
+          </div>
         `,
       };
 
@@ -647,11 +663,15 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
     (async () => {
       try {
         const formatAmount = (amount) => `$${(amount / 100).toFixed(2)}`;
-        let orderItemsHTML = '<ul>';
+        let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
         for (let item of items) {
           const prod = await Product.findOne({ id: item.productId });
           const pName = prod ? sanitizeHTML(prod.name) : `Product ID: ${sanitizeHTML(item.productId)}`;
-          orderItemsHTML += `<li>${item.quantity}x ${pName}</li>`;
+          const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+          const pImg = prod && prod.image 
+            ? `<img src="${prod.image.startsWith('http') ? prod.image : clientUrl + prod.image}" alt="Product image" width="40" height="40" style="vertical-align: middle; margin-right: 10px; border-radius: 4px; object-fit: contain;" />` 
+            : '';
+          orderItemsHTML += `<li style="margin-bottom: 12px; display: flex; align-items: center;">${pImg} <span><strong>${item.quantity}x</strong> ${pName}</span></li>`;
         }
         orderItemsHTML += '</ul>';
 
@@ -660,11 +680,22 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
           to: customerEmail,
           subject: `Order Confirmation - ${newOrder.orderId}`,
           html: `
-            <h2>Thank you for your order!</h2>
-            <p>Hi ${sanitizeHTML(customerName)},</p>
-            <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it now.</p>
-            <p><strong>Total Amount:</strong> ${formatAmount(paymentIntent.amount)}</p>
-            <p>Thanks for shopping with us!</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+              <h2 style="color: #1a56db;">Thank you for your order!</h2>
+              <p>Hi ${sanitizeHTML(customerName)},</p>
+              <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it for dispatch.</p>
+              
+              <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="margin-top: 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Order Summary</h3>
+                ${orderItemsHTML}
+                <div style="margin-top: 15px; border-top: 2px solid #e5e7eb; padding-top: 10px;">
+                  <strong>Total Amount:</strong> ${formatAmount(paymentIntent.amount)}
+                </div>
+              </div>
+              
+              <p>If you have any questions, simply reply to this email.</p>
+              <p>Thanks for choosing Victoria Diagnostic Supplies!</p>
+            </div>
           `,
         };
 
@@ -697,6 +728,76 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('Confirm order error:', err.message);
     res.status(500).json({ error: 'Failed to confirm order' });
+  }
+});
+app.post('/api/quote/request', async (req, res) => {
+  try {
+    const { name, email, facility, phone, address, message, items } = req.body;
+    
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required' });
+    }
+
+    const quoteId = `QT-${new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14)}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+
+    const newQuote = new Quote({
+      quoteId,
+      name,
+      email,
+      facility,
+      phone,
+      address,
+      message,
+      items: items || []
+    });
+
+    await newQuote.save();
+
+    let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
+    if (items && items.length > 0) {
+      for (let item of items) {
+        const prod = await Product.findOne({ id: item.productId });
+        const pName = prod ? sanitizeHTML(prod.name) : `Product ID: ${sanitizeHTML(item.productId)}`;
+        
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+        const pImg = prod && prod.image 
+          ? `<img src="${prod.image.startsWith('http') ? prod.image : clientUrl + prod.image}" alt="Product image" width="40" height="40" style="vertical-align: middle; margin-right: 10px; border-radius: 4px; object-fit: contain;" />` 
+          : '';
+
+        orderItemsHTML += `<li style="margin-bottom: 12px; display: flex; align-items: center;">
+          ${pImg}
+          <span><strong>${item.quantity}x</strong> ${pName}</span>
+        </li>`;
+      }
+    }
+    orderItemsHTML += '</ul>';
+
+    const adminMailOptions = {
+      from: `"VDS Website" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+      subject: `New Quote Request - ${sanitizeHTML(name)}`,
+      html: `
+        <h2>New Quote Request (${quoteId})</h2>
+        <p><strong>Quote ID:</strong> ${quoteId}</p>
+        <p><strong>Name:</strong> ${sanitizeHTML(name)}</p>
+        <p><strong>Email:</strong> ${sanitizeHTML(email)}</p>
+        <p><strong>Facility/Organization:</strong> ${sanitizeHTML(facility) || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${sanitizeHTML(phone) || 'N/A'}</p>
+        <p><strong>Delivery Address:</strong> ${sanitizeHTML(address) || 'N/A'}</p>
+        <br/>
+        <h3>Requested Items:</h3>
+        ${orderItemsHTML}
+        <br/>
+        <h3>Additional Message:</h3>
+        <p>${sanitizeHTML(message || 'No additional message').replace(/\n/g, '<br/>')}</p>
+      `,
+    };
+
+    await transporter.sendMail(adminMailOptions);
+    res.json({ success: true, message: 'Quote request sent' });
+  } catch (err) {
+    console.error('Quote request error:', err.message);
+    res.status(500).json({ error: 'Failed to send quote request' });
   }
 });
 

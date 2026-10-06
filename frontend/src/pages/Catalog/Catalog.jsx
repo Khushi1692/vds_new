@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { fetchProducts } from '../../data/products';
@@ -42,6 +42,8 @@ export default function Catalog() {
   }, []);
 
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedSetting, setSelectedSetting] = useState('');
+  const [regulatoryChecked, setRegulatoryChecked] = useState(false);
 
   const categoryCounts = useMemo(() => {
     const predefinedCategories = [
@@ -93,6 +95,16 @@ export default function Catalog() {
       result = result.filter((p) => p.category === activeCat);
     }
 
+    if (selectedSetting) {
+      // Assuming 'inds' array on products holds settings like 'radiology', 'gp', etc.
+      result = result.filter(p => p.inds && p.inds.includes(selectedSetting));
+    }
+
+    if (regulatoryChecked) {
+      // Assuming 'artg' field specifies if the product has ARTG number
+      result = result.filter(p => p.artg);
+    }
+
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -104,15 +116,17 @@ export default function Catalog() {
     }
 
     return result;
-  }, [products, activeCat, searchQuery, selectedCategories]);
+  }, [products, activeCat, searchQuery, selectedCategories, selectedSetting, regulatoryChecked]);
 
   const handleClearFilters = () => {
     setSelectedCategories([]);
     setSearchQuery('');
+    setSelectedSetting('');
+    setRegulatoryChecked(false);
     setSearchParams({});
   };
 
-  const hasFilters = selectedCategories.length > 0 || searchQuery.trim() !== '' || activeCat !== 'all';
+  const hasFilters = selectedCategories.length > 0 || searchQuery.trim() !== '' || activeCat !== 'all' || selectedSetting !== '' || regulatoryChecked;
 
   return (
     <>
@@ -120,10 +134,14 @@ export default function Catalog() {
         {/* Hero Section */}
         <section className="catalog__hero">
           <div className="container">
-            <span className="catalog__badge">Product Catalog</span>
-            <h1 className="catalog__h1">Radiology and imaging supply, done properly</h1>
+            <div className="crumbs" style={{ display: 'flex', gap: '8px', marginBottom: '24px', fontSize: '13px', fontFamily: 'var(--font-family-mono)', color: 'var(--ink-soft)' }}>
+               <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+               <span>/</span>
+               <span style={{ color: 'var(--ink)' }}>Range</span>
+            </div>
+            <h1 className="catalog__h1">The range</h1>
             <p className="catalog__lead">
-              Certified radiology consumables and equipment developed using state-of-the-art scientific innovation.
+              Radiology and clinical consumables, imported direct. Every line comes with its regulatory details before you order.
             </p>
           </div>
         </section>
@@ -159,6 +177,7 @@ export default function Catalog() {
                 ))}
               </div>
             </div>
+
           </aside>
 
           {/* Catalog Main Content */}
@@ -207,3 +226,4 @@ export default function Catalog() {
     </>
   );
 }
+

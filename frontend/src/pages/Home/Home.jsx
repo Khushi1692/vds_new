@@ -6,6 +6,24 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import { fetchFeaturedProducts, fetchProducts } from '../../data/products';
 import './Home.css';
 import disinfectorImg from '../../assets/disinfector.webp';
+import imgRad from '../../assets/imaging_hospitals.jpg';
+import imgHos from '../../assets/hospital_departments.jpg';
+import imgGp from '../../assets/gp_allied_health.jpg';
+import imgAh from '../../assets/physio_sports.jpg';
+import imgAc from '../../assets/aged_care.jpg';
+
+const ART = {
+  gel: '<path d="M44 46h32v52a6 6 0 0 1-6 6H50a6 6 0 0 1-6-6z"/><path d="M48 46l3-8h18l3 8"/><path d="M55 38l2-12h6l2 12"/><circle class="accf" cx="60" cy="18" r="3.2"/><path class="dim" d="M32 46v58M29 46h6M29 104h6"/><path class="acc" d="M48 70h24"/>',
+  apron: '<path d="M40 32q20 8 40 0l6 14-4 56q-22 6-44 0l-4-56z"/><path d="M48 32q12-14 24 0"/><path class="acc" d="M37 66h46"/><path class="dim" d="M94 46v56M91 46h6M91 102h6"/>',
+  uvc: '<rect x="30" y="20" width="60" height="84" rx="4"/><rect x="40" y="30" width="40" height="52" rx="2"/><path d="M60 36v28M55 64h10l-2 9h-6z"/><path class="acc" d="M46 34v44M74 34v44" stroke-dasharray="3 4"/><circle class="accf" cx="60" cy="94" r="3"/>',
+  warmer: '<rect x="24" y="48" width="72" height="40" rx="4"/><rect x="34" y="60" width="40" height="14" rx="2"/><path d="M74 67h10M30 67h4"/><rect x="80" y="54" width="10" height="6" rx="1"/><path class="warm" d="M40 40q4-7 8 0t8 0t8 0t8 0"/><path class="dim" d="M24 96h72M24 93v6M96 93v6"/>',
+  mri: '<circle cx="48" cy="86" r="18"/><circle cx="48" cy="86" r="3"/><circle cx="88" cy="98" r="6"/><path d="M38 34l10 38h38v20"/><path d="M48 72l-4-26"/><path d="M60 72V56h24"/><rect class="acc" x="78" y="22" width="22" height="16" rx="2"/><text x="81.5" y="34.5">MR</text>',
+  gown: '<path d="M42 28l12-6q6 7 12 0l12 6 14 18-10 6-4-6 2 58H40l2-58-4 6-10-6z"/><path d="M54 22v16q6 4 12 0V22"/><path class="acc" d="M46 62h28"/>'
+};
+
+const renderSVG = (key) => (
+  <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" aria-hidden="true" dangerouslySetInnerHTML={{ __html: ART[key] }} style={{ width: '100%', height: '100%' }} />
+);
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
@@ -125,19 +143,18 @@ export default function Home() {
           <div className="container">
             <div className="home__hero-inner">
             <div className="home__hero-content">
-
+              <span className="section-badge" style={{ marginBottom: '16px', display: 'inline-block' }}>Direct importer · Medical consumables · Australia</span>
               <h1 className="home__hero-title">
-                Diagnostic supplies, direct.
+                Diagnostic supplies, <em>direct.</em>
               </h1>
               <p className="home__hero-subtitle">
-               VDS imports radiology and clinical consumables straight from the manufacturer, holds the ARTG sponsorship itself, and supplies clinics across Australia. Put us next to your current supplier, line by line.
-
+               VDS imports radiology and clinical consumables straight from the manufacturer, holds the ARTG sponsorship , and supplies clinics across Australia. Put us next to your current supplier, line by line.
               </p>
               <div className="home__hero-actions">
-                <Button as={Link} to="/products" variant="primary" size="lg" iconRight={ArrowRight}>
-                  Browse the range
+                <Button as={Link} to="/request-quote" variant="primary" size="lg" iconRight={ArrowRight}>
+                  Request a quote
                 </Button>
-                <Button as={Link} to="/about" variant="secondary" size="lg">
+                <Button as={Link} to="/why-vds" variant="secondary" size="lg">
                   Why we are different
                 </Button>
               </div>
@@ -217,49 +234,74 @@ export default function Home() {
 
 
 
-        {/* ── Featured Solutions & Services ── */}
-        {featured.length > 0 && (
-          <section className="home__section featured-section">
-            <div className="container">
-              <div className="home__section-header text-center">
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <span className="section-badge">The range</span>
-                  <h2 className="home__section-title">What we supply</h2>
-                  <p className="home__section-subtitle">
-                    Tailored medical supply solutions and services engineered for modern clinical environments.
-                  </p>
-                </div>
+        {/* ── The Range (Categories) Section ── */}
+        <section className="home__section featured-section">
+          <div className="container">
+            <div className="home__section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              <div>
+                <span className="section-badge">The range</span>
+                <h2 className="home__section-title" style={{ marginBottom: 0 }}>What we supply</h2>
               </div>
-              <div className="home__products-grid">
-                {featured.slice(0, 4).map((product) => (
-                  <ProductCard 
-                    key={product.id} 
-                    product={product} 
-                    showPrice={false} 
-                    showBadge={false} 
-                    showStock={false} 
-                  />
-                ))}
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'var(--space-2xl)' }}>
-                <Button as={Link} to="/products" variant="ghost" size="lg" iconRight={ChevronRight}>
-                  View Full Catalog
-                </Button>
-              </div>
+              <Button as={Link} to="/products" variant="outline" size="sm" iconRight={ChevronRight}>
+                All 9 product lines
+              </Button>
             </div>
-          </section>
-        )}
+
+            <div className="home__categories-grid" style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+              gap: '1rem',
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              borderLeft: '1px solid rgba(255,255,255,0.05)'
+            }}>
+              {[
+                { name: 'Imaging consumables', lines: '2 lines', desc: 'Coupling gel and print media for ultrasound and imaging rooms.', iconKey: 'gel' },
+                { name: 'Radiation protection', lines: '1 line', desc: 'Lead aprons for X-ray, fluoroscopy and theatre teams.', iconKey: 'apron' },
+                { name: 'Infection prevention', lines: '1 line', desc: 'UV-C disinfection for ultrasound probes between patients.', iconKey: 'uvc' },
+                { name: 'Patient & contrast warming', lines: '2 lines', desc: 'Contrast media warmers and warming cabinets.', iconKey: 'warmer' },
+                { name: 'Patient transfer', lines: '1 line', desc: 'Non-ferromagnetic wheelchairs for the MRI suite.', iconKey: 'mri' },
+                { name: 'Disposable and Apparel', lines: '2 lines', desc: 'Examination gowns and couch sheets.', iconKey: 'gown' }
+              ].map((cat, idx) => {
+                return (
+                <Link to={`/products?cat=${cat.name}`} key={idx} style={{
+                  padding: '1.4rem',
+                  borderRight: '1px solid rgba(255,255,255,0.05)',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 84px',
+                  gap: '0.6rem 1rem',
+                  alignItems: 'start',
+                  textDecoration: 'none',
+                  background: 'rgba(255, 255, 255, 0.012)',
+                  transition: 'background 0.2s',
+                  position: 'relative'
+                }} className="cat-card-hover">
+                  <div style={{ gridColumn: 1, display: 'flex', flexDirection: 'column', gap: '0.6rem', height: '100%' }}>
+                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '0.75rem', color: 'var(--ink-soft)' }}>{cat.lines}</span>
+                    <h3 style={{ fontSize: '1.1rem', color: 'var(--ink)', margin: 0 }}>{cat.name}</h3>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--ink-soft)', flex: 1, margin: 0 }}>{cat.desc}</p>
+                  </div>
+                  <div className="cat-art-svg" style={{ gridColumn: 2, gridRow: '1 / 4', width: '84px', height: '84px', color: 'var(--cyan)' }}>
+                    {renderSVG(cat.iconKey)}
+                  </div>
+                </Link>
+                );
+              })}
+            </div>
+
+            <p style={{ marginTop: '1.2rem', fontSize: '0.92rem', color: 'var(--ink-soft)' }}>
+              Need something that isn't listed? We source from manufacturers, so <Link to="/request-quote" style={{ textDecoration: 'underline', color: 'var(--cyan)' }}>ask us</Link>.
+            </p>
+          </div>
+        </section>
 
         {/* ── Why Practices Switch ── */}
         <section id="customer-value" className="home__section switching-section">
           <div className="container">
-            <div className="home__section-header text-center">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span className="section-badge">Customer Value</span>
-                <h2 className="home__section-title">Why practices switch to VDS</h2>
-                <p className="home__section-subtitle">
-                  Clinical managers deserve straightforward logistics without hidden distributor brokerage fees.
-                </p>
+            <div className="home__section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+              <div>
+                <span className="section-badge">Why VDS</span>
+                <h2 className="home__section-title" style={{ marginBottom: 0 }}>Three things that change<br />what you pay and who you deal with</h2>
               </div>
             </div>
 
@@ -310,31 +352,48 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Product Categories Section ── */}
-        {/*
-        <section className="home__section categories-section">
+        {/* ── Industries Section ── */}
+        <section className="home__section industries-section">
           <div className="container">
             <div className="home__section-header">
               <div>
-                <span className="section-badge">Departments We Equip</span>
-                <h2 className="home__section-title">Browse standard categories</h2>
-                <p className="home__section-subtitle">
-                  Clinical equipment and consumables held in Melbourne and Sydney warehouses.
-                </p>
+                <span className="section-badge">Who we supply</span>
+                <h2 className="home__section-title">Built for the people who keep clinics stocked</h2>
               </div>
-              <Button as={Link} to="/categories" variant="ghost" size="sm" iconRight={ChevronRight}>
-                All Categories
+              <Button as={Link} to="/industries" variant="secondary" size="sm" iconRight={ChevronRight} style={{ color: 'var(--cyan)' }}>
+                All industries
               </Button>
             </div>
 
-            <div className="home__categories-grid">
-              {categories.slice(0, 4).map((cat) => (
-                <CategoryCard key={cat.id} category={cat} />
-              ))}
+            <div className="home__categories-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+              <div className="ind-card" style={{ backgroundImage: `url(${imgRad})` }}>
+                <span className="why-vds-eyebrow">RAD</span>
+                <h4>Radiology & imaging centres</h4>
+                <p>Gel, protection, probe disinfection and MRI transfer for busy rooms.</p>
+              </div>
+              <div className="ind-card" style={{ backgroundImage: `url(${imgHos})` }}>
+                <span className="why-vds-eyebrow">HOS</span>
+                <h4>Hospital imaging departments</h4>
+                <p>Documentation-first supply for procurement teams.</p>
+              </div>
+              <div className="ind-card" style={{ backgroundImage: `url(${imgGp})` }}>
+                <span className="why-vds-eyebrow">GP</span>
+                <h4>GP & specialist clinics</h4>
+                <p>Everyday clinical consumables without the wholesaler markup.</p>
+              </div>
+              <div className="ind-card" style={{ backgroundImage: `url(${imgAh})` }}>
+                <span className="why-vds-eyebrow">AH</span>
+                <h4>Allied health</h4>
+                <p>Gel, sheets and gowns for physio, sports and sonography practices.</p>
+              </div>
+              <div className="ind-card" style={{ backgroundImage: `url(${imgAc})` }}>
+                <span className="why-vds-eyebrow">AC</span>
+                <h4>Aged care</h4>
+                <p>Warming cabinets, gowns and sheets for residential care.</p>
+              </div>
             </div>
           </div>
         </section>
-        */}
         {/* ── Price Check Section ── */}
         <section className="home__section price-check-section">
           <div className="container">

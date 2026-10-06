@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ShieldCheck, ArrowRight, ShoppingCart } from 'lucide-react';
+import { ShieldCheck, ShoppingCart } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { CartContext } from '../../context/CartContext';
+import { QuoteContext } from '../../context/QuoteContext';
 import QuickViewModal from '../QuickViewModal/QuickViewModal';
 import './ProductCard.css';
 
@@ -13,7 +14,9 @@ export default function ProductCard({
   showStock = true,
 }) {
   const { addToCart } = useContext(CartContext);
+  const { addToQuote } = useContext(QuoteContext);
   const [showModal, setShowModal] = useState(false);
+
   const stockClass =
     product.stockStatus === 'In Stock'
       ? 'product-card__stock--in'
@@ -64,39 +67,63 @@ export default function ProductCard({
           </div>
         )}
 
-        <div className="product-card__bottom">
+        <div className="product-card__bottom" style={{ paddingBottom: '12px' }}>
           {showPrice && (
             <span className="product-card__price">{product.priceLabel}</span>
           )}
-          <button 
-            className="product-card__action product-card__add-btn"
-            style={{ 
-              background: 'var(--color-primary-container, #2d5a88)', 
-              border: 'none', 
-              cursor: 'pointer', 
-              fontFamily: 'inherit', 
-              fontSize: '0.9rem', 
-              color: 'var(--color-on-primary, #ffffff)', 
-              display: 'flex', 
-              alignItems: 'center',
-              padding: '6px 12px',
-              borderRadius: '4px',
-              fontWeight: '600'
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              setShowModal(true);
-            }}
-          >
-            Add to Cart <ShoppingCart size={14} style={{ marginLeft: '6px' }} />
-          </button>
         </div>
-        {product.bulkOrderAvailable && (
-          <Link to={`/request-quote?product=${product.id}`} className="product-card__bulk-order">
-            Bulk Order? Talk to us <ArrowRight size={14} />
-          </Link>
-        )}
-      </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+            <button 
+              className="product-card__action"
+              style={{ 
+                background: 'transparent', 
+                border: '1px solid var(--color-primary-container, #2d5a88)', 
+                cursor: 'pointer', 
+                fontFamily: 'inherit', 
+                fontSize: '0.9rem', 
+                color: 'var(--color-primary-container, #2d5a88)', 
+                display: 'flex', 
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '6px 12px',
+                borderRadius: '4px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap'
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                addToQuote(product, 1);
+              }}
+            >
+              Quote
+            </button>
+            <button 
+              className="product-card__action product-card__add-btn"
+              style={{ 
+                background: 'var(--color-primary-container, #2d5a88)', 
+                border: 'none', 
+                cursor: 'pointer', 
+                fontFamily: 'inherit', 
+                fontSize: '0.9rem', 
+                color: 'var(--color-on-primary, #ffffff)', 
+                display: 'flex', 
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '6px 12px',
+                borderRadius: '4px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                gap: '6px'
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                setShowModal(true);
+              }}
+            >
+              Add to Cart <ShoppingCart size={16} />
+            </button>
+          </div>
+        </div>
 
       <QuickViewModal 
         isOpen={showModal} 

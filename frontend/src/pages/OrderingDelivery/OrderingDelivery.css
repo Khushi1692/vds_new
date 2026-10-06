@@ -1,0 +1,258 @@
+.ordering-page {
+  flex: 1;
+  background: var(--color-background);
+}
+
+.ordering-hero {
+  padding: 60px 0 40px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.ordering-title {
+  font-family: var(--font-family-headings);
+  font-size: clamp(36px, 6vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+  max-width: 860px;
+}
+
+.ordering-lead {
+  font-size: clamp(17px, 2.2vw, 19.5px);
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 740px;
+  margin-bottom: var(--space-xl);
+}
+
+.crumbs {
+  font-family: var(--font-family-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.crumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--ink);
+}
+
+/* Steps Section */
+.ordering-steps-section {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+  counter-reset: s;
+}
+
+.steps-list li {
+  counter-increment: s;
+  border-top: 2px solid var(--ink);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-content: flex-start;
+}
+
+.steps-list li::before {
+  content: "0" counter(s);
+  font-family: var(--font-family-mono);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--cyan);
+}
+
+.steps-list b {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 15.5px;
+}
+
+.steps-list span {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .steps-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .steps-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FAQ Section */
+.ordering-faq-section {
+  padding: 60px 0 100px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: clamp(24px, 5vw, 80px);
+}
+
+.split > * {
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eyebrow {
+  font-family: var(--font-family-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+}
+
+.section-title {
+  font-family: var(--font-family-headings);
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.urgent-card {
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.urgent-card b {
+  color: #f59e0b;
+  font-size: 15px;
+}
+
+.urgent-card p {
+  color: var(--ink);
+  font-size: 14.5px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.mono {
+  font-family: var(--font-family-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accordions */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-summary {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  align-items: center;
+}
+
+.faq-summary::after {
+  content: "+";
+  font-family: var(--font-family-mono);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--cyan);
+  transition: transform 0.2s;
+}
+
+.faq-item.open .faq-summary::after {
+  transform: rotate(45deg);
+}
+
+.faq-content {
+  display: none;
+  padding-bottom: 18px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.faq-content p {
+  margin: 0;
+}
+
+.faq-item.open .faq-content {
+  display: block;
+}
+
+.link {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.link:hover {
+  color: #7dd3fc;
+}

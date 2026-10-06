@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useState, useContext, useEffect, useRef } from 'react';
 import { CartContext } from '../../context/CartContext';
+import { QuoteContext } from '../../context/QuoteContext';
 import { AuthContext } from '../../context/AuthContext';
 import logoImg from '../../assets/logo.webp';
 import './Header.css';
@@ -23,6 +24,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { cartCount } = useContext(CartContext);
+  const { quoteCount } = useContext(QuoteContext);
   const { user, logout } = useContext(AuthContext);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -109,14 +111,14 @@ export default function Header() {
             className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
             onClick={() => setMobileOpen(false)}
           >
-            Products
+            Range
           </NavLink>
           <NavLink
-            to="/about"
+            to="/industries"
             className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
             onClick={() => setMobileOpen(false)}
           >
-            About Us
+            Industries
           </NavLink>
           <NavLink
             to="/why-vds"
@@ -131,6 +133,20 @@ export default function Header() {
             onClick={() => setMobileOpen(false)}
           >
             Quality & ARTG
+          </NavLink>
+          <NavLink
+            to="/procurement"
+            className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            Procurement
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) => `header__link ${isActive ? 'header__link--active' : ''}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            About
           </NavLink>
 
           {/* Mobile-only CTA */}
@@ -156,8 +172,26 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Action Controls: Cart, Account, Quote CTA */}
+        {/* Action Controls: Quote, Cart, Account */}
         <div className="header__actions">
+          {/* Quote Pill with Live Counter Badge */}
+          <Link
+            to="/quote"
+            className={`header__action-pill header__cart-pill ${quoteCount > 0 ? 'header__cart-pill--active' : ''}`}
+            aria-label={`View quote list with ${quoteCount} items`}
+            onClick={() => setMobileOpen(false)}
+          >
+            <div className="header__cart-icon-wrapper">
+              <FileText size={19} className="header__action-icon" />
+              {quoteCount > 0 && (
+                <span className="header__cart-counter" aria-live="polite">
+                  {quoteCount}
+                </span>
+              )}
+            </div>
+            <span className="header__action-text">Quote</span>
+          </Link>
+
           {/* Cart Pill with Live Counter Badge */}
           <Link
             to="/cart"

@@ -1628,3 +1628,50 @@
     font-size: 2.5rem;
   }
 }
+.cat-card-hover:hover { background: rgba(255, 255, 255, 0.04) !important; border-color: rgba(14, 165, 233, 0.25) !important; }
+
+.ind-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background-size: cover;
+  background-position: center;
+}
+
+.ind-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%);
+  z-index: 1;
+}
+
+.ind-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.ind-card .why-vds-eyebrow {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.2rem;
+  margin: 0 !important;
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.ind-card h4 {
+  color: #fff;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.ind-card p {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+}

@@ -102,7 +102,7 @@ export default function Cart() {
           <div className="cart-summary">
             <h2>Order Summary</h2>
             <div className="summary-row">
-              <span>Subtotal</span>
+              <span>Subtotal ({cartItems.length} items)</span>
               <span>${calculateTotal().toFixed(2)}</span>
             </div>
             <div className="summary-row">
@@ -110,31 +110,33 @@ export default function Cart() {
               <span>Calculated at checkout</span>
             </div>
             <div className="summary-row summary-total">
-              <span>Total Estimated</span>
+              <span>Total (ex GST)</span>
               <span>${calculateTotal().toFixed(2)}</span>
             </div>
             
-
-
-            <Button
+            <Button 
+              className="checkout-btn" 
+              fullWidth 
               onClick={handleCheckout}
-              variant="primary"
-              size="lg"
-              iconRight={ArrowRight}
-              fullWidth
             >
               Proceed to Checkout
             </Button>
+            
+            <p className="summary-note">
+              Tax and shipping charges are calculated at checkout.
+            </p>
           </div>
         </div>
       </div>
+      
       <CheckoutModal 
         isOpen={showCheckoutModal} 
-        onClose={() => setShowCheckoutModal(false)} 
-        cartItems={cartItems} 
+        onClose={() => setShowCheckoutModal(false)}
+        cartItems={cartItems}
         totalAmount={calculateTotal()}
         onSuccess={handleCheckoutSuccess}
       />
+
       <PaymentSuccessModal 
         isOpen={showSuccessModal} 
         orderId={successOrderId} 
