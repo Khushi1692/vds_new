@@ -96,7 +96,7 @@ export default function Procurement() {
           <div className="callout-container">
             <div className="callout">
               <p>
-                Nothing in the “in development” or “later” columns is live yet. If one of them would change how you buy, <Link to="/contact" className="link">tell us</Link>. It moves up the list.
+                Nothing in the “in development” or “later” columns is live yet. If one of them would change how you buy, <Link to="/request-quote?need=Product question" className="link">tell us</Link>. It moves up the list.
               </p>
             </div>
           </div>

@@ -28,7 +28,7 @@ export default function OrderingDelivery() {
     },
     {
       question: "Can I get documents before I order?",
-      answer: <>Yes. Datasheets, instructions for use and regulatory details go out with your quote. <Link to="/contact" className="link">Request documents</Link></>
+      answer: <>Yes. Datasheets, instructions for use and regulatory details go out with your quote. <Link to="/request-quote?need=Documents" className="link">Request documents</Link></>
     },
     {
       question: "Something arrived damaged or wrong. What now?",

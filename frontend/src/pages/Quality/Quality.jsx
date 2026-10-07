@@ -62,7 +62,7 @@ export default function Quality() {
               </div>
 
               <div className="artg-notice">
-                <strong>Asking about another product?</strong> We'll send its classification, ARTG details where they apply, and the manufacturer documents with your quote. <Link to="/request-quote" className="inline-link">Request documents</Link>
+                <strong>Asking about another product?</strong> We'll send its classification, ARTG details where they apply, and the manufacturer documents with your quote. <Link to="/request-quote?need=Documents" className="inline-link">Request documents</Link>
               </div>
             </div>
           </div>

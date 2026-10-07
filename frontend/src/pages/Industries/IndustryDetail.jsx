@@ -51,7 +51,7 @@ export default function IndustryDetail() {
           
           <div className="action-buttons">
             <Link className="btn primary" to="/request-quote">Request a quote <span className="arr">→</span></Link>
-            <Link className="btn" to="/request-quote?type=pricecheck">Price-check your current supplier</Link>
+            <Link className="btn" to="/request-quote?need=Price check">Price-check your current supplier</Link>
           </div>
         </div>
       </div>

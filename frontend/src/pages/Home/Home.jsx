@@ -146,7 +146,8 @@ export default function Home() {
             <div className="home__hero-content">
               <span className="section-badge" style={{ marginBottom: '16px', display: 'inline-block' }}>Direct importer · Medical consumables · Australia</span>
               <h1 className="home__hero-title">
-                Diagnostic supplies, <em>direct.</em>
+                Diagnostic supplies, <br />
+                <em style={{ fontStyle: 'normal', display: 'inline-block', background: 'linear-gradient(135deg, #ffffff 10%, #8fb3df 90%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>direct.</em>
               </h1>
               <p className="home__hero-subtitle">
                VDS imports radiology and clinical consumables straight from the manufacturer, holds the ARTG sponsorship , and supplies clinics across Australia. Put us next to your current supplier, line by line.
@@ -243,8 +244,8 @@ export default function Home() {
                 <span className="section-badge">The range</span>
                 <h2 className="home__section-title" style={{ marginBottom: 0 }}>What we supply</h2>
               </div>
-              <Button as={Link} to="/products" variant="outline" size="sm" iconRight={ChevronRight}>
-                All 9 product lines
+              <Button as={Link} to="/products" variant="outline" size="sm" iconRight={ArrowRight}>
+                All product ranges
               </Button>
             </div>
 
@@ -290,7 +291,7 @@ export default function Home() {
             </div>
 
             <p style={{ marginTop: '1.2rem', fontSize: '0.92rem', color: 'var(--ink-soft)' }}>
-              Need something that isn't listed? We source from manufacturers, so <Link to="/request-quote" style={{ textDecoration: 'underline', color: 'var(--cyan)' }}>ask us</Link>.
+              Need something that isn't listed? We source from manufacturers, so <Link to="/request-quote?need=Product question" style={{ textDecoration: 'underline', color: 'var(--cyan)' }}>ask us</Link>.
             </p>
           </div>
         </section>
@@ -360,7 +361,7 @@ export default function Home() {
                 <span className="section-badge">Who we supply</span>
                 <h2 className="home__section-title">Built for the people who keep clinics stocked</h2>
               </div>
-              <Button as={Link} to="/industries" variant="secondary" size="sm" iconRight={ChevronRight} style={{ color: 'var(--cyan)' }}>
+              <Button as={Link} to="/industries" variant="secondary" size="sm" iconRight={ArrowRight} style={{ color: 'var(--cyan)' }}>
                 All industries
               </Button>
             </div>
@@ -388,7 +389,7 @@ export default function Home() {
                 <h2>Send us your last invoice.</h2>
                 <p>We'll quote the same lines, in the same quantities, so you can compare without doing the legwork.</p>
                 <div className="price-check-actions">
-                  <Button as={Link} to="/request-quote" variant="primary" iconRight={ArrowRight}>Start a price check</Button>
+                  <Button as={Link} to="/request-quote?need=Price check" variant="primary" iconRight={ArrowRight}>Start a price check</Button>
                 </div>
               </div>
               <div className="price-check-right">

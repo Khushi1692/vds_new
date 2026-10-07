@@ -64,6 +64,19 @@
   border-color: var(--color-outline);
 }
 
+/* Outline */
+.btn--outline {
+  background: transparent;
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline);
+}
+
+.btn--outline:hover {
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  border-color: var(--color-on-surface);
+}
+
 /* Ghost */
 .btn--ghost {
   background: transparent;

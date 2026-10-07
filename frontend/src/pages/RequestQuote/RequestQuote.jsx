@@ -9,6 +9,7 @@ export default function RequestQuote() {
   const [searchParams] = useSearchParams();
   const productId = searchParams.get('product');
   const qtyParam = searchParams.get('qty') || '';
+  const needParam = searchParams.get('need');
   
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function RequestQuote() {
   const [copied, setCopied] = useState(false);
   
   const [form, setForm] = useState({
-    need: 'Request a quote',
+    need: needParam || 'Request a quote',
     name: '',
     organization: '',
     email: '',
@@ -34,7 +35,10 @@ export default function RequestQuote() {
         message: `Inquiry regarding product ID: ${productId}${qtyParam ? `, Quantity: ${qtyParam}` : ''}`
       }));
     }
-  }, [productId, qtyParam]);
+    if (needParam) {
+      setForm(prev => ({ ...prev, need: needParam }));
+    }
+  }, [productId, qtyParam, needParam]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

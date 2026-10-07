@@ -92,8 +92,8 @@ export default function Header() {
         <Link to="/" className="header__logo" aria-label="Victoria Diagnostic Supplies Home">
           <img src={logoImg} alt="Victoria Diagnostic Supplies" className="header__logo-img" />
           <div className="header__brand-text">
-            <span className="header__brand-title">VICTORIA DIAGNOSTIC</span>
-            <span className="header__brand-subtitle">SUPPLIES · AUSTRALIA</span>
+            <span className="header__brand-title">VICTORIA DIAGNOSTIC SUPPLIES</span>
+            <span className="header__brand-subtitle">AUSTRALIA</span>
           </div>
         </Link>
 
