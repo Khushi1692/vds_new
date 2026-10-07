@@ -32,7 +32,7 @@ export default function PaymentSuccessModal({ isOpen, orderId, onClose }) {
           <Button variant="primary" onClick={() => { onClose(); navigate('/products'); }} style={{ borderRadius: '24px' }}>
             Back to Menu
           </Button>
-          <Button variant="outline" onClick={() => { onClose(); navigate('/orders'); }} style={{ borderRadius: '24px' }}>
+          <Button variant="outline" className="psm-outline-btn" onClick={() => { onClose(); navigate('/orders'); }} style={{ borderRadius: '24px' }}>
             View Orders
           </Button>
         </div>

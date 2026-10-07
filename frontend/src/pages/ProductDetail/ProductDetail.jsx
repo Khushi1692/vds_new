@@ -97,10 +97,10 @@ export default function ProductDetail() {
 
         {/* Product Hero */}
         <section className="container pd__hero">
-          <div className="pd__hero-image" style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+          <div className="pd__hero-image" style={{ display: 'flex', flexDirection: 'column-reverse', gap: '16px', alignItems: 'center', width: '100%' }}>
             {/* Gallery Thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="pd__gallery-thumbs" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="pd__gallery-thumbs" style={{ display: 'flex', flexDirection: 'row', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
                 {product.images.map((img, idx) => (
                   <button 
                     key={idx}
@@ -109,7 +109,7 @@ export default function ProductDetail() {
                     style={{
                       border: activeImage === idx ? '2px solid var(--cyan)' : '2px solid transparent',
                       padding: '2px',
-                      background: 'transparent',
+                      background: '#ffffff',
                       cursor: 'pointer',
                       borderRadius: '8px',
                       overflow: 'hidden',
@@ -121,7 +121,7 @@ export default function ProductDetail() {
                     <img 
                       src={img.replace(/\.(png|jpe?g)$/i, '.webp')} 
                       alt={`${product.name} view ${idx + 1}`}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '4px' }}
                     />
                   </button>
                 ))}
@@ -129,18 +129,18 @@ export default function ProductDetail() {
             )}
             
             {/* Main Image */}
-            <div className="pd__main-image" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--card)', borderRadius: '8px', minHeight: '400px' }}>
+            <div className="pd__main-image" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', borderRadius: '8px', padding: '24px' }}>
               {(product.images && product.images.length > 0 ? product.images[activeImage] : product.image) && (product.images && product.images.length > 0 ? product.images[activeImage] : product.image) !== '/images/placeholder.jpg' ? (
                 <img 
                   src={(product.images && product.images.length > 0 ? product.images[activeImage] : product.image).replace(/\.(png|jpe?g)$/i, '.webp') + '?v=2'} 
                   alt={product.name} 
                   className="pd__hero-img" 
                   decoding="async" 
-                  style={{ width: '100%', maxHeight: '500px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
+                  style={{ width: '100%', maxHeight: '450px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
                 />
               ) : (
                 <div className="pd__hero-image-placeholder">
-                  <ShieldCheck size={72} />
+                  <ShieldCheck size={72} color="#9ca3af" />
                 </div>
               )}
             </div>

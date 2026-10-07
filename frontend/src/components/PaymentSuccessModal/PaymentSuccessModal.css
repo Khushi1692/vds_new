@@ -84,3 +84,13 @@
   justify-content: center;
   gap: 16px;
 }
+
+.psm-outline-btn {
+  color: #374151 !important;
+  border-color: #d1d5db !important;
+}
+
+.psm-outline-btn:hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
