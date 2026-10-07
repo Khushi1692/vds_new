@@ -20,7 +20,7 @@ export default function OrderingDelivery() {
     },
     {
       question: "Where do you deliver?",
-      answer: "We supply clinics across Australia from our base in Clyde North, Victoria. Delivery times depend on where you are; we confirm them with every quote."
+      answer: "We supply clinics across Australia from our base in Melbourne, Victoria. Delivery times depend on where you are; we confirm them with every quote."
     },
     {
       question: "How do I pay?",

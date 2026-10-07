@@ -5,12 +5,6 @@ import Button from '../../components/Button/Button';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { fetchFeaturedProducts, fetchProducts } from '../../data/products';
 import './Home.css';
-import disinfectorImg from '../../assets/disinfector.webp';
-import imgRad from '../../assets/imaging_hospitals.jpg';
-import imgHos from '../../assets/hospital_departments.jpg';
-import imgGp from '../../assets/gp_allied_health.jpg';
-import imgAh from '../../assets/physio_sports.jpg';
-import imgAc from '../../assets/aged_care.jpg';
 import { INDS } from '../../data/industries';
 
 const ART = {
@@ -199,7 +193,7 @@ export default function Home() {
                 <canvas ref={canvasRef} id="scan"></canvas>
                 <div className="hud" aria-hidden="true">
                   <div className="hud-row">
-                    <span>VDS · Direct supply<br /><span className="hud-dim">Clyde North · VIC</span></span>
+                    <span>VDS · Direct supply<br /><span className="hud-dim">VIC</span></span>
                     <span style={{ textAlign: 'right' }}>Gain 62<br /><span className="hud-dim">Depth 14 cm</span></span>
                   </div>
                   <div className="hud-row" style={{ alignItems: 'flex-end' }}>
@@ -218,7 +212,7 @@ export default function Home() {
               </div>
               <div className="stat-item">
                 <span className="stat-eyebrow">Direct import</span>
-                <strong>Manufacturer → VDS → you</strong>
+                <strong>Manufacturer → VDS → You</strong>
               </div>
               <div className="stat-item">
                 <span className="stat-eyebrow">Nurse-founded</span>
@@ -226,7 +220,7 @@ export default function Home() {
               </div>
               <div className="stat-item">
                 <span className="stat-eyebrow">Australia-wide</span>
-                <strong>Based in Clyde North, VIC</strong>
+                <strong>Based in Melbourne, serving Australia.</strong>
               </div>
             </div>
           </div>
@@ -257,11 +251,10 @@ export default function Home() {
               borderLeft: '1px solid rgba(255,255,255,0.05)'
             }}>
               {[
-                { name: 'Medical Imaging Consumables', lines: '3 lines', desc: 'Coupling gel, print media, and radiation protection.', iconKey: 'gel' },
-                { name: 'Infection Prevention', lines: '2 lines', desc: 'Disposable gowns, bedsheets, and related apparel.', iconKey: 'gown' },
-                { name: 'Furniture and Patient Transfer', lines: '2 lines', desc: 'Examination couches and MRI safe wheelchairs.', iconKey: 'mri' },
-                { name: 'Medical Equipment', lines: '3 lines', desc: 'Gel warmers, warming cabinets, and UV-C probe disinfectors.', iconKey: 'warmer' },
-                { name: 'Everyday Paper Supplies', lines: '3 lines', desc: 'Medical rolls and tissue papers.', iconKey: 'uvc' }
+                { name: 'Ultrasound / Imaging', lines: '7 lines', desc: 'Ultrasound gel, warmers, UV disinfectors, lead aprons and print media.', iconKey: 'gel' },
+                { name: 'Clinic Furniture', lines: '2 lines', desc: 'Examination bed and MRI chair.', iconKey: 'mri' },
+                { name: 'Linen & Gowns', lines: '2 lines', desc: 'Bedsheets and disposable gowns.', iconKey: 'gown' },
+                { name: 'Paper & Hygiene', lines: '3 lines', desc: 'Medical roll, facial tissues, and toilet paper.', iconKey: 'uvc' }
               ].map((cat, idx) => {
                 return (
                 <Link to={`/products?cat=${cat.name}`} key={idx} style={{
@@ -296,60 +289,45 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Why Practices Switch ── */}
-        <section id="customer-value" className="home__section switching-section">
+        <section id="customer-value" className="home__section switching-section" style={{ borderTop: '1px solid rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.03)', padding: '6rem 0' }}>
           <div className="container">
             <div className="home__section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' }}>
               <div>
                 <span className="section-badge">Why VDS</span>
-                <h2 className="home__section-title" style={{ marginBottom: 0 }}>Three things that change<br />what you pay and who you deal with</h2>
+                <h2 className="home__section-title" style={{ marginBottom: 0 }}>Three things that change what<br />you pay and who you deal with</h2>
               </div>
             </div>
 
-            <div className="process-flow-container">
-              {/* Horizontal connecting line behind cards */}
-              <div className="process-flow-line"></div>
-
-              <div className="process-flow-grid">
+            <div className="process-flow-container" style={{ paddingTop: '1rem', marginTop: '3rem', paddingBottom: '0' }}>
+              <div className="process-flow-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', rowGap: '3rem' }}>
                 {/* Step 1 */}
-                <div className="process-flow-card">
-                  <div className="process-step-badge step-1">
-                    <span>01</span>
-                  </div>
-                  <span className="why-vds-eyebrow" style={{ marginTop: 'auto', marginBottom: '8px' }}>FEWER HANDS</span>
-                  <h4>We import it ourselves</h4>
-                  <p>
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
+                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>FEWER HANDS</span>
+                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>We import it ourselves</h4>
+                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
                     Product comes from the manufacturer to us and then to you. No wholesaler in between taking a margin.
                   </p>
                 </div>
 
                 {/* Step 2 */}
-                <div className="process-flow-card">
-                  <div className="process-step-badge step-2">
-                    <span>02</span>
-                  </div>
-                  <span className="why-vds-eyebrow" style={{ marginTop: 'auto', marginBottom: '8px' }}>ONE ACCOUNTABLE PARTY</span>
-                  <h4>We hold the sponsorship</h4>
-                  <p>
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
+                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>ONE ACCOUNTABLE PARTY</span>
+                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>We hold the sponsorship</h4>
+                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
                     For lines we sponsor on the ARTG, regulatory questions and recalls come straight to us. The first, our coupling gel, is ARTG 530981.
                   </p>
                 </div>
 
                 {/* Step 3 */}
-                <div className="process-flow-card">
-                  <div className="process-step-badge step-3">
-                    <span>03</span>
-                  </div>
-                  <span className="why-vds-eyebrow" style={{ marginTop: 'auto', marginBottom: '8px' }}>CLINICAL JUDGEMENT</span>
-                  <h4>Founded by a nurse</h4>
-                  <p>
-                    VDS was started by an endorsed enrolled nurse who's led clinical teams in hospitals and aged care. We choose products the way a clinician would.
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
+                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>CLINICAL JUDGEMENT</span>
+                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>Founded by a nurse</h4>
+                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
+                    VDS was started by healthcare professionals who led teams in clinical settings. We choose products the way a clinician would.
                   </p>
                 </div>
               </div>
             </div>
-
-
           </div>
         </section>
 
@@ -366,17 +344,29 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="home__categories-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
-              {INDS.map((ind, i) => {
-                const images = [imgRad, imgHos, imgGp, imgAh, imgAc];
-                return (
-                  <Link to={`/industries/${ind.id}`} key={ind.code} className="ind-card" style={{ backgroundImage: `url(${images[i]})`, textDecoration: 'none', color: 'inherit' }}>
-                    <span className="why-vds-eyebrow">{ind.code}</span>
-                    <h4>{ind.name}</h4>
-                    <p>{ind.short}</p>
-                  </Link>
-                );
-              })}
+            <div className="inds-row" style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(5, 1fr)', 
+              marginTop: '2rem',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.012)'
+            }}>
+              {INDS.map((ind, i) => (
+                <Link to={`/industries/${ind.id}`} key={ind.code} className="ind-cell cat-card-hover" style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  padding: '2rem 1.5rem', 
+                  textDecoration: 'none',
+                  borderRight: i !== INDS.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none'
+                }}>
+                  <span className="code" style={{ fontFamily: 'var(--font-family-mono)', color: '#8fb3df', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1px', marginBottom: '2.5rem' }}>{ind.code}</span>
+                  <div className="ind-body">
+                    <h3 style={{ fontSize: '1.1rem', margin: '0 0 0.8rem 0', color: '#fff', lineHeight: 1.3, fontWeight: 600 }}>{ind.name}</h3>
+                    <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', margin: 0, lineHeight: 1.5 }}>{ind.short}</p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
@@ -419,24 +409,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Quote Section ── */}
-        <section className="home__section quote-section">
-          <div className="container">
-            <div className="quote-container">
-              <div className="quote-avatar">
-                <span className="quote-avatar-text">VDS</span>
-              </div>
-              <div className="quote-content">
-                <blockquote>
-                  “I've stood in the storeroom at 2am looking for something that wasn't there. VDS exists so that happens less.”
-                </blockquote>
-                <div className="quote-author">
-                  Harsh, co-founder &middot; Endorsed enrolled nurse &middot; <Link to="/about">Read our story</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+
 
       </main>
     </>

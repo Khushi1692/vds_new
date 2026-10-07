@@ -118,7 +118,7 @@ export default function WhyVDS() {
               <span className="feature-category">REACH</span>
               <h3 className="feature-title">Melbourne-based, national</h3>
               <p className="feature-desc">
-                Run from Clyde North, Victoria, supplying clinics across Australia.
+                Run from Melbourne, Victoria, supplying clinics across Australia.
               </p>
             </div>
 

@@ -30,7 +30,7 @@ export default function ProductCard({
       <Link to={`/product/${product.id}`} className="product-card__image" style={{ textDecoration: 'none' }}>
         {product.image && product.image !== '/images/placeholder.jpg' ? (
           <img 
-            src={product.image.replace(/\.(png|jpe?g)$/i, '.webp')} 
+            src={product.image.replace(/\.(png|jpe?g)$/i, '.webp') + '?v=2'} 
             alt={product.name} 
             className="product-card__img" 
             loading="lazy" 

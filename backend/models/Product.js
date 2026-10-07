@@ -28,6 +28,7 @@ const productSchema = new mongoose.Schema({
   stockStatus: String,
   bulkOrderAvailable: Boolean,
   image: String,
+  images: [String],
   featured: Boolean,
   heroQuote: String,
   badges: [badgeSchema]

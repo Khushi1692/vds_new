@@ -24,13 +24,6 @@ import {
 } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import './AboutUs.css';
-import aboutUsImg from '../../assets/aboutus.webp';
-import foundersImg from '../../assets/founders_vds.jpg';
-import imgHospitals from '../../assets/imaging_hospitals.jpg';
-import imgHospitalsDept from '../../assets/hospital_departments.jpg';
-import imgGp from '../../assets/gp_allied_health.jpg';
-import imgPhysio from '../../assets/physio_sports.jpg';
-import imgAgedCare from '../../assets/aged_care.jpg';
 
 export default function AboutUs() {
   useEffect(() => {
@@ -80,17 +73,14 @@ export default function AboutUs() {
             <div className="about-page__hero-new-header">
               <h1 className="about-page__hero-new-title">Started by people<br/>who've worked the floor.</h1>
               <p className="about-page__hero-new-subtitle">
-                VDS is an Australian-owned importer of medical consumables and clinical equipment, based in Clyde North, Victoria.
+                VDS is an Australian-owned importer of medical consumables and clinical equipment, based in Melbourne, Victoria.
               </p>
             </div>
             
-            <div className="about-page__hero-new-split">
-              <div className="about-page__hero-new-image-wrapper">
-                <img src={foundersImg} alt="VDS Founders" className="about-page__hero-new-img" />
-              </div>
-              <div className="about-page__hero-new-content">
+            <div className="about-page__hero-new-statement" style={{ marginTop: '3rem' }}>
+              <div className="about-page__hero-new-content" style={{ maxWidth: '900px', fontSize: '1.15rem', lineHeight: '1.8' }}>
                 <p>
-                  Harsh is an endorsed enrolled nurse who has led clinical teams in hospitals and aged care. Raghav brings the commercial side. Together they started VDS after seeing the same problem from both ends: clinics paying several layers of margin for everyday consumables, and getting slow answers when something went wrong.
+                  Harsh is a Healthcare Professional who has led clinical teams in hospitals and aged care. Ray brings the commercial side. Together they started VDS after seeing the same problem from both ends: clinics paying several layers of margin for everyday consumables, and getting slow answers when something went wrong.
                 </p>
                 <p>
                   So we went to the source. We import directly from manufacturers, we hold ARTG sponsorship ourselves, and we supply clinics across Australia without the reseller chain in between.
@@ -273,7 +263,7 @@ export default function AboutUs() {
                   </div>
                   <h3>Category intelligence</h3>
                   <p>
-                    We understand radiology consumables, injector specifications, and clinical workflows well enough to consult, not just take orders.
+                    We understand medical equipment, consumables, specifications, and clinical workflows well enough to consult, not just take orders.
                   </p>
                 </div>
               </div>

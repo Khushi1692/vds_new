@@ -57,8 +57,8 @@ export default function Footer() {
           <Link to="/" className="footer__logo" style={{ textDecoration: 'none' }}>
             <img src={logoImg} alt="Victoria Diagnostic Supplies" style={{ height: '40px', marginBottom: '1.2rem', filter: 'drop-shadow(0 4px 14px rgba(28, 77, 128, 0.5))' }} />
           </Link>
-          <p className="footer__tagline" style={{ maxWidth: '280px', color: 'rgba(255,255,255,0.7)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-            Victoria Diagnostic Supplies imports radiology and clinical consumables direct from the manufacturer and supplies clinics across Australia.
+          <p className="footer__tagline" style={{ maxWidth: '320px', color: 'rgba(255,255,255,0.7)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+            Victoria Diagnostic Supplies acknowledge the Traditional Owners of Country throughout Australia and recognise their continuing connection to land, waters and community. We pay our respect to them and their cultures and to Elders past and present.
           </p>
           <div className="footer__social" style={{ display: 'flex', gap: '0.8rem' }}>
             <a href="https://www.linkedin.com/company/victoria-diagnostic-supplies-pty-ltd/" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><LinkedinIcon style={{ width: 18, height: 18 }} /></a>
@@ -110,7 +110,7 @@ export default function Footer() {
 
       <div className="footer__bottom">
         <div className="container footer__bottom-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', paddingBottom: '2rem' }}>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>© 2026 Victoria Diagnostic Supplies Pty Ltd · Clyde North, Victoria · Australian owned</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>© 2026 Victoria Diagnostic Supplies Pty Ltd · Melbourne, Victoria · Australian owned</p>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             <span style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-family-mono)', borderRadius: '4px' }}>

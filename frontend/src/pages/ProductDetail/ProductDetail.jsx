@@ -21,6 +21,7 @@ export default function ProductDetail() {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function ProductDetail() {
     ]).then(([prod, rel]) => {
       setProduct(prod);
       setRelated(rel);
+      setActiveImage(0); // Reset on product load
       setLoading(false);
     }).catch(err => {
       console.error(err);
@@ -95,19 +97,53 @@ export default function ProductDetail() {
 
         {/* Product Hero */}
         <section className="container pd__hero">
-          <div className="pd__hero-image">
-            {product.image && product.image !== '/images/placeholder.jpg' ? (
-              <img 
-                src={product.image.replace(/\.(png|jpe?g)$/i, '.webp')} 
-                alt={product.name} 
-                className="pd__hero-img" 
-                decoding="async" 
-              />
-            ) : (
-              <div className="pd__hero-image-placeholder">
-                <ShieldCheck size={72} />
+          <div className="pd__hero-image" style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+            {/* Gallery Thumbnails */}
+            {product.images && product.images.length > 1 && (
+              <div className="pd__gallery-thumbs" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {product.images.map((img, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setActiveImage(idx)}
+                    onMouseEnter={() => setActiveImage(idx)}
+                    style={{
+                      border: activeImage === idx ? '2px solid var(--cyan)' : '2px solid transparent',
+                      padding: '2px',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      width: '80px',
+                      height: '80px',
+                      flexShrink: 0
+                    }}
+                  >
+                    <img 
+                      src={img.replace(/\.(png|jpe?g)$/i, '.webp')} 
+                      alt={`${product.name} view ${idx + 1}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                    />
+                  </button>
+                ))}
               </div>
             )}
+            
+            {/* Main Image */}
+            <div className="pd__main-image" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--card)', borderRadius: '8px', minHeight: '400px' }}>
+              {(product.images && product.images.length > 0 ? product.images[activeImage] : product.image) && (product.images && product.images.length > 0 ? product.images[activeImage] : product.image) !== '/images/placeholder.jpg' ? (
+                <img 
+                  src={(product.images && product.images.length > 0 ? product.images[activeImage] : product.image).replace(/\.(png|jpe?g)$/i, '.webp') + '?v=2'} 
+                  alt={product.name} 
+                  className="pd__hero-img" 
+                  decoding="async" 
+                  style={{ width: '100%', maxHeight: '500px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
+                />
+              ) : (
+                <div className="pd__hero-image-placeholder">
+                  <ShieldCheck size={72} />
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="pd__hero-info">
