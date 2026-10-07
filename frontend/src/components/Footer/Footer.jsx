@@ -70,12 +70,11 @@ export default function Footer() {
         <div className="footer__col">
           <h5 className="footer__col-title" style={{ color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.75rem', marginBottom: '1.2rem' }}>RANGE</h5>
           <ul className="footer__list">
-            <li><Link to="/products?cat=Imaging consumables">Imaging consumables</Link></li>
-            <li><Link to="/products?cat=Radiation protection">Radiation protection</Link></li>
-            <li><Link to="/products?cat=Infection prevention">Infection prevention</Link></li>
-            <li><Link to="/products?cat=Patient & contrast warming">Patient & contrast warming</Link></li>
-            <li><Link to="/products?cat=Patient transfer">Patient transfer</Link></li>
-            <li><Link to="/products?cat=Disposable and Apparel">Disposable and Apparel</Link></li>
+            <li><Link to="/products?cat=Medical Imaging Consumables">Medical Imaging Consumables</Link></li>
+            <li><Link to="/products?cat=Infection Prevention">Infection Prevention</Link></li>
+            <li><Link to="/products?cat=Furniture and Patient Transfer">Furniture and Patient Transfer</Link></li>
+            <li><Link to="/products?cat=Medical Equipment">Medical Equipment</Link></li>
+            <li><Link to="/products?cat=Everyday Paper Supplies">Everyday Paper Supplies</Link></li>
           </ul>
         </div>
 
@@ -93,7 +92,7 @@ export default function Footer() {
         <div className="footer__col">
           <h5 className="footer__col-title" style={{ color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.75rem', marginBottom: '1.2rem' }}>GET IN TOUCH</h5>
           <ul className="footer__list footer__list--contact">
-            <li><Link to="/contact">Contact & quotes</Link></li>
+            <li><Link to="/request-quote">Contact & quotes</Link></li>
             <li><Link to="/support">Ordering & delivery</Link></li>
             <li><Link to="/account">Trade account</Link></li>
             <li style={{ marginTop: '1rem', fontFamily: 'var(--font-family-mono)', color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>

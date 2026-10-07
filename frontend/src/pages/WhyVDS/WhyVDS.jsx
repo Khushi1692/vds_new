@@ -129,8 +129,9 @@ export default function WhyVDS() {
       {/* Table Section */}
       <section className="why-page__table-section">
         <div className="container">
-          <div className="table-header-wrap">
-            <h2 className="table-main-title">What changes when you switch</h2>
+          <div className="table-header-wrap" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <span className="section-badge" style={{ alignSelf: 'flex-start' }}>Side by side</span>
+            <h2 className="table-main-title" style={{ margin: 0 }}>What changes when you switch</h2>
           </div>
 
           <div className="why-page__table-card">

@@ -11,6 +11,7 @@ import imgHos from '../../assets/hospital_departments.jpg';
 import imgGp from '../../assets/gp_allied_health.jpg';
 import imgAh from '../../assets/physio_sports.jpg';
 import imgAc from '../../assets/aged_care.jpg';
+import { INDS } from '../../data/industries';
 
 const ART = {
   gel: '<path d="M44 46h32v52a6 6 0 0 1-6 6H50a6 6 0 0 1-6-6z"/><path d="M48 46l3-8h18l3 8"/><path d="M55 38l2-12h6l2 12"/><circle class="accf" cx="60" cy="18" r="3.2"/><path class="dim" d="M32 46v58M29 46h6M29 104h6"/><path class="acc" d="M48 70h24"/>',
@@ -154,8 +155,8 @@ export default function Home() {
                 <Button as={Link} to="/request-quote" variant="primary" size="lg" iconRight={ArrowRight}>
                   Request a quote
                 </Button>
-                <Button as={Link} to="/why-vds" variant="secondary" size="lg">
-                  Why we are different
+                <Button as={Link} to="/products" variant="secondary" size="lg">
+                  Browse the range
                 </Button>
               </div>
               
@@ -255,12 +256,11 @@ export default function Home() {
               borderLeft: '1px solid rgba(255,255,255,0.05)'
             }}>
               {[
-                { name: 'Imaging consumables', lines: '2 lines', desc: 'Coupling gel and print media for ultrasound and imaging rooms.', iconKey: 'gel' },
-                { name: 'Radiation protection', lines: '1 line', desc: 'Lead aprons for X-ray, fluoroscopy and theatre teams.', iconKey: 'apron' },
-                { name: 'Infection prevention', lines: '1 line', desc: 'UV-C disinfection for ultrasound probes between patients.', iconKey: 'uvc' },
-                { name: 'Patient & contrast warming', lines: '2 lines', desc: 'Contrast media warmers and warming cabinets.', iconKey: 'warmer' },
-                { name: 'Patient transfer', lines: '1 line', desc: 'Non-ferromagnetic wheelchairs for the MRI suite.', iconKey: 'mri' },
-                { name: 'Disposable and Apparel', lines: '2 lines', desc: 'Examination gowns and couch sheets.', iconKey: 'gown' }
+                { name: 'Medical Imaging Consumables', lines: '3 lines', desc: 'Coupling gel, print media, and radiation protection.', iconKey: 'gel' },
+                { name: 'Infection Prevention', lines: '2 lines', desc: 'Disposable gowns, bedsheets, and related apparel.', iconKey: 'gown' },
+                { name: 'Furniture and Patient Transfer', lines: '2 lines', desc: 'Examination couches and MRI safe wheelchairs.', iconKey: 'mri' },
+                { name: 'Medical Equipment', lines: '3 lines', desc: 'Gel warmers, warming cabinets, and UV-C probe disinfectors.', iconKey: 'warmer' },
+                { name: 'Everyday Paper Supplies', lines: '3 lines', desc: 'Medical rolls and tissue papers.', iconKey: 'uvc' }
               ].map((cat, idx) => {
                 return (
                 <Link to={`/products?cat=${cat.name}`} key={idx} style={{
@@ -366,31 +366,16 @@ export default function Home() {
             </div>
 
             <div className="home__categories-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
-              <div className="ind-card" style={{ backgroundImage: `url(${imgRad})` }}>
-                <span className="why-vds-eyebrow">RAD</span>
-                <h4>Radiology & imaging centres</h4>
-                <p>Gel, protection, probe disinfection and MRI transfer for busy rooms.</p>
-              </div>
-              <div className="ind-card" style={{ backgroundImage: `url(${imgHos})` }}>
-                <span className="why-vds-eyebrow">HOS</span>
-                <h4>Hospital imaging departments</h4>
-                <p>Documentation-first supply for procurement teams.</p>
-              </div>
-              <div className="ind-card" style={{ backgroundImage: `url(${imgGp})` }}>
-                <span className="why-vds-eyebrow">GP</span>
-                <h4>GP & specialist clinics</h4>
-                <p>Everyday clinical consumables without the wholesaler markup.</p>
-              </div>
-              <div className="ind-card" style={{ backgroundImage: `url(${imgAh})` }}>
-                <span className="why-vds-eyebrow">AH</span>
-                <h4>Allied health</h4>
-                <p>Gel, sheets and gowns for physio, sports and sonography practices.</p>
-              </div>
-              <div className="ind-card" style={{ backgroundImage: `url(${imgAc})` }}>
-                <span className="why-vds-eyebrow">AC</span>
-                <h4>Aged care</h4>
-                <p>Warming cabinets, gowns and sheets for residential care.</p>
-              </div>
+              {INDS.map((ind, i) => {
+                const images = [imgRad, imgHos, imgGp, imgAh, imgAc];
+                return (
+                  <Link to={`/industries/${ind.id}`} key={ind.code} className="ind-card" style={{ backgroundImage: `url(${images[i]})`, textDecoration: 'none', color: 'inherit' }}>
+                    <span className="why-vds-eyebrow">{ind.code}</span>
+                    <h4>{ind.name}</h4>
+                    <p>{ind.short}</p>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>

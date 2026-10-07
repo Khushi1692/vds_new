@@ -16,6 +16,7 @@ export default function ProductCard({
   const { addToCart } = useContext(CartContext);
   const { addToQuote } = useContext(QuoteContext);
   const [showModal, setShowModal] = useState(false);
+  const [isQuoteAdded, setIsQuoteAdded] = useState(false);
 
   const stockClass =
     product.stockStatus === 'In Stock'
@@ -76,26 +77,29 @@ export default function ProductCard({
             <button 
               className="product-card__action"
               style={{ 
-                background: 'transparent', 
-                border: '1px solid var(--color-primary-container, #2d5a88)', 
+                background: isQuoteAdded ? 'var(--color-success-bg, #dcfce7)' : 'transparent', 
+                border: isQuoteAdded ? '1px solid var(--color-success, #16a34a)' : '1px solid var(--color-primary-container, #2d5a88)', 
                 cursor: 'pointer', 
                 fontFamily: 'inherit', 
                 fontSize: '0.9rem', 
-                color: 'var(--color-primary-container, #2d5a88)', 
+                color: isQuoteAdded ? 'var(--color-success, #16a34a)' : 'var(--color-primary-container, #2d5a88)', 
                 display: 'flex', 
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '6px 12px',
                 borderRadius: '4px',
                 fontWeight: '600',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s ease-in-out'
               }}
               onClick={(e) => {
                 e.preventDefault();
                 addToQuote(product, 1);
+                setIsQuoteAdded(true);
+                setTimeout(() => setIsQuoteAdded(false), 2000);
               }}
             >
-              Quote
+              {isQuoteAdded ? 'Added ✓' : 'Quote'}
             </button>
             <button 
               className="product-card__action product-card__add-btn"

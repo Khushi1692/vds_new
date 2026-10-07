@@ -225,7 +225,7 @@ export default function AboutUs() {
                   </div>
                   <h3>We're a supplier first</h3>
                   <p>
-                    Real stock, real products, real delivery in Melbourne and Sydney — that's the foundation of clinical trust, not a broker's afterthought.
+                    Real stock, real products, reliable delivery across Australia — that's the foundation of clinical trust, not a broker's afterthought.
                   </p>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function AboutUs() {
               <h2 className="about-page__section-title">Build a better clinical supply chain</h2>
               <p>Connect directly with our category specialists to design, source, or secure radiology consumables.</p>
             </div>
-            <Button as={Link} to="/request-quote" variant="primary" size="lg" iconRight={ArrowRight}>
+            <Button as={Link} to="/login" variant="primary" size="lg" iconRight={ArrowRight}>
               Open a facility account
             </Button>
           </div>

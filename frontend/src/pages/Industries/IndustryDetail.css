@@ -1,0 +1,201 @@
+.industry-detail-page {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.industry-detail-page .phead {
+  padding-top: clamp(2.2rem, 5vw, 4rem);
+  padding-bottom: clamp(1.6rem, 3vw, 2.6rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.industry-detail-page .stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.industry-detail-page .crumbs {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.industry-detail-page .crumbs a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.industry-detail-page .crumbs a:hover {
+  color: var(--color-on-surface);
+}
+
+.industry-detail-page .eyebrow {
+  font-family: var(--font-family-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant);
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.industry-detail-page .eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+}
+
+.industry-detail-page h1 {
+  font-family: var(--font-family-headings);
+  font-size: clamp(2.3rem, 5.6vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.industry-detail-page .lede {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--color-on-surface-variant);
+  max-width: 56ch;
+  line-height: 1.6;
+}
+
+.industry-detail-page .action-buttons {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.industry-detail-page .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-on-surface);
+  background: transparent;
+  color: var(--color-on-surface);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s, transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.industry-detail-page .btn:hover {
+  background: var(--color-on-surface);
+  color: var(--color-surface);
+}
+
+.industry-detail-page .btn.primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.industry-detail-page .btn.primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.industry-detail-page .arr {
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.industry-detail-page .btn:hover .arr {
+  transform: translateX(3px);
+}
+
+.industry-detail-page .band {
+  padding-top: clamp(3rem, 7vw, 6rem);
+  padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+
+.industry-detail-page .lines-section {
+  padding-top: 0;
+}
+
+.industry-detail-page .container {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.industry-detail-page .pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 3vw, 2.5rem);
+}
+
+.industry-detail-page .pillar {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  border-top: 2px solid var(--color-on-surface);
+  padding-top: 1.1rem;
+}
+
+.industry-detail-page .pillar h3 {
+  font-family: var(--font-family-headings);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.industry-detail-page .pillar p {
+  color: var(--color-on-surface-variant);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.industry-detail-page .shead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+.industry-detail-page .shead h2 {
+  font-family: var(--font-family-headings);
+  font-size: clamp(1.7rem, 3.4vw, 2.7rem);
+  margin: 0;
+}
+
+.industry-detail-page .grid-prod {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 860px) {
+  .industry-detail-page .pillars {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .industry-detail-page .shead {
+    grid-template-columns: 1fr;
+  }
+}

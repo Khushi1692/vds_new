@@ -89,9 +89,9 @@
   --color-info-bg: #e8f0fa;
 
   /* Typography */
-  --font-family: 'IBM Plex Sans', sans-serif;
-  --font-family-headings: 'Archivo', sans-serif;
-  --font-family-mono: 'IBM Plex Mono', monospace;
+  --font-family: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-family-headings: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Spacing — 8px base linear scale */
   --space-2xs: 2px;

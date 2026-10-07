@@ -1,40 +1,8 @@
 import { Link } from 'react-router-dom';
+import { INDS } from '../../data/industries';
 import './Industries.css';
 
 export default function Industries() {
-  const industries = [
-    {
-      code: 'RAD',
-      title: 'Radiology & imaging centres',
-      desc: 'Gel, protection, probe disinfection and MRI transfer for busy rooms.',
-      link: '/industries/rad'
-    },
-    {
-      code: 'HOS',
-      title: 'Hospital imaging departments',
-      desc: 'Documentation-first supply for procurement teams.',
-      link: '/industries/hos'
-    },
-    {
-      code: 'GP',
-      title: 'GP & specialist clinics',
-      desc: 'Everyday clinical consumables without the wholesaler markup.',
-      link: '/industries/gp'
-    },
-    {
-      code: 'AH',
-      title: 'Allied health',
-      desc: 'Gel, sheets and gowns for physio, sports and sonography practices.',
-      link: '/industries/ah'
-    },
-    {
-      code: 'AC',
-      title: 'Aged care',
-      desc: 'Warming cabinets, gowns and sheets for residential care.',
-      link: '/industries/ac'
-    }
-  ];
-
   return (
     <main className="industries-page">
       <section className="industries-hero">
@@ -54,12 +22,12 @@ export default function Industries() {
       <section className="industries-content">
         <div className="container">
           <div className="inds">
-            {industries.map((ind) => (
-              <Link to="/products" key={ind.code} className="ind">
+            {INDS.map((ind) => (
+              <Link to={`/industries/${ind.id}`} key={ind.code} className="ind">
                 <span className="code">{ind.code}</span>
                 <div className="ind-body">
-                  <h3>{ind.title}</h3>
-                  <p>{ind.desc}</p>
+                  <h3>{ind.name}</h3>
+                  <p>{ind.short}</p>
                 </div>
               </Link>
             ))}

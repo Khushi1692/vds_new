@@ -11,6 +11,7 @@ import Success from './pages/Success/Success';
 import Cart from './pages/Cart/Cart';
 import QuoteList from './pages/QuoteList/QuoteList';
 import Industries from './pages/Industries/Industries';
+import IndustryDetail from './pages/Industries/IndustryDetail';
 import Procurement from './pages/Procurement/Procurement';
 import OrderingDelivery from './pages/OrderingDelivery/OrderingDelivery';
 import Login from './pages/Auth/Login';
@@ -18,6 +19,8 @@ import Signup from './pages/Auth/Signup';
 import OrderHistory from './pages/Orders/OrderHistory';
 import Quality from './pages/Quality/Quality';
 import ARTGGuide from './pages/ARTGGuide/ARTGGuide';
+import Insights from './pages/Insights/Insights';
+import TradeAccount from './pages/TradeAccount/TradeAccount';
 import ScrollToTop from './components/ScrollToTop';
 import { CartProvider } from './context/CartContext';
 import { QuoteProvider } from './context/QuoteContext';
@@ -44,13 +47,16 @@ export default function App() {
         <Route path="/orders" element={<OrderHistory />} />
         <Route path="/support" element={<OrderingDelivery />} />
         <Route path="/industries" element={<Industries />} />
+        <Route path="/industries/:id" element={<IndustryDetail />} />
         <Route path="/procurement" element={<Procurement />} />
         {/* <Route path="/categories" element={<Categories />} /> */}
         <Route path="/beyond-the-shelf" element={<Navigate to="/about" replace />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/why-vds" element={<WhyVDS />} />
         <Route path="/quality" element={<Quality />} />
+        <Route path="/insights" element={<Insights />} />
         <Route path="/insights/artg-guide" element={<ARTGGuide />} />
+        <Route path="/account" element={<TradeAccount />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/request-quote" element={<RequestQuote />} />
         <Route path="/success" element={<Success />} />

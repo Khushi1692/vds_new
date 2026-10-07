@@ -47,12 +47,11 @@ export default function Catalog() {
 
   const categoryCounts = useMemo(() => {
     const predefinedCategories = [
-      "Imaging consumables",
-      "Radiation protection",
-      "Infection prevention",
-      "Patient & contrast warming",
-      "Patient transfer",
-      "Linen & apparel"
+      "Medical Imaging Consumables",
+      "Infection Prevention",
+      "Furniture and Patient Transfer",
+      "Medical Equipment",
+      "Everyday Paper Supplies"
     ];
 
     const counts = {};

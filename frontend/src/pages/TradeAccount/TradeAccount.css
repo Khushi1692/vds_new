@@ -1,0 +1,98 @@
+.trade-account-page {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+.trade-account-page .split {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 800px) {
+  .trade-account-page .split {
+    flex-direction: column;
+  }
+}
+
+.trade-account-page .needs {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.trade-account-page .needs li {
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.trade-account-page .needs li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.trade-account-page .panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  flex: 1;
+  width: 100%;
+}
+
+.trade-account-page .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.trade-account-page .row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .trade-account-page .row2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.trade-account-page .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trade-account-page .field label {
+  font-family: var(--font-family-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+.trade-account-page .field input,
+.trade-account-page .field select {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+.trade-account-page .field input:focus,
+.trade-account-page .field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
