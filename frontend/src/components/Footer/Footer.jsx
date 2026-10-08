@@ -70,10 +70,11 @@ export default function Footer() {
         <div className="footer__col">
           <h5 className="footer__col-title" style={{ color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.75rem', marginBottom: '1.2rem' }}>RANGE</h5>
           <ul className="footer__list">
-            <li><Link to="/products?cat=Ultrasound%20%2F%20Imaging">Ultrasound / Imaging</Link></li>
-            <li><Link to="/products?cat=Clinic%20Furniture">Clinic Furniture</Link></li>
-            <li><Link to="/products?cat=Linen%20%26%20Gowns">Linen & Gowns</Link></li>
-            <li><Link to="/products?cat=Paper%20%26%20Hygiene">Paper & Hygiene</Link></li>
+            <li><Link to="/products?cat=Medical%20Imaging%20Consumables">Medical Imaging Consumables</Link></li>
+            <li><Link to="/products?cat=Infection%20Prevention">Infection Prevention</Link></li>
+            <li><Link to="/products?cat=Furniture%20and%20Patient%20Transfer">Furniture and Patient Transfer</Link></li>
+            <li><Link to="/products?cat=Medical%20Equipment">Medical Equipment</Link></li>
+            <li><Link to="/products?cat=Everyday%20Paper%20Supplies">Everyday Paper Supplies</Link></li>
           </ul>
         </div>
 

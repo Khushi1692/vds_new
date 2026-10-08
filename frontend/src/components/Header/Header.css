@@ -859,3 +859,66 @@
     font-size: 13px;
   }
 }
+
+/* ── Mobile Floating Action Button ("Talk to Us" at Bottom Right) ── */
+.header__floating-cta {
+  display: none;
+}
+
+@media (max-width: 1080px) {
+  .header__floating-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    position: fixed;
+    bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    right: max(16px, env(safe-area-inset-right, 16px));
+    z-index: 990;
+    height: 46px;
+    padding: 0 1.25rem 0 1.1rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #0e4da4 0%, #0891b2 100%);
+    border: 1px solid rgba(166, 196, 235, 0.45);
+    color: #ffffff;
+    font-family: var(--font-family-base, inherit);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(8, 145, 178, 0.45), 0 3px 8px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+    cursor: pointer;
+  }
+
+  .header__floating-cta:hover {
+    background: linear-gradient(135deg, #165ab5 0%, #06b6d4 100%);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(8, 145, 178, 0.55), 0 4px 12px rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+  }
+
+  .header__floating-cta:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  .header__floating-cta--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.85);
+  }
+
+  .header__floating-cta-icon {
+    color: #a5f3fc;
+  }
+
+  .header__floating-cta-arrow {
+    opacity: 0.85;
+    transition: transform 0.2s ease;
+  }
+
+  .header__floating-cta:hover .header__floating-cta-arrow {
+    transform: translateX(2px);
+    opacity: 1;
+  }
+}

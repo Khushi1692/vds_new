@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   Menu,
   X,
@@ -9,7 +9,8 @@ import {
   ChevronDown,
   FileText,
   ShieldCheck,
-  ArrowRight
+  ArrowRight,
+  MessageSquare
 } from 'lucide-react';
 import { useState, useContext, useEffect, useRef } from 'react';
 import { CartContext } from '../../context/CartContext';
@@ -28,6 +29,7 @@ export default function Header() {
   const { user, logout } = useContext(AuthContext);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -64,7 +66,8 @@ export default function Header() {
   const userDisplayName = user?.name || user?.email?.split('@')[0] || 'Account';
 
   return (
-    <header className="header">
+    <>
+      <header className="header">
       {/* Top Continuous Rotating Announcement Ticker Bar */}
       <div className="header__ticker" role="region" aria-label="Announcement">
         <div className="header__ticker-track">
@@ -314,5 +317,20 @@ export default function Header() {
         </div>
       </div>
     </header>
+
+      {/* Mobile Floating Action Button - Talk to Us (Bottom Right) */}
+      {location.pathname !== '/request-quote' && (
+        <Link
+          to="/request-quote"
+          className={`header__floating-cta ${mobileOpen ? 'header__floating-cta--hidden' : ''}`}
+          aria-label="Talk to Us"
+          onClick={() => setMobileOpen(false)}
+        >
+          <MessageSquare size={17} className="header__floating-cta-icon" />
+          <span>Talk to Us</span>
+          <ArrowRight size={14} className="header__floating-cta-arrow" />
+        </Link>
+      )}
+    </>
   );
 }

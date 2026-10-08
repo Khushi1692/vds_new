@@ -941,8 +941,10 @@
 /* ── Categories & Products Grid ── */
 .home__categories-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .home__products-grid {
@@ -951,17 +953,25 @@
   gap: var(--space-lg);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
+  .home__categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
-  .home__categories-grid,
+@media (max-width: 600px) {
+  .home__categories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
   .home__products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 560px) {
-
-  .home__categories-grid,
   .home__products-grid {
     grid-template-columns: 1fr;
   }
@@ -1628,7 +1638,17 @@
     font-size: 2.5rem;
   }
 }
-.cat-card-hover:hover { background: rgba(255, 255, 255, 0.04) !important; border-color: rgba(14, 165, 233, 0.25) !important; }
+.cat-card-hover:hover {
+  background: rgba(14, 165, 233, 0.035) !important;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.45);
+  z-index: 2;
+}
+
+.cat-art-svg .acc { stroke: var(--cyan); }
+.cat-art-svg .accf { fill: var(--cyan); stroke: var(--cyan); }
+.cat-art-svg .dim { opacity: 0.35; stroke: currentColor; }
+.cat-art-svg .warm { stroke: #fb923c; }
+.cat-art-svg text { fill: currentColor; font-family: var(--font-family-mono); font-size: 11px; font-weight: 700; }
 
 .ind-card {
   position: relative;
@@ -1675,3 +1695,160 @@
   color: rgba(255,255,255,0.8);
   font-size: 0.9rem;
 }
+
+/* ── Who We Supply (Industries Grid) ── */
+.inds-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  margin-top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.ind-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.4rem;
+  text-decoration: none;
+  background: #030712;
+  transition: background 0.2s, box-shadow 0.2s;
+  min-height: 220px;
+}
+
+.ind-cell:hover {
+  background: rgba(14, 165, 233, 0.04) !important;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.45);
+}
+
+.ind-cell .code {
+  font-family: var(--font-family-mono);
+  color: #8fb3df;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 2.2rem;
+  display: inline-block;
+}
+
+.ind-cell .ind-body h3 {
+  font-size: 1.08rem;
+  margin: 0 0 0.8rem 0;
+  color: #fff;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.ind-cell .ind-body p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .inds-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ind-cell {
+    min-height: 170px;
+    padding: 1.6rem 1.3rem;
+  }
+  .ind-cell .code {
+    margin-bottom: 1.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .home__section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+  .inds-row {
+    grid-template-columns: 1fr;
+    margin-top: 1.5rem;
+  }
+  .ind-cell {
+    min-height: 0;
+    padding: 1.25rem 1.2rem;
+  }
+  .ind-cell .code {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ── Why VDS (3 Pillars) ── */
+.switching-section {
+  padding: 5.5rem 0;
+}
+
+.why-vds-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.why-vds-pillar {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.why-vds-pillar .why-vds-eyebrow {
+  color: var(--blue, #38bdf8);
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.why-vds-pillar h4 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.why-vds-pillar p {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .switching-section {
+    padding: 3.5rem 0;
+  }
+  .why-vds-pillars {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  .why-vds-pillar {
+    padding-top: 1.25rem;
+  }
+  .why-vds-pillar h4 {
+    font-size: 1.25rem;
+    margin-bottom: 0.6rem;
+  }
+  .why-vds-pillar p {
+    font-size: 0.95rem;
+  }
+}
+
+
