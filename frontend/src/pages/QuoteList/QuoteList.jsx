@@ -91,8 +91,12 @@ export default function QuoteList() {
           <div className="cart-items">
             {quoteItems.map((item) => (
               <div key={item.product.id} className="cart-item" style={{ display: 'flex', gap: '20px', padding: '24px 40px 24px 0', borderBottom: '1px dashed var(--line)', alignItems: 'center' }}>
-                <div className="cart-item-icon" style={{ width: '60px', color: 'var(--ink)' }}>
-                  {renderSVG(item.product.art || 'gel')}
+                <div className="cart-item-icon" style={{ width: '60px', height: '60px', borderRadius: '6px', overflow: 'hidden', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {item.product.image ? (
+                    <img src={item.product.image.replace(/\.(png|jpe?g)$/i, '.webp')} alt={item.product.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  ) : (
+                    renderSVG(item.product.art || 'gel')
+                  )}
                 </div>
                 <div className="cart-item-details" style={{ flex: 1 }}>
                   <span className="cart-item-name" style={{ display: 'block', fontWeight: '600', fontSize: '16px', marginBottom: '4px' }}>{item.product.name}</span>

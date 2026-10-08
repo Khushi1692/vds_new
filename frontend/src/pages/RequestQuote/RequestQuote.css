@@ -91,26 +91,43 @@
 }
 
 .contact-page__urgent-box {
-  background: rgba(245, 166, 35, 0.1);
+  background: rgba(245, 166, 35, 0.15);
   padding: 30px 24px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  border: 1px solid rgba(245, 166, 35, 0.2);
+  gap: 20px;
+  border: 2px solid rgba(245, 166, 35, 0.5);
+  box-shadow: 0 4px 20px rgba(245, 166, 35, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-page__urgent-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--amber);
 }
 
 .contact-page__urgent-box h3 {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--amber);
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .contact-page__urgent-box p {
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--ink);
+  font-weight: 500;
   margin: 0;
 }
 

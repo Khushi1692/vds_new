@@ -257,7 +257,7 @@ export default function Home() {
                 { name: 'Paper & Hygiene', lines: '3 lines', desc: 'Medical roll, facial tissues, and toilet paper.', iconKey: 'uvc' }
               ].map((cat, idx) => {
                 return (
-                <Link to={`/products?cat=${cat.name}`} key={idx} style={{
+                <Link to={`/products?cat=${encodeURIComponent(cat.name)}`} key={idx} style={{
                   padding: '1.4rem',
                   borderRight: '1px solid rgba(255,255,255,0.05)',
                   borderBottom: '1px solid rgba(255,255,255,0.05)',

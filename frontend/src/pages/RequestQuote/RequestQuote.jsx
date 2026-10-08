@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle, Send, Copy } from 'lucide-react';
+import { CheckCircle, Send, Copy, Phone } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import axios from 'axios';
 import './RequestQuote.css';
@@ -131,7 +131,7 @@ export default function RequestQuote() {
             </div>
 
             <div className="contact-page__urgent-box">
-              <h3>Urgent or after hours</h3>
+              <h3><Phone size={20} /> Urgent or after hours</h3>
               <p>Call rather than email, and tell us the product and delivery address.</p>
             </div>
 

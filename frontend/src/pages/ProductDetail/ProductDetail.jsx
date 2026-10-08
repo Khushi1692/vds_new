@@ -47,7 +47,7 @@ export default function ProductDetail() {
       if (meta) {
         meta.setAttribute(
           'content',
-          `${product.tagline || ''} Available through VDS (Victoria Diagnostic Supplies) Australia. ${product.artgNumber || ''}`
+          `${product.tagline || ''} Available through VDS (Victoria Diagnostic Supplies) Australia.`
         );
       }
     } else if (!loading) {
@@ -163,11 +163,6 @@ export default function ProductDetail() {
               {product.liveStock && (
                 <span className="pd__meta-tag pd__meta-tag--stock">
                   🟢 {product.liveStock} units physically in stock
-                </span>
-              )}
-              {product.artgNumber && (
-                <span className="pd__meta-tag pd__meta-tag--compliance">
-                  📋 TGA Compliance: {product.artgNumber}
                 </span>
               )}
             </div>

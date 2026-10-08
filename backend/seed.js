@@ -23,8 +23,8 @@ const products = [
     certifications: ['CE Mark'],
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
-    image: '/images/products/exam-bed-sheet-10_main.webp',
-    images: ["/images/products/exam-bed-sheet-10_main.webp","/images/products/exam-bed-sheet-10_alt1.webp","/images/products/exam-bed-sheet-10_alt2.webp","/images/products/exam-bed-sheet-10_alt3.webp"],    featured: true,
+    image: '/images/products/exam-bed-sheet-10_alt1.webp',
+    images: ["/images/products/exam-bed-sheet-10_alt1.webp","/images/products/exam-bed-sheet-10_main.webp","/images/products/exam-bed-sheet-10_alt2.webp","/images/products/exam-bed-sheet-10_alt3.webp"],    featured: true,
   },
   {
     id: 'exam-couch-hilo',
@@ -40,7 +40,7 @@ const products = [
     specs: [
       { label: 'Configuration', value: '2-section', detail: 'For optimal flexibility' },
       { label: 'Padding Thickness', value: '5cm', detail: '' },
-      { label: 'Motorisation', value: 'Single motor', detail: 'For hi-lo and back adjustments' },
+      { label: 'Motorisation', value: 'Two motor', detail: 'For hi-lo and back adjustments' },
       { label: 'Width', value: '70cm', detail: 'Generous space for patient comfort' },
       { label: 'Upholstery', value: 'Heavy-duty PVC vinyl', detail: 'Fire, stain, mildew, oil, water, and wear-resistant' },
     ],
@@ -70,8 +70,8 @@ const products = [
     certifications: ['CE Mark'],
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
-    image: '/images/products/exam-gown-regular_main.webp',
-    images: ["/images/products/exam-gown-regular_main.webp","/images/products/exam-gown-regular_alt1.webp","/images/products/exam-gown-regular_alt2.webp","/images/products/exam-gown-regular_alt3.webp"],  },
+    image: '/images/products/exam-gown-regular_alt3.webp',
+    images: ["/images/products/exam-gown-regular_alt3.webp","/images/products/exam-gown-regular_main.webp","/images/products/exam-gown-regular_alt1.webp","/images/products/exam-gown-regular_alt2.webp"],  },
   {
     id: 'thermasonic-gel-warmer',
     name: 'Ultrasound Gel warmer',
@@ -160,8 +160,8 @@ const products = [
     certifications: ['CE Mark'],
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
-    image: '/images/products/sony-upp-110hg_main.webp',
-    images: ["/images/products/sony-upp-110hg_main.webp","/images/products/sony-upp-110hg_alt1.webp","/images/products/sony-upp-110hg_alt2.webp","/images/products/sony-upp-110hg_alt3.webp"],  },
+    image: '/images/products/sony-upp-110hg_alt2.webp',
+    images: ["/images/products/sony-upp-110hg_alt2.webp","/images/products/sony-upp-110hg_main.webp","/images/products/sony-upp-110hg_alt1.webp","/images/products/sony-upp-110hg_alt3.webp"],  },
   {
     id: 'tisora-facial-tissue',
     name: 'Tisora Facial Tissue',
@@ -246,8 +246,8 @@ const products = [
     certifications: ['ISO 13485'],
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
-    image: '/images/products/us-gel-5l_main.webp',
-    images: ["/images/products/us-gel-5l_main.webp","/images/products/us-gel-5l_alt1.webp"],    featured: true,
+    image: '/images/products/us-gel-5l_alt1.webp',
+    images: ["/images/products/us-gel-5l_alt1.webp","/images/products/us-gel-5l_main.webp"],    featured: true,
   },
   {
     id: 'us-gel-250ml',
@@ -269,8 +269,8 @@ const products = [
     certifications: ['ISO 13485'],
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
-    image: '/images/products/us-gel-250ml_main.webp',
-    images: ["/images/products/us-gel-250ml_main.webp","/images/products/us-gel-250ml_alt1.webp","/images/products/us-gel-250ml_alt2.webp","/images/products/us-gel-250ml_alt3.webp"],  },
+    image: '/images/products/us-gel-250ml_alt3.webp',
+    images: ["/images/products/us-gel-250ml_alt3.webp","/images/products/us-gel-250ml_main.webp","/images/products/us-gel-250ml_alt1.webp","/images/products/us-gel-250ml_alt2.webp"],  },
   {
     id: 'uv-probe-disinfector',
     name: 'UV-C LED Ultrasound Probe Disinfector',
