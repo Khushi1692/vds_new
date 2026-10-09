@@ -53,7 +53,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
             </div>
             <div className="qvm-details">
               <h3 className="qvm-name-small">{product.name.toUpperCase()}</h3>
-              <div className="qvm-price-display">{product.priceLabel}</div>
+            <div className="qvm-price-display">{product.priceLabel?.split(' / ')[0]}</div>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
 
           <div className="qvm-summary-row">
             <span className="qvm-label">PRICE:</span>
-            <span className="qvm-summary-value">{product.priceLabel}</span>
+            <span className="qvm-summary-value">{product.priceLabel?.split(' / ')[0]}</span>
           </div>
           
           <div className="qvm-summary-row">

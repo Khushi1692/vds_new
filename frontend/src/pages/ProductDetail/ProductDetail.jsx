@@ -129,14 +129,14 @@ export default function ProductDetail() {
             )}
             
             {/* Main Image */}
-            <div className="pd__main-image" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', borderRadius: '8px', padding: '24px' }}>
+            <div className="pd__main-image" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ffffff', borderRadius: '8px', padding: '8px' }}>
               {(product.images && product.images.length > 0 ? product.images[activeImage] : product.image) && (product.images && product.images.length > 0 ? product.images[activeImage] : product.image) !== '/images/placeholder.jpg' ? (
                 <img 
-                  src={(product.images && product.images.length > 0 ? product.images[activeImage] : product.image).replace(/\.(png|jpe?g)$/i, '.webp') + '?v=2'} 
+                  src={(product.images && product.images.length > 0 ? product.images[activeImage] : product.image).replace(/\.(png|jpe?g)$/i, '.webp') + '?v=4'} 
                   alt={product.name} 
                   className="pd__hero-img" 
                   decoding="async" 
-                  style={{ width: '100%', maxHeight: '450px', objectFit: 'contain', display: 'block', borderRadius: '8px' }}
+                  style={{ width: '100%', maxHeight: '450px', objectFit: 'contain', display: 'block', borderRadius: '8px', transform: (product.id === 'us-gel-250ml' && product.images && activeImage === product.images.length - 1) ? 'rotate(90deg)' : 'none' }}
                 />
               ) : (
                 <div className="pd__hero-image-placeholder">
@@ -155,8 +155,32 @@ export default function ProductDetail() {
             <h1 className="pd__title">{product.name}</h1>
             <p className="pd__tagline">{product.tagline}</p>
 
-            <div className="pd__price-row">
-              <span className="pd__price">{product.priceLabel}</span>
+            <div className="pd__price-row" style={{ display: 'flex', flexDirection: 'column' }}>
+              <span className="pd__price">{product.priceLabel?.split(' / ')[0]}</span>
+              {product.id === 'exam-bed-sheet-10' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Carton of 100 bedsheets</div>
+                  <div>10 packs × 10 bedsheets · 240 × 70 cm · Dark blue</div>
+                </div>
+              )}
+              {product.id === 'tisora-facial-tissue' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 50 tissues</div>
+                  <div>$1.38 per pack</div>
+                </div>
+              )}
+              {product.id === 'tisora-toilet-tissue' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 48 rolls</div>
+                  <div>$1.04 per roll</div>
+                </div>
+              )}
+              {product.id === 'ultra-med-roll' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 20 rolls</div>
+                  <div>$3.60 per roll</div>
+                </div>
+              )}
             </div>
 
             <div className="pd__meta-row">

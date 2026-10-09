@@ -247,7 +247,7 @@ const products = [
     stockStatus: 'In Stock',
     bulkOrderAvailable: true,
     image: '/images/products/us-gel-5l_alt1.webp',
-    images: ["/images/products/us-gel-5l_alt1.webp","/images/products/us-gel-5l_main.webp"],    featured: true,
+    images: ["/images/products/us-gel-5l_alt1.webp","/images/products/us-gel-5l_main.webp","/images/products/us-gel-5l_alt2.webp","/images/products/us-gel-5l_alt3.webp"],    featured: true,
   },
   {
     id: 'us-gel-250ml',

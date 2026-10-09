@@ -80,7 +80,7 @@ export default function Cart() {
                     {item.product.name}
                   </Link>
                   <p className="cart-item-sku">{item.product.sku}</p>
-                  <p className="cart-item-price">{item.product.priceLabel}</p>
+                  <p className="cart-item-price">{item.product.priceLabel?.split(' / ')[0]}</p>
                 </div>
                 <div className="cart-item-actions">
                   <div className="cart-qty-selector">

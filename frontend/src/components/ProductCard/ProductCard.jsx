@@ -30,7 +30,7 @@ export default function ProductCard({
       <Link to={`/product/${product.id}`} className="product-card__image" style={{ textDecoration: 'none' }}>
         {product.image && product.image !== '/images/placeholder.jpg' ? (
           <img 
-            src={product.image.replace(/\.(png|jpe?g)$/i, '.webp') + '?v=2'} 
+            src={product.image.replace(/\.(png|jpe?g)$/i, '.webp') + '?v=4'} 
             alt={product.name} 
             className="product-card__img" 
             loading="lazy" 
@@ -70,7 +70,33 @@ export default function ProductCard({
 
         <div className="product-card__bottom" style={{ paddingBottom: '12px' }}>
           {showPrice && (
-            <span className="product-card__price">{product.priceLabel}</span>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span className="product-card__price">{product.priceLabel?.split(' / ')[0]}</span>
+              {product.id === 'exam-bed-sheet-10' && (
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
+                  <div style={{ fontWeight: '600' }}>Carton of 100 bedsheets</div>
+                  <div>10 packs × 10 bedsheets · 240 × 70 cm · Dark blue</div>
+                </div>
+              )}
+              {product.id === 'tisora-facial-tissue' && (
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 50 tissues</div>
+                  <div>$1.38 per pack</div>
+                </div>
+              )}
+              {product.id === 'tisora-toilet-tissue' && (
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 48 rolls</div>
+                  <div>$1.04 per roll</div>
+                </div>
+              )}
+              {product.id === 'ultra-med-roll' && (
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
+                  <div style={{ fontWeight: '600' }}>Pack of 20 rolls</div>
+                  <div>$3.60 per roll</div>
+                </div>
+              )}
+            </div>
           )}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
