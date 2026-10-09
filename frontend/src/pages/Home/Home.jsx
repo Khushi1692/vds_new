@@ -13,7 +13,8 @@ const ART = {
   uvc: '<rect x="30" y="20" width="60" height="84" rx="4"/><rect x="40" y="30" width="40" height="52" rx="2"/><path d="M60 36v28M55 64h10l-2 9h-6z"/><path class="acc" d="M46 34v44M74 34v44" stroke-dasharray="3 4"/><circle class="accf" cx="60" cy="94" r="3"/>',
   warmer: '<rect x="24" y="48" width="72" height="40" rx="4"/><rect x="34" y="60" width="40" height="14" rx="2"/><path d="M74 67h10M30 67h4"/><rect x="80" y="54" width="10" height="6" rx="1"/><path class="warm" d="M40 40q4-7 8 0t8 0t8 0t8 0"/><path class="dim" d="M24 96h72M24 93v6M96 93v6"/>',
   mri: '<circle cx="48" cy="86" r="18"/><circle cx="48" cy="86" r="3"/><circle cx="88" cy="98" r="6"/><path d="M38 34l10 38h38v20"/><path d="M48 72l-4-26"/><path d="M60 72V56h24"/><rect class="acc" x="78" y="22" width="22" height="16" rx="2"/><text x="81.5" y="34.5">MR</text>',
-  gown: '<path d="M42 28l12-6q6 7 12 0l12 6 14 18-10 6-4-6 2 58H40l2-58-4 6-10-6z"/><path d="M54 22v16q6 4 12 0V22"/><path class="acc" d="M46 62h28"/>'
+  gown: '<path d="M42 28l12-6q6 7 12 0l12 6 14 18-10 6-4-6 2 58H40l2-58-4 6-10-6z"/><path d="M54 22v16q6 4 12 0V22"/><path class="acc" d="M46 62h28"/>',
+  paper: '<rect x="30" y="24" width="60" height="30" rx="4"/><circle cx="60" cy="39" r="7"/><path d="M38 54v46h44V54"/><path class="acc" d="M42 82l6-10 5 16 6-22 5 18 5-8 5 6"/>'
 };
 
 const renderSVG = (key) => (
@@ -22,11 +23,19 @@ const renderSVG = (key) => (
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchFeaturedProducts().then(setFeatured).catch(console.error);
+    fetchProducts().then(setAllProducts).catch(console.error);
   }, []);
+
+  const getCategoryLines = (catName, fallback) => {
+    if (!allProducts || allProducts.length === 0) return fallback;
+    const count = allProducts.filter(p => p.category?.toLowerCase() === catName.toLowerCase()).length;
+    return `${count} line${count === 1 ? '' : 's'}`;
+  };
 
   useEffect(() => {
     document.title = "VDS | Victoria Diagnostic Supplies — Medical Consumables & Radiology Equipment, Australia";
@@ -233,45 +242,41 @@ export default function Home() {
         {/* ── The Range (Categories) Section ── */}
         <section className="home__section featured-section">
           <div className="container">
-            <div className="home__section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+            <div className="home__section-header">
               <div>
                 <span className="section-badge">The range</span>
                 <h2 className="home__section-title" style={{ marginBottom: 0 }}>What we supply</h2>
               </div>
               <Button as={Link} to="/products" variant="outline" size="sm" iconRight={ArrowRight}>
-                All product ranges
+                {allProducts.length ? `All ${allProducts.length} product lines` : 'All product lines'}
               </Button>
             </div>
 
-            <div className="home__categories-grid" style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
-              gap: '1rem',
-              borderTop: '1px solid rgba(255,255,255,0.05)',
-              borderLeft: '1px solid rgba(255,255,255,0.05)'
-            }}>
+            <div className="home__categories-grid">
               {[
-                { name: 'Ultrasound / Imaging', lines: '7 lines', desc: 'Ultrasound gel, warmers, UV disinfectors, lead aprons and print media.', iconKey: 'gel' },
-                { name: 'Clinic Furniture', lines: '2 lines', desc: 'Examination bed and MRI chair.', iconKey: 'mri' },
-                { name: 'Linen & Gowns', lines: '2 lines', desc: 'Bedsheets and disposable gowns.', iconKey: 'gown' },
-                { name: 'Paper & Hygiene', lines: '3 lines', desc: 'Medical roll, facial tissues, and toilet paper.', iconKey: 'uvc' }
+                { name: 'Medical Imaging Consumables', defaultLines: '4 lines', desc: 'Coupling Gel, Print Media, and Radiation Protection.', iconKey: 'gel' },
+                { name: 'Infection Prevention', defaultLines: '2 lines', desc: 'Disposable Gowns, Bedsheets, and Related Apparel.', iconKey: 'gown' },
+                { name: 'Furniture and Patient Transfer', defaultLines: '2 lines', desc: 'Examination Couches and MRI Safe Wheelchairs.', iconKey: 'mri' },
+                { name: 'Medical Equipment', defaultLines: '3 lines', desc: 'Gel Warmers, Warming Cabinets, and UV-C Probe Disinfectors.', iconKey: 'warmer' },
+                { name: 'Everyday Paper Supplies', defaultLines: '3 lines', desc: 'Medical Rolls and Tissue Papers.', iconKey: 'paper' }
               ].map((cat, idx) => {
+                const linesCount = getCategoryLines(cat.name, cat.defaultLines);
                 return (
                 <Link to={`/products?cat=${encodeURIComponent(cat.name)}`} key={idx} style={{
                   padding: '1.4rem',
-                  borderRight: '1px solid rgba(255,255,255,0.05)',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  borderRight: '1px solid rgba(255,255,255,0.08)',
+                  borderBottom: '1px solid rgba(255,255,255,0.08)',
                   display: 'grid',
                   gridTemplateColumns: '1fr 84px',
                   gap: '0.6rem 1rem',
                   alignItems: 'start',
                   textDecoration: 'none',
                   background: 'rgba(255, 255, 255, 0.012)',
-                  transition: 'background 0.2s',
+                  transition: 'background 0.2s, border-color 0.2s',
                   position: 'relative'
                 }} className="cat-card-hover">
                   <div style={{ gridColumn: 1, display: 'flex', flexDirection: 'column', gap: '0.6rem', height: '100%' }}>
-                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '0.75rem', color: 'var(--ink-soft)' }}>{cat.lines}</span>
+                    <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '0.75rem', color: 'var(--ink-soft)' }}>{linesCount}</span>
                     <h3 style={{ fontSize: '1.1rem', color: 'var(--ink)', margin: 0 }}>{cat.name}</h3>
                     <p style={{ fontSize: '0.9rem', color: 'var(--ink-soft)', flex: 1, margin: 0 }}>{cat.desc}</p>
                   </div>
@@ -289,43 +294,41 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="customer-value" className="home__section switching-section" style={{ borderTop: '1px solid rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.03)', padding: '6rem 0' }}>
+        <section id="customer-value" className="home__section switching-section">
           <div className="container">
-            <div className="home__section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap' }}>
+            <div className="home__section-header">
               <div>
                 <span className="section-badge">Why VDS</span>
                 <h2 className="home__section-title" style={{ marginBottom: 0 }}>Three things that change what<br />you pay and who you deal with</h2>
               </div>
             </div>
 
-            <div className="process-flow-container" style={{ paddingTop: '1rem', marginTop: '3rem', paddingBottom: '0' }}>
-              <div className="process-flow-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem', rowGap: '3rem' }}>
-                {/* Step 1 */}
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
-                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>FEWER HANDS</span>
-                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>We import it ourselves</h4>
-                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
-                    Product comes from the manufacturer to us and then to you. No wholesaler in between taking a margin.
-                  </p>
-                </div>
+            <div className="why-vds-pillars">
+              {/* Step 1 */}
+              <div className="why-vds-pillar">
+                <span className="why-vds-eyebrow">FEWER HANDS</span>
+                <h4>We import it ourselves</h4>
+                <p>
+                  Product comes from the manufacturer to us and then to you. No wholesaler in between taking a margin.
+                </p>
+              </div>
 
-                {/* Step 2 */}
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
-                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>ONE ACCOUNTABLE PARTY</span>
-                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>We hold the sponsorship</h4>
-                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
-                    For lines we sponsor on the ARTG, regulatory questions and recalls come straight to us. The first, our coupling gel, is ARTG 530981.
-                  </p>
-                </div>
+              {/* Step 2 */}
+              <div className="why-vds-pillar">
+                <span className="why-vds-eyebrow">ONE ACCOUNTABLE PARTY</span>
+                <h4>We hold the sponsorship</h4>
+                <p>
+                  For lines we sponsor on the ARTG, regulatory questions and recalls come straight to us. The first, our coupling gel, is ARTG 530981.
+                </p>
+              </div>
 
-                {/* Step 3 */}
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', minHeight: 'auto', background: 'none', boxShadow: 'none' }}>
-                  <span className="why-vds-eyebrow" style={{ color: 'var(--blue)', marginBottom: '1rem' }}>CLINICAL JUDGEMENT</span>
-                  <h4 style={{ textTransform: 'none', fontSize: '1.4rem', fontWeight: 700, color: '#fff', margin: '0 0 1rem 0', letterSpacing: '-0.01em', justifyContent: 'flex-start' }}>Founded by a nurse</h4>
-                  <p style={{ color: 'var(--ink-soft)', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
-                    VDS was started by healthcare professionals who led teams in clinical settings. We choose products the way a clinician would.
-                  </p>
-                </div>
+              {/* Step 3 */}
+              <div className="why-vds-pillar">
+                <span className="why-vds-eyebrow">CLINICAL JUDGEMENT</span>
+                <h4>Founded by a nurse</h4>
+                <p>
+                  VDS was started by healthcare professionals who led teams in clinical settings. We choose products the way a clinician would.
+                </p>
               </div>
             </div>
           </div>
@@ -344,26 +347,13 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="inds-row" style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(5, 1fr)', 
-              marginTop: '2rem',
-              border: '1px solid rgba(255, 255, 255, 0.05)',
-              borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.012)'
-            }}>
-              {INDS.map((ind, i) => (
-                <Link to={`/industries/${ind.id}`} key={ind.code} className="ind-cell cat-card-hover" style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  padding: '2rem 1.5rem', 
-                  textDecoration: 'none',
-                  borderRight: i !== INDS.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none'
-                }}>
-                  <span className="code" style={{ fontFamily: 'var(--font-family-mono)', color: '#8fb3df', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1px', marginBottom: '2.5rem' }}>{ind.code}</span>
+            <div className="inds-row">
+              {INDS.map((ind) => (
+                <Link to={`/industries/${ind.id}`} key={ind.code} className="ind-cell cat-card-hover">
+                  <span className="code">{ind.code}</span>
                   <div className="ind-body">
-                    <h3 style={{ fontSize: '1.1rem', margin: '0 0 0.8rem 0', color: '#fff', lineHeight: 1.3, fontWeight: 600 }}>{ind.name}</h3>
-                    <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', margin: 0, lineHeight: 1.5 }}>{ind.short}</p>
+                    <h3>{ind.name}</h3>
+                    <p>{ind.short}</p>
                   </div>
                 </Link>
               ))}

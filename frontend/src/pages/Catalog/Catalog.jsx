@@ -45,12 +45,22 @@ export default function Catalog() {
   const [selectedSetting, setSelectedSetting] = useState('');
   const [regulatoryChecked, setRegulatoryChecked] = useState(false);
 
+  useEffect(() => {
+    const cat = searchParams.get('cat');
+    if (cat && cat !== 'all') {
+      setSelectedCategories([cat]);
+    } else if (!cat) {
+      setSelectedCategories([]);
+    }
+  }, [searchParams]);
+
   const categoryCounts = useMemo(() => {
     const predefinedCategories = [
-      "Ultrasound / Imaging",
-      "Clinic Furniture",
-      "Linen & Gowns",
-      "Paper & Hygiene"
+      "Medical Imaging Consumables",
+      "Infection Prevention",
+      "Furniture and Patient Transfer",
+      "Medical Equipment",
+      "Everyday Paper Supplies"
     ];
 
     const counts = {};
@@ -77,11 +87,17 @@ export default function Catalog() {
   }, [products]);
 
   const handleCategoryChange = (cat) => {
-    setSelectedCategories(prev => 
-      prev.includes(cat) 
+    setSelectedCategories(prev => {
+      const next = prev.includes(cat) 
         ? prev.filter(c => c !== cat) 
-        : [...prev, cat]
-    );
+        : [...prev, cat];
+      if (searchParams.get('cat')) {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.delete('cat');
+        setSearchParams(nextParams, { replace: true });
+      }
+      return next;
+    });
   };
 
   const filtered = useMemo(() => {
