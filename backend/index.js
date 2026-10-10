@@ -408,7 +408,7 @@ app.post('/api/auth/google', authLimiter, async (req, res) => {
 // In-memory cache for ultra-fast products serving
 let productsCache = null;
 let productsCacheTime = 0;
-const PRODUCTS_CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+const PRODUCTS_CACHE_TTL = 3 * 60 * 1000; // 3 minutes cache 2
 
 // Routes
 

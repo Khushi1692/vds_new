@@ -49,6 +49,20 @@ const WhatsappIcon = (props) => (
   </svg>
 );
 
+const FacebookIcon = (props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={props.style}
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
 export default function Footer() {
   return (
     <footer className="footer">
@@ -62,7 +76,8 @@ export default function Footer() {
           </p>
           <div className="footer__social" style={{ display: 'flex', gap: '0.8rem' }}>
             <a href="https://www.linkedin.com/company/victoria-diagnostic-supplies-pty-ltd/" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><LinkedinIcon style={{ width: 18, height: 18 }} /></a>
-            <a href="https://www.instagram.com/victoriadiagnosticsupplies/" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><InstagramIcon style={{ width: 18, height: 18 }} /></a>
+            <a href="https://www.instagram.com/victoria_diagnostic_supplies?cplk=MTV4OXY2bW5qajMzeg%3D%3D" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><InstagramIcon style={{ width: 18, height: 18 }} /></a>
+            <a href="https://www.facebook.com/share/16MVeFJgTSq/" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><FacebookIcon style={{ width: 18, height: 18 }} /></a>
             <a href="https://wa.me/61422228496" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}><WhatsappIcon style={{ width: 18, height: 18 }} /></a>
           </div>
         </div>
@@ -102,7 +117,7 @@ export default function Footer() {
               info@vdsupplies.com.au
             </li>
             <li style={{ marginTop: '0.8rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              PO Box
+              Clyde North, Victoria
             </li>
           </ul>
         </div>

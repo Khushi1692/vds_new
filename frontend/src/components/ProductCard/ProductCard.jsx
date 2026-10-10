@@ -78,6 +78,12 @@ export default function ProductCard({
                   <div>10 packs × 10 bedsheets · 240 × 70 cm · Dark blue</div>
                 </div>
               )}
+              {product.id === 'exam-gown-regular' && (
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
+                  <div style={{ fontWeight: '600' }}>Carton of 100 gowns</div>
+                  <div>10 packs × 10 gowns · 105 cm × 140 cm</div>
+                </div>
+              )}
               {product.id === 'tisora-facial-tissue' && (
                 <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>
                   <div style={{ fontWeight: '600' }}>Pack of 50 tissues</div>

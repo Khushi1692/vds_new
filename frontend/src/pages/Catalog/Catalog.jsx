@@ -76,14 +76,7 @@ export default function Catalog() {
       }
     });
 
-    const extraCategories = Object.keys(counts)
-      .filter(c => !predefinedCategories.includes(c))
-      .sort((a, b) => a.localeCompare(b));
-    
-    return [
-      ...predefinedCategories.map(cat => [cat, counts[cat]]),
-      ...extraCategories.map(cat => [cat, counts[cat]])
-    ];
+    return predefinedCategories.map(cat => [cat, counts[cat]]);
   }, [products]);
 
   const handleCategoryChange = (cat) => {
