@@ -61,6 +61,137 @@ function sanitizeHTML(str) {
     .replace(/'/g, '&#039;');
 }
 
+// Melbourne, Australia date-time formatter
+function getMelbourneDateTime(date = new Date()) {
+  const d = new Date(date);
+  const dateStr = d.toLocaleDateString('en-AU', { timeZone: 'Australia/Melbourne' });
+  const timeStr = d.toLocaleTimeString('en-AU', { timeZone: 'Australia/Melbourne', hour12: true });
+  return `${dateStr}, ${timeStr.toUpperCase()}`;
+}
+
+// Generate Order ID in Melbourne timezone: ORD-YYYYMMDD-HHMMSS-XXXX
+function generateOrderId() {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Australia/Melbourne',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).formatToParts(now);
+
+  const p = {};
+  parts.forEach(({ type, value }) => { p[type] = value; });
+  const rand = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+  return `ORD-${p.year}${p.month}${p.day}-${p.hour}${p.minute}${p.second}-${rand}`;
+}
+
+// Modern dark-themed order email matching customer specification
+function generateOrderEmailHTML({
+  orderId,
+  customerName,
+  customerEmail,
+  customerPhone,
+  items,
+  totalAmount,
+  date,
+  specialInstructions,
+  isAdmin = false
+}) {
+  const formattedDate = getMelbourneDateTime(date);
+  const formattedTotal = `$${(totalAmount / 100).toFixed(2)}`;
+  const cleanName = sanitizeHTML(customerName) || (isAdmin ? 'Admin' : 'Customer');
+  const cleanEmail = sanitizeHTML(customerEmail) || 'N/A';
+  const cleanPhone = sanitizeHTML(customerPhone);
+  const cleanInstructions = sanitizeHTML(specialInstructions);
+  const displayOrderId = orderId ? (orderId.startsWith('#') ? orderId : `#${orderId}`) : '';
+
+  const greetingHeading = isAdmin 
+    ? 'Hi Victoria Diagnostic Supplies Team,'
+    : `Hi ${cleanName},`;
+
+  const orderPlacedText = isAdmin
+    ? `A new order <strong>${displayOrderId}</strong> has been successfully placed at <strong>Victoria Diagnostic Supplies</strong>.`
+    : `Your order <strong>${displayOrderId}</strong> has been successfully placed at <strong>Victoria Diagnostic Supplies</strong>.`;
+
+  const itemsTableRows = (items || []).map(item => {
+    const subtotalFormatted = item.price != null
+      ? `$${(item.price * item.quantity).toFixed(2)}`
+      : 'N/A';
+    return `
+      <tr style="border-bottom: 1px solid #27272a;">
+        <td style="padding: 12px 8px 12px 0; color: #ffffff; font-size: 14px; vertical-align: top;">${sanitizeHTML(item.name)}</td>
+        <td style="padding: 12px 8px; text-align: center; color: #ffffff; font-size: 14px; vertical-align: top;">${item.quantity}</td>
+        <td style="padding: 12px 0 12px 8px; text-align: right; color: #ffffff; font-size: 14px; font-weight: 500; vertical-align: top;">${subtotalFormatted}</td>
+      </tr>
+    `;
+  }).join('');
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${displayOrderId}</title>
+    </head>
+    <body style="margin: 0; padding: 24px 12px; background-color: #000000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #ffffff; -webkit-font-smoothing: antialiased;">
+      <div style="max-width: 540px; margin: 0 auto; background-color: #121212; border-radius: 12px; padding: 32px 28px; border: 1px solid #27272a;">
+        
+        <h2 style="font-size: 22px; font-weight: 700; margin: 0 0 16px 0; color: #ffffff; letter-spacing: -0.01em;">${greetingHeading}</h2>
+        <p style="font-size: 15px; line-height: 1.6; color: #d1d5db; margin: 0 0 28px 0;">
+          ${orderPlacedText}
+        </p>
+
+        <h3 style="font-size: 17px; font-weight: 700; margin: 28px 0 14px 0; color: #ffffff;">Customer Details</h3>
+        <div style="font-size: 14px; line-height: 1.9; color: #d1d5db; margin-bottom: 24px;">
+          <div><strong style="color: #ffffff;">Name:</strong> ${cleanName}</div>
+          <div><strong style="color: #ffffff;">Email:</strong> <a href="mailto:${cleanEmail}" style="color: #60a5fa; text-decoration: underline;">${cleanEmail}</a></div>
+          <div><strong style="color: #ffffff;">Contact:</strong> ${cleanPhone ? `<a href="tel:${cleanPhone}" style="color: #60a5fa; text-decoration: underline;">${cleanPhone}</a>` : 'N/A'}</div>
+        </div>
+
+        <h3 style="font-size: 17px; font-weight: 700; margin: 28px 0 14px 0; color: #ffffff;">Order Details</h3>
+        <div style="font-size: 14px; line-height: 1.9; color: #d1d5db; margin-bottom: 20px;">
+          <div><strong style="color: #ffffff;">Date:</strong> ${formattedDate}</div>
+          <div><strong style="color: #ffffff;">Total:</strong> ${formattedTotal}</div>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 24px;">
+          <thead>
+            <tr style="border-bottom: 1px solid #374151; text-align: left;">
+              <th style="padding: 10px 8px 10px 0; font-size: 14px; font-weight: 700; color: #9ca3af;">Item</th>
+              <th style="padding: 10px 8px; text-align: center; font-size: 14px; font-weight: 700; color: #9ca3af;">Qty</th>
+              <th style="padding: 10px 0 10px 8px; text-align: right; font-size: 14px; font-weight: 700; color: #9ca3af;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsTableRows}
+          </tbody>
+        </table>
+
+        ${cleanInstructions ? `
+          <div style="font-size: 14px; color: #ffffff; margin: 20px 0; line-height: 1.5;">
+            <strong>Special Instructions:</strong> ${cleanInstructions}
+          </div>
+        ` : ''}
+
+        <p style="font-size: 15px; color: #ffffff; margin: 28px 0 24px 0;">
+          We'll notify you once your order is ready.
+        </p>
+
+        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #27272a; font-size: 12px; color: #71717a; line-height: 1.5;">
+          This is an automated message. Please do not reply.
+        </div>
+
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 // Input validation helpers
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -165,10 +296,11 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
 
       const newOrder = new Order({
         userId: userId || null,
-        orderId: orderId || `ORD-${Date.now()}`,
+        orderId: orderId || generateOrderId(),
         stripeSessionId: sessionOrIntent.id,
         customerEmail,
         customerName,
+        customerPhone,
         items: items,
         totalAmount,
         currency,
@@ -179,63 +311,49 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
       await newOrder.save();
       console.log('Order created for:', sessionOrIntent.id);
 
-      // Send emails
-      const formatAmount = (amount) => `$${(amount / 100).toFixed(2)}`;
-      
-      let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
+      // Fetch items with price and details for email
+      const itemsWithDetails = [];
       for (let item of items) {
         const prod = await Product.findOne({ id: item.productId });
-        const pName = prod ? sanitizeHTML(prod.name) : `Product ID: ${sanitizeHTML(item.productId)}`;
-        const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-        const pImg = prod && prod.image 
-          ? `<img src="${prod.image.startsWith('http') ? prod.image : clientUrl + prod.image}" alt="Product image" width="40" height="40" style="vertical-align: middle; margin-right: 10px; border-radius: 4px; object-fit: contain;" />` 
-          : '';
-        orderItemsHTML += `<li style="margin-bottom: 12px; display: flex; align-items: center;">${pImg} <span><strong>${item.quantity}x</strong> ${pName}</span></li>`;
+        itemsWithDetails.push({
+          name: prod ? prod.name : `Product ID: ${item.productId}`,
+          quantity: item.quantity,
+          price: prod ? prod.price : null
+        });
       }
-      orderItemsHTML += '</ul>';
 
       const customerMailOptions = {
         from: `"Victoria Diagnostic Supplies" <${process.env.SMTP_USER}>`,
         to: customerEmail,
-        subject: `Order Confirmation - ${newOrder.orderId}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-            <h2 style="color: #1a56db;">Thank you for your order!</h2>
-            <p>Hi ${sanitizeHTML(customerName) || 'Customer'},</p>
-            <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it for dispatch.</p>
-            
-            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-              <h3 style="margin-top: 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Order Summary</h3>
-              ${orderItemsHTML}
-              <div style="margin-top: 15px; border-top: 2px solid #e5e7eb; padding-top: 10px;">
-                <strong>Total Amount:</strong> ${formatAmount(totalAmount)}
-              </div>
-            </div>
-            
-            <p>If you have any questions, simply reply to this email.</p>
-            <p>Thanks for choosing Victoria Diagnostic Supplies!</p>
-          </div>
-        `,
+        subject: `Order Confirmation - #${newOrder.orderId}`,
+        html: generateOrderEmailHTML({
+          orderId: newOrder.orderId,
+          customerName,
+          customerEmail,
+          customerPhone,
+          items: itemsWithDetails,
+          totalAmount,
+          date: newOrder.createdAt || new Date(),
+          specialInstructions: newOrder.specialInstructions || '',
+          isAdmin: false
+        })
       };
 
       const adminMailOptions = {
         from: `"Victoria Diagnostic Supplies System" <${process.env.SMTP_USER}>`,
         to: process.env.ADMIN_EMAIL,
-        subject: `New Order Received - ${newOrder.orderId}`,
-        html: `
-          <h2>New Order Alert</h2>
-          <p>A new order has been placed on the store.</p>
-          <ul>
-            <li><strong>Order ID:</strong> ${newOrder.orderId}</li>
-            <li><strong>Customer Name:</strong> ${sanitizeHTML(customerName) || 'N/A'}</li>
-            <li><strong>Customer Email:</strong> ${sanitizeHTML(customerEmail)}</li>
-            <li><strong>Customer Mobile:</strong> ${sanitizeHTML(customerPhone) || 'N/A'}</li>
-            <li><strong>Total Amount:</strong> ${formatAmount(totalAmount)}</li>
-          </ul>
-          <h3>Order Items:</h3>
-          ${orderItemsHTML}
-          <p>Check the admin dashboard for full details.</p>
-        `,
+        subject: `New Order Received - #${newOrder.orderId}`,
+        html: generateOrderEmailHTML({
+          orderId: newOrder.orderId,
+          customerName,
+          customerEmail,
+          customerPhone,
+          items: itemsWithDetails,
+          totalAmount,
+          date: newOrder.createdAt || new Date(),
+          specialInstructions: newOrder.specialInstructions || '',
+          isAdmin: true
+        })
       };
 
       try {
@@ -593,7 +711,7 @@ app.post('/api/checkout/intent', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'No valid products in cart' });
     }
 
-    const orderId = `ORD-${new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14)}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+    const orderId = generateOrderId();
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount,
@@ -614,7 +732,7 @@ app.post('/api/checkout/intent', authMiddleware, async (req, res) => {
 
 app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
   try {
-    const { paymentIntentId } = req.body;
+    const { paymentIntentId, phone: clientPhone, specialInstructions: clientInstructions } = req.body;
     if (!paymentIntentId) {
       return res.status(400).json({ error: 'Missing paymentIntentId' });
     }
@@ -642,13 +760,16 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
     const user = await User.findById(req.userId);
     let customerEmail = paymentIntent.receipt_email || user?.email || 'no-email-provided@stripe.com';
     let customerName = user?.name || paymentIntent.shipping?.name || 'Customer';
+    let customerPhone = clientPhone || paymentIntent.charges?.data?.[0]?.billing_details?.phone || paymentIntent.customer_details?.phone || '';
 
     const newOrder = new Order({
       userId: req.userId,
-      orderId: orderId || `ORD-${Date.now()}`,
+      orderId: orderId || generateOrderId(),
       stripeSessionId: paymentIntent.id,
       customerEmail,
       customerName,
+      customerPhone,
+      specialInstructions: clientInstructions || '',
       items: items,
       totalAmount: paymentIntent.amount,
       currency: paymentIntent.currency || 'aud',
@@ -662,63 +783,53 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
     // Send confirmation emails in background
     (async () => {
       try {
-        const formatAmount = (amount) => `$${(amount / 100).toFixed(2)}`;
-        let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
+        const itemsWithDetails = [];
         for (let item of items) {
           const prod = await Product.findOne({ id: item.productId });
-          const pName = prod ? sanitizeHTML(prod.name) : `Product ID: ${sanitizeHTML(item.productId)}`;
-          const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-          const pImg = prod && prod.image 
-            ? `<img src="${prod.image.startsWith('http') ? prod.image : clientUrl + prod.image}" alt="Product image" width="40" height="40" style="vertical-align: middle; margin-right: 10px; border-radius: 4px; object-fit: contain;" />` 
-            : '';
-          orderItemsHTML += `<li style="margin-bottom: 12px; display: flex; align-items: center;">${pImg} <span><strong>${item.quantity}x</strong> ${pName}</span></li>`;
+          itemsWithDetails.push({
+            name: prod ? prod.name : `Product ID: ${item.productId}`,
+            quantity: item.quantity,
+            price: prod ? prod.price : null
+          });
         }
-        orderItemsHTML += '</ul>';
 
         const customerMailOptions = {
           from: `"Victoria Diagnostic Supplies" <${process.env.SMTP_USER}>`,
           to: customerEmail,
-          subject: `Order Confirmation - ${newOrder.orderId}`,
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-              <h2 style="color: #1a56db;">Thank you for your order!</h2>
-              <p>Hi ${sanitizeHTML(customerName)},</p>
-              <p>We've received your order <strong>${newOrder.orderId}</strong> and are preparing it for dispatch.</p>
-              
-              <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                <h3 style="margin-top: 0; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">Order Summary</h3>
-                ${orderItemsHTML}
-                <div style="margin-top: 15px; border-top: 2px solid #e5e7eb; padding-top: 10px;">
-                  <strong>Total Amount:</strong> ${formatAmount(paymentIntent.amount)}
-                </div>
-              </div>
-              
-              <p>If you have any questions, simply reply to this email.</p>
-              <p>Thanks for choosing Victoria Diagnostic Supplies!</p>
-            </div>
-          `,
+          subject: `Order Confirmation - #${newOrder.orderId}`,
+          html: generateOrderEmailHTML({
+            orderId: newOrder.orderId,
+            customerName,
+            customerEmail,
+            customerPhone,
+            items: itemsWithDetails,
+            totalAmount: paymentIntent.amount,
+            date: newOrder.createdAt || new Date(),
+            specialInstructions: clientInstructions,
+            isAdmin: false
+          })
         };
 
         const adminMailOptions = {
           from: `"Victoria Diagnostic Supplies System" <${process.env.SMTP_USER}>`,
           to: process.env.ADMIN_EMAIL,
-          subject: `New Order Received - ${newOrder.orderId}`,
-          html: `
-            <h2>New Order Alert</h2>
-            <p>A new order has been placed on the store.</p>
-            <ul>
-              <li><strong>Order ID:</strong> ${newOrder.orderId}</li>
-              <li><strong>Customer Name:</strong> ${sanitizeHTML(customerName)}</li>
-              <li><strong>Customer Email:</strong> ${sanitizeHTML(customerEmail)}</li>
-              <li><strong>Total Amount:</strong> ${formatAmount(paymentIntent.amount)}</li>
-            </ul>
-            <h3>Order Items:</h3>
-            ${orderItemsHTML}
-          `,
+          subject: `New Order Received - #${newOrder.orderId}`,
+          html: generateOrderEmailHTML({
+            orderId: newOrder.orderId,
+            customerName,
+            customerEmail,
+            customerPhone,
+            items: itemsWithDetails,
+            totalAmount: paymentIntent.amount,
+            date: newOrder.createdAt || new Date(),
+            specialInstructions: clientInstructions,
+            isAdmin: true
+          })
         };
 
         await transporter.sendMail(customerMailOptions);
         await transporter.sendMail(adminMailOptions);
+        console.log('Confirmation emails sent successfully.');
       } catch (err) {
         console.error('Email error in confirm order:', err.message);
       }

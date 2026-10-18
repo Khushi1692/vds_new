@@ -34,10 +34,12 @@ export default function Cart() {
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      // The price format is "$995.00", let's strip the '$' and parse it.
-      const priceStr = item.product.priceLabel.replace(/[^0-9.]/g, '');
-      const price = parseFloat(priceStr);
-      return total + (isNaN(price) ? 0 : price * item.quantity);
+      let price = typeof item.product?.price === 'number' && !isNaN(item.product.price) ? item.product.price : null;
+      if (price === null && item.product?.priceLabel) {
+        const firstPart = item.product.priceLabel.split('/')[0];
+        price = parseFloat(firstPart.replace(/[^0-9.]/g, ''));
+      }
+      return total + (isNaN(price) || price === null ? 0 : price * item.quantity);
     }, 0);
   };
 

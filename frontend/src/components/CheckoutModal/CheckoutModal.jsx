@@ -15,6 +15,7 @@ const CheckoutForm = ({ clientSecret, amount, onSuccess, token, orderId, user })
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [phone, setPhone] = useState('');
+  const [specialInstructions, setSpecialInstructions] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +48,11 @@ const CheckoutForm = ({ clientSecret, amount, onSuccess, token, orderId, user })
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ paymentIntentId: paymentIntent.id })
+          body: JSON.stringify({ 
+            paymentIntentId: paymentIntent.id,
+            phone: phone,
+            specialInstructions: specialInstructions
+          })
         });
       } catch (confirmErr) {
         console.warn('Failed to call /api/checkout/confirm:', confirmErr);
@@ -70,6 +75,8 @@ const CheckoutForm = ({ clientSecret, amount, onSuccess, token, orderId, user })
       <textarea 
         className="checkout-input" 
         placeholder="Special instructions (optional)" 
+        value={specialInstructions}
+        onChange={(e) => setSpecialInstructions(e.target.value)}
       ></textarea>
 
       <div className="stripe-element-container">

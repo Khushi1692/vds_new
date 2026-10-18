@@ -6,6 +6,8 @@ const orderSchema = new mongoose.Schema({
   stripeSessionId: { type: String, required: true, unique: true },
   customerEmail: { type: String, required: true },
   customerName: { type: String },
+  customerPhone: { type: String },
+  specialInstructions: { type: String },
   items: [{
     productId: { type: String, required: true },
     quantity: { type: Number, required: true }

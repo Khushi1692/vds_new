@@ -117,7 +117,7 @@ export default function Footer() {
               info@vdsupplies.com.au
             </li>
             <li style={{ marginTop: '0.8rem', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-              Clyde North, Victoria
+              16 Welsh Cres, Clyde North VIC 3978
             </li>
           </ul>
         </div>
@@ -127,12 +127,7 @@ export default function Footer() {
         <div className="container footer__bottom-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', paddingBottom: '2rem' }}>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>© 2026 Victoria Diagnostic Supplies Pty Ltd · Melbourne, Victoria · Australian owned</p>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <span style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-family-mono)', borderRadius: '4px' }}>
-              Prototype build · forms don't send yet
-            </span>
-            <div className="footer__bottom-links" style={{ display: 'flex', gap: '1rem' }}>
-            </div>
+          <div className="footer__bottom-links" style={{ display: 'flex', gap: '1rem' }}>
           </div>
         </div>
       </div>

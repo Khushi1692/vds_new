@@ -159,26 +159,54 @@ export default function ProductDetail() {
               <span className="pd__price">{product.priceLabel?.split(' / ')[0]}</span>
               {product.id === 'exam-bed-sheet-10' && (
                 <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
-                  <div style={{ fontWeight: '600' }}>Carton of 100 bedsheets</div>
+                  <div style={{ fontWeight: '600' }}>Box of 100 bedsheets</div>
                   <div>10 packs × 10 bedsheets · 240 × 70 cm · Dark blue</div>
+                </div>
+              )}
+              {product.id === 'exam-gown-regular' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Box of 100 gowns</div>
+                  <div>10 packs × 10 gowns · 105 cm × 140 cm</div>
                 </div>
               )}
               {product.id === 'tisora-facial-tissue' && (
                 <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
-                  <div style={{ fontWeight: '600' }}>Pack of 50 tissues</div>
-                  <div>$1.38 per pack</div>
+                  <div style={{ fontWeight: '600' }}>Box of 50 tissues</div>
+                  <div>$1.09 per pack</div>
                 </div>
               )}
               {product.id === 'tisora-toilet-tissue' && (
                 <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
-                  <div style={{ fontWeight: '600' }}>Pack of 48 rolls</div>
+                  <div style={{ fontWeight: '600' }}>Box of 48 rolls</div>
                   <div>$1.04 per roll</div>
                 </div>
               )}
               {product.id === 'ultra-med-roll' && (
                 <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
-                  <div style={{ fontWeight: '600' }}>Pack of 20 rolls</div>
-                  <div>$3.60 per roll</div>
+                  <div style={{ fontWeight: '600' }}>Box of 20 rolls</div>
+                  <div>$2.95 per roll</div>
+                </div>
+              )}
+              {product.id === 'us-gel-250ml' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Carton of 12 bottles</div>
+                  <div>$5.33 per bottle</div>
+                </div>
+              )}
+              {product.id === 'sony-upp-110hg' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  <div style={{ fontWeight: '600' }}>Box of 10 rolls</div>
+                  <div>$10.00 per roll</div>
+                </div>
+              )}
+              {product.id === 'us-gel-5l' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  5+ cartons: 10% off – $42.99
+                </div>
+              )}
+              {product.id === 'med-warming-cabinet' && (
+                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '8px', lineHeight: '1.5' }}>
+                  5+ units: 10% off – $2,249.10
                 </div>
               )}
             </div>
