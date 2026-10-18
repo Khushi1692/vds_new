@@ -1,35 +1,23 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Trash2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Trash2, ArrowRight, ArrowLeft, ShieldAlert, FileText } from 'lucide-react';
 import { CartContext } from '../../context/CartContext';
 import { AuthContext } from '../../context/AuthContext';
 import Button from '../../components/Button/Button';
-import CheckoutModal from '../../components/CheckoutModal/CheckoutModal';
-import PaymentSuccessModal from '../../components/PaymentSuccessModal/PaymentSuccessModal';
 import './Cart.css';
 
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity, clearCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [successOrderId, setSuccessOrderId] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleCheckout = () => {
     if (!user) {
-      navigate('/login', { state: { from: location } });
+      navigate('/login', { state: { from: { pathname: '/checkout' } } });
       return;
     }
-    setShowCheckoutModal(true);
-  };
-
-  const handleCheckoutSuccess = (orderId) => {
-    setShowCheckoutModal(false);
-    clearCart();
-    setSuccessOrderId(orderId);
-    setShowSuccessModal(true);
+    navigate('/checkout');
   };
 
   const calculateTotal = () => {
@@ -43,6 +31,9 @@ export default function Cart() {
     }, 0);
   };
 
+  const subtotal = calculateTotal();
+  const estimatedGst = subtotal * 0.10;
+
   if (cartItems.length === 0) {
     return (
       <main className="cart-page">
@@ -53,11 +44,6 @@ export default function Cart() {
             Continue Shopping
           </Button>
         </div>
-        <PaymentSuccessModal 
-          isOpen={showSuccessModal} 
-          orderId={successOrderId} 
-          onClose={() => setShowSuccessModal(false)} 
-        />
       </main>
     );
   }
@@ -66,6 +52,15 @@ export default function Cart() {
     <main className="cart-page">
       <div className="container cart-inner">
         <h1 className="cart-title">Your Cart</h1>
+
+        {/* Pricing notice disclaimer */}
+        <div className="cart-pricing-disclaimer">
+          <ShieldAlert size={22} />
+          <div>
+            <strong>Important B2B Pricing Notice:</strong> All product prices are <strong>strictly exclusive of GST and delivery charges</strong>. At checkout, you will select your receiving store and request a final tax invoice including calculated courier freight and GST.
+          </div>
+        </div>
+
         <div className="cart-content">
           <div className="cart-items">
             {cartItems.map((item) => (
@@ -82,7 +77,12 @@ export default function Cart() {
                     {item.product.name}
                   </Link>
                   <p className="cart-item-sku">{item.product.sku}</p>
-                  <p className="cart-item-price">{item.product.priceLabel?.split(' / ')[0]}</p>
+                  <p className="cart-item-price">
+                    {item.product.priceLabel?.split(' / ')[0]} 
+                    <span style={{ fontSize: '0.8rem', color: 'var(--ink-soft)', fontWeight: 400, marginLeft: '6px' }}>
+                      (ex GST)
+                    </span>
+                  </p>
                 </div>
                 <div className="cart-item-actions">
                   <div className="cart-qty-selector">
@@ -90,7 +90,7 @@ export default function Cart() {
                     <span>{item.quantity}</span>
                     <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>+</button>
                   </div>
-                  <button className="cart-item-remove" onClick={() => removeFromCart(item.product.id)}>
+                  <button className="cart-item-remove" onClick={() => removeFromCart(item.product.id)} title="Remove item">
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -104,16 +104,27 @@ export default function Cart() {
           <div className="cart-summary">
             <h2>Order Summary</h2>
             <div className="summary-row">
-              <span>Subtotal ({cartItems.length} items)</span>
-              <span>${calculateTotal().toFixed(2)}</span>
+              <span>Subtotal ({cartItems.length} lines, ex GST)</span>
+              <strong>${subtotal.toFixed(2)}</strong>
             </div>
             <div className="summary-row">
-              <span>Shipping</span>
-              <span>Calculated at checkout</span>
+              <span>Estimated GST (10%)</span>
+              <span style={{ color: 'var(--cyan)' }}>+${estimatedGst.toFixed(2)}</span>
+            </div>
+            <div className="summary-row">
+              <span>Delivery Charge (Entire Order)</span>
+              <span style={{ color: '#fbbf24', fontStyle: 'italic', fontSize: '0.88rem' }}>
+                Single fee calculated at checkout
+              </span>
             </div>
             <div className="summary-row summary-total">
-              <span>Total (ex GST)</span>
-              <span>${calculateTotal().toFixed(2)}</span>
+              <div>
+                <span>Subtotal (ex GST & Delivery)</span>
+                <span style={{ display: 'block', fontSize: '0.75rem', color: '#fbbf24', fontWeight: 400 }}>
+                  + Single order delivery fee & 10% GST added on final invoice
+                </span>
+              </div>
+              <span>${subtotal.toFixed(2)}</span>
             </div>
             
             <Button 
@@ -121,29 +132,16 @@ export default function Cart() {
               fullWidth 
               onClick={handleCheckout}
             >
-              Proceed to Checkout
+              <FileText size={18} />
+              <span>Proceed to Final Invoice Request</span>
             </Button>
             
             <p className="summary-note">
-              Tax and shipping charges are calculated at checkout.
+              No payment is required now. You will choose your delivery store and receive an official final tax invoice.
             </p>
           </div>
         </div>
       </div>
-      
-      <CheckoutModal 
-        isOpen={showCheckoutModal} 
-        onClose={() => setShowCheckoutModal(false)}
-        cartItems={cartItems}
-        totalAmount={calculateTotal()}
-        onSuccess={handleCheckoutSuccess}
-      />
-
-      <PaymentSuccessModal 
-        isOpen={showSuccessModal} 
-        orderId={successOrderId} 
-        onClose={() => setShowSuccessModal(false)} 
-      />
     </main>
   );
 }

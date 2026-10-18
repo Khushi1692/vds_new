@@ -154,7 +154,7 @@ export default function Header() {
 
           {/* Mobile-only CTA */}
           <div className="header__mobile-cta">
-            {!user && (
+            {!user ? (
               <Link
                 to="/login"
                 className="header__btn-signin-mobile"
@@ -162,6 +162,15 @@ export default function Header() {
               >
                 <UserIcon size={18} />
                 <span>Sign In to Account</span>
+              </Link>
+            ) : (
+              <Link
+                to="/profile"
+                className="header__btn-signin-mobile"
+                onClick={() => setMobileOpen(false)}
+              >
+                <UserIcon size={18} />
+                <span>View Profile</span>
               </Link>
             )}
             <Link
@@ -240,6 +249,16 @@ export default function Header() {
                   </div>
 
                   <div className="header__dropdown-divider" />
+
+                  <Link
+                    to="/profile"
+                    className="header__dropdown-item"
+                    role="menuitem"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <UserIcon size={17} className="header__dropdown-icon" />
+                    <span>View Profile</span>
+                  </Link>
 
                   <Link
                     to="/orders"

@@ -1,67 +1,140 @@
 .odm-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9990;
+  padding: 20px;
 }
 
 .odm-content {
-  background: var(--card);
-  border-radius: 24px;
-  padding: 32px;
-  width: 90%;
-  max-width: 600px;
+  background: #0f172a;
+  border-radius: 20px;
+  padding: 28px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid #1e293b;
+  color: #f8fafc;
 }
 
 .odm-close {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 20px;
+  right: 20px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  color: #94a3b8;
+  transition: all 0.2s;
+}
+
+.odm-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 .odm-title {
   font-size: 20px;
   font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 24px;
-  padding-right: 30px;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Status Banner */
+.odm-status-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.odm-status-banner.pending_invoice {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fde68a;
+}
+
+.odm-status-banner.invoice_issued {
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  color: #bae6fd;
+}
+
+.odm-status-banner.paid {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #bbf7d0;
+}
+
+.odm-status-banner.dispatched {
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #e9d5ff;
+}
+
+.odm-status-banner.delivered {
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  color: #99f6e4;
+}
+
+.odm-status-banner.cancelled {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+/* Store details box */
+.odm-store-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .odm-items {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .odm-item {
   display: flex;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
   align-items: center;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .odm-item-img-wrapper {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
   overflow: hidden;
-  background: var(--paper);
+  background: #1e293b;
   flex-shrink: 0;
 }
 
@@ -77,35 +150,122 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  color: var(--ink-soft);
+  font-size: 11px;
+  color: #64748b;
 }
 
 .odm-item-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .odm-item-name {
   font-weight: 600;
-  font-size: 16px;
-  color: var(--ink);
+  font-size: 14px;
+  color: #ffffff;
 }
 
 .odm-item-price {
-  font-size: 14px;
-  color: var(--ink-soft);
+  font-size: 13px;
+  color: #94a3b8;
 }
 
-.odm-instructions {
-  color: var(--ink-soft);
-  font-size: 14px;
-  margin-bottom: 24px;
+/* Financials breakdown in modal */
+.odm-breakdown {
+  background: #111e38;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
 }
 
-.odm-total {
-  font-size: 20px;
+.odm-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #cbd5e1;
+}
+
+.odm-breakdown-row.freight {
+  color: #38bdf8;
+}
+
+.odm-breakdown-row.taxable {
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+.odm-breakdown-row.total {
+  border-top: 1px solid rgba(14, 165, 233, 0.35);
+  padding-top: 10px;
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.odm-breakdown-row.total strong {
+  color: #38bdf8;
+  font-size: 18px;
   font-weight: 800;
-  color: var(--ink);
+}
+
+/* Action CTA Bar */
+.odm-actions-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #1e293b;
+  flex-wrap: wrap;
+}
+
+.odm-pay-btn {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+  transition: all 0.2s;
+}
+
+.odm-pay-btn:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  transform: translateY(-1px);
+}
+
+.odm-print-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.odm-print-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
 }
