@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import Button from '../../components/Button/Button';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import InteractiveRoom from '../../components/InteractiveRoom/InteractiveRoom';
 import { fetchFeaturedProducts, fetchProducts } from '../../data/products';
 import './Home.css';
 import { INDS } from '../../data/industries';
@@ -235,9 +236,8 @@ export default function Home() {
           </div>
         </header>
 
-
-
-
+        {/* ── Interactive Clinical Suite 360° Showroom ── */}
+        <InteractiveRoom dbProducts={allProducts} />
 
         {/* ── The Range (Categories) Section ── */}
         <section className="home__section featured-section">
