@@ -13,6 +13,7 @@ import './InteractiveRoom.css';
 // 14 Products mapped with precise room hotspot coordinates (%)
 const ROOM_HOTSPOTS = [
   {
+    num: 1,
     id: 'exam-couch-hilo',
     name: 'Premium Hi-Lo Examination Couch',
     category: 'Furniture and Patient Transfer',
@@ -22,11 +23,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 203847',
     tagline: 'Versatile electric 2-motor positioning for clinics & ultrasound suites',
     image: '/images/exam_couch.webp',
-    x: 23,
-    y: 68,
+    x: 26,
+    y: 78,
     tooltipPlacement: 'top'
   },
   {
+    num: 2,
     id: 'exam-bed-sheet-10',
     name: 'Disposable Bedsheet',
     category: 'Infection Prevention',
@@ -36,11 +38,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 102934',
     tagline: '240 × 70 cm · Non-woven fluid-resistant barrier for examination couches',
     image: '/images/exam_bed_sheet_10.webp',
-    x: 27,
-    y: 57,
+    x: 23,
+    y: 64,
     tooltipPlacement: 'top'
   },
   {
+    num: 3,
     id: 'ultra-med-roll',
     name: 'Ultra Medical Roll',
     category: 'Everyday Paper Supplies',
@@ -50,11 +53,12 @@ const ROOM_HOTSPOTS = [
     artg: null,
     tagline: 'Continuous couch roll dispenser protection with easy-tear perforations',
     image: '/images/ultra_medical_roll.webp',
-    x: 15,
-    y: 74,
+    x: 66.8,
+    y: 55.3,
     tooltipPlacement: 'top'
   },
   {
+    num: 4,
     id: 'xray-protective-apron',
     name: 'Xray Lead Protective Gown',
     category: 'Medical Imaging Consumables',
@@ -64,11 +68,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 401823',
     tagline: '0.50mm Pb radiation protection for imaging staff & radiologists',
     image: '/images/x_ray_protective_apron.webp',
-    x: 18,
-    y: 49,
-    tooltipPlacement: 'right'
+    x: 20.5,
+    y: 48,
+    tooltipPlacement: 'top'
   },
   {
+    num: 5,
     id: 'exam-gown-regular',
     name: 'Disposable Gowns',
     category: 'Infection Prevention',
@@ -76,13 +81,14 @@ const ROOM_HOTSPOTS = [
     sku: 'EX-GOWN-REG',
     price: '$76.00 / Box of 100',
     artg: 'ARTG 394857',
-    tagline: 'Single-use breathable non-woven patient gowns for ultrasound & exams',
+    tagline: 'Single-use breathable non-woven patient gowns on examination table',
     image: '/images/patient_examination_gown.webp',
-    x: 24,
-    y: 47,
-    tooltipPlacement: 'right'
+    x: 61.2,
+    y: 53.5,
+    tooltipPlacement: 'top'
   },
   {
+    num: 6,
     id: 'us-gel-250ml',
     name: 'Ultrasound Gel 250ML',
     category: 'Medical Imaging Consumables',
@@ -92,11 +98,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 530981',
     tagline: 'VDS is direct ARTG sponsor · Acoustically correct clear transmission formula',
     image: '/images/ultrasound_gel_250ML.webp',
-    x: 40,
-    y: 53.5,
-    tooltipPlacement: 'left'
+    x: 40.3,
+    y: 55.3,
+    tooltipPlacement: 'top'
   },
   {
+    num: 7,
     id: 'us-gel-5l',
     name: 'Ultrasound Gel 5L',
     category: 'Medical Imaging Consumables',
@@ -106,11 +113,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 530981',
     tagline: 'Bulk supply cubitainer with free 250ml dispensing bottle included',
     image: '/images/ultrasound_gel_5L.webp',
-    x: 48.5,
-    y: 53.5,
+    x: 77.0,
+    y: 53.0,
     tooltipPlacement: 'top'
   },
   {
+    num: 8,
     id: 'thermasonic-gel-warmer',
     name: 'Ultrasound Gel Warmer',
     category: 'Medical Equipment',
@@ -120,11 +128,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 495823',
     tagline: 'Rapid microprocessor-controlled heating for optimal patient comfort',
     image: '/images/thermasonic_gel_warmer.webp',
-    x: 44.5,
-    y: 64,
+    x: 72.7,
+    y: 53.5,
     tooltipPlacement: 'top'
   },
   {
+    num: 9,
     id: 'med-warming-cabinet',
     name: 'Medical Warming Cabinet',
     category: 'Medical Equipment',
@@ -134,11 +143,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 412890',
     tagline: 'Stainless steel heated cabinet for blankets, fluids, and clinical linens',
     image: '/images/medical_warming_cabinet.webp',
-    x: 54.5,
-    y: 46,
-    tooltipPlacement: 'bottom'
+    x: 63.5,
+    y: 68.0,
+    tooltipPlacement: 'top'
   },
   {
+    num: 10,
     id: 'uv-probe-disinfector',
     name: 'UV-C LED Ultrasound Probe Disinfector',
     category: 'Medical Equipment',
@@ -148,11 +158,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 582910',
     tagline: 'High-level disinfection in under 60 seconds with no harmful chemicals',
     image: '/images/ultrasound_probe_disinfector.webp',
-    x: 65.5,
-    y: 51,
-    tooltipPlacement: 'bottom'
+    x: 54.7,
+    y: 54.5,
+    tooltipPlacement: 'top'
   },
   {
+    num: 11,
     id: 'tisora-facial-tissue',
     name: 'Tisora Facial Tissue',
     category: 'Everyday Paper Supplies',
@@ -162,11 +173,12 @@ const ROOM_HOTSPOTS = [
     artg: null,
     tagline: 'Ultra-soft 2-ply clinical tissues for ultrasound gel clean-up',
     image: '/images/tisora_facial_tissue.webp',
-    x: 74.5,
-    y: 54,
-    tooltipPlacement: 'bottom'
+    x: 80.5,
+    y: 54.0,
+    tooltipPlacement: 'top'
   },
   {
+    num: 12,
     id: 'sony-upp-110hg',
     name: 'Sony UPP-110HG Thermal Paper',
     category: 'Medical Imaging Consumables',
@@ -176,11 +188,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 318290',
     tagline: 'High-gloss A6 black & white thermal print media for ultrasound diagnostics',
     image: '/images/sony_upp_110hg_print_media.webp',
-    x: 79,
-    y: 46.5,
-    tooltipPlacement: 'left'
+    x: 43.5,
+    y: 74.5,
+    tooltipPlacement: 'top'
   },
   {
+    num: 13,
     id: 'mri-safe-wheelchair',
     name: 'MR SAFE Non-Metal Wheelchair',
     category: 'Furniture and Patient Transfer',
@@ -190,11 +203,12 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 298412',
     tagline: '100% non-magnetic polymer construction tested for up to 3.0 Tesla MRI zones',
     image: '/images/non_metal_wheelchair.webp',
-    x: 88.5,
-    y: 71,
-    tooltipPlacement: 'left'
+    x: 88.0,
+    y: 70.3,
+    tooltipPlacement: 'top'
   },
   {
+    num: 14,
     id: 'tisora-toilet-tissue',
     name: 'Tisora Toilet Tissue Paper',
     category: 'Everyday Paper Supplies',
@@ -204,19 +218,26 @@ const ROOM_HOTSPOTS = [
     artg: null,
     tagline: 'Hospital & clinic facility grade 2-ply soft embossed rolls',
     image: '/images/tisora_toilet_tissue_paper.webp',
-    x: 71.5,
-    y: 53.5,
-    tooltipPlacement: 'bottom'
+    x: 70.8,
+    y: 71.0,
+    tooltipPlacement: 'top'
   }
 ];
 
 const CATEGORIES = [
   { id: 'all', label: 'All Equipment', count: 14 },
-  { id: 'imaging', label: 'Ultrasound & Imaging', count: 4 },
+  { id: 'imaging', label: 'Ultrasound & Imaging', count: 5 },
   { id: 'furniture', label: 'Couch & Patient Transfer', count: 3 },
   { id: 'infection', label: 'Infection Prevention', count: 3 },
-  { id: 'paper', label: 'Clinical Paper Supplies', count: 4 }
+  { id: 'paper', label: 'Clinical Paper Supplies', count: 3 }
 ];
+
+// Helper to prevent preview cards from clipping past viewport edges
+const getAlignClass = (x) => {
+  if (x <= 30) return 'align-left';
+  if (x >= 70) return 'align-right';
+  return 'align-center';
+};
 
 export default function InteractiveRoom({ dbProducts = [] }) {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -303,17 +324,19 @@ export default function InteractiveRoom({ dbProducts = [] }) {
               }
             }}
           >
-            {/* Background 3D High-Res Clinic Room Image */}
-            <img 
-              src="/images/interactive-clinic-room.jpg" 
-              alt="State-of-the-art Australian Diagnostic and Ultrasound Clinic Examination Room" 
-              className="room-image"
-              loading="eager"
-            />
+            {/* Background 3D High-Res Clinic Room Image & Lighting */}
+            <div className="room-viewport__media" aria-hidden="true">
+              <img 
+                src="/images/interactive-clinic-room.jpg" 
+                alt="State-of-the-art Australian Diagnostic and Ultrasound Clinic Examination Room" 
+                className="room-image"
+                loading="eager"
+              />
 
-            {/* Ambient Lighting & Scanline Overlays */}
-            <div className="room-overlay-ambient" aria-hidden="true" />
-            <div className="room-vignette" aria-hidden="true" />
+              {/* Ambient Lighting & Scanline Overlays */}
+              <div className="room-overlay-ambient" />
+              <div className="room-vignette" />
+            </div>
 
             {/* HUD Status Bar in Top Left */}
             <div className="room-hud-tag" aria-hidden="true">
@@ -358,13 +381,13 @@ export default function InteractiveRoom({ dbProducts = [] }) {
                     <span className="pulse-wave" />
                     <span className="pulse-wave pulse-wave--delayed" />
                     <span className="pin-core">
-                      <span className="pin-number">{index + 1}</span>
+                      <span className="pin-number">{spot.num || index + 1}</span>
                     </span>
                   </button>
 
                   {/* Floating Glassmorphic Tooltip / Product Preview Card */}
                   <div 
-                    className={`room-card-preview placement-${spot.tooltipPlacement || 'top'} ${isActive ? 'visible' : ''}`}
+                    className={`room-card-preview placement-${spot.tooltipPlacement || 'top'} ${getAlignClass(spot.x)} ${isActive ? 'visible' : ''}`}
                     onClick={() => handleGoToProduct(spot.id)}
                     role="button"
                     tabIndex={0}

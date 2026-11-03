@@ -146,9 +146,18 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   background: #020712;
   user-select: none;
+}
+
+.room-viewport__media {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .room-image {
@@ -330,16 +339,17 @@
 /* ── Floating Tooltip / Glassmorphism Preview Card ── */
 .room-card-preview {
   position: absolute;
-  width: 290px;
-  background: rgba(8, 22, 42, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(143, 179, 223, 0.35);
-  border-radius: 14px;
+  width: 270px;
+  max-width: calc(100vw - 32px);
+  background: rgba(8, 22, 42, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(143, 179, 223, 0.4);
+  border-radius: 12px;
   box-shadow: 
-    0 20px 40px -8px rgba(0, 0, 0, 0.75),
-    0 0 30px rgba(56, 189, 248, 0.22);
-  padding: 12px;
+    0 20px 40px -8px rgba(0, 0, 0, 0.8),
+    0 0 25px rgba(56, 189, 248, 0.2);
+  padding: 10px;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -347,7 +357,8 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  z-index: 50;
 }
 
 .room-card-preview.visible {
@@ -359,12 +370,33 @@
 /* Placement rules */
 .room-card-preview.placement-top {
   bottom: calc(100% + 14px);
-  left: 50%;
-  transform: translateX(-50%) translateY(8px) scale(0.96);
 }
 
-.room-card-preview.placement-top.visible {
+.room-card-preview.placement-top.align-center {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%) translateY(8px) scale(0.96);
+}
+.room-card-preview.placement-top.align-center.visible {
   transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.room-card-preview.placement-top.align-left {
+  left: -12px;
+  right: auto;
+  transform: translateY(8px) scale(0.96);
+}
+.room-card-preview.placement-top.align-left.visible {
+  transform: translateY(0) scale(1);
+}
+
+.room-card-preview.placement-top.align-right {
+  right: -12px;
+  left: auto;
+  transform: translateY(8px) scale(0.96);
+}
+.room-card-preview.placement-top.align-right.visible {
+  transform: translateY(0) scale(1);
 }
 
 .room-card-preview.placement-bottom {
@@ -372,7 +404,6 @@
   left: 50%;
   transform: translateX(-50%) translateY(-8px) scale(0.96);
 }
-
 .room-card-preview.placement-bottom.visible {
   transform: translateX(-50%) translateY(0) scale(1);
 }
@@ -382,7 +413,6 @@
   top: 50%;
   transform: translateY(-50%) translateX(8px) scale(0.96);
 }
-
 .room-card-preview.placement-left.visible {
   transform: translateY(-50%) translateX(0) scale(1);
 }
@@ -392,7 +422,6 @@
   top: 50%;
   transform: translateY(-50%) translateX(-8px) scale(0.96);
 }
-
 .room-card-preview.placement-right.visible {
   transform: translateY(-50%) translateX(0) scale(1);
 }
@@ -401,9 +430,9 @@
 .room-card-preview__image-wrapper {
   position: relative;
   width: 100%;
-  height: 120px;
-  background: rgba(2, 6, 18, 0.6);
-  border-radius: 10px;
+  height: 105px;
+  background: rgba(2, 6, 18, 0.65);
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -604,11 +633,23 @@
     gap: 1rem;
   }
 
-  /* Center preview tooltips on small screens */
+  /* Compact preview tooltips on small screens */
   .room-card-preview {
-    width: 250px;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) translateY(0) !important;
+    width: min(240px, 85vw);
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .room-card-preview__image-wrapper {
+    height: 85px;
+  }
+
+  .room-card-preview__title {
+    font-size: 0.82rem;
+  }
+
+  .room-card-preview__tagline {
+    font-size: 0.7rem;
+    -webkit-line-clamp: 1;
   }
 }
