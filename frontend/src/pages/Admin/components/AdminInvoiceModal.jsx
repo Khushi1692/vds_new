@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   X, CheckCircle2, AlertCircle, Truck, DollarSign, Send, 
   Printer, Building2, Store, FileText, Phone, Mail, MapPin, 
-  Clock, ShieldAlert, Save, RefreshCw
+  Clock, ShieldAlert, Save, RefreshCw, Package, Tag, ArrowRight
 } from 'lucide-react';
 import { getApiUrl } from '../../../config/api';
 
@@ -22,16 +22,19 @@ export default function AdminInvoiceModal({
   const [adminNotes, setAdminNotes] = useState(order.adminNotes || '');
   const [invoiceNotes, setInvoiceNotes] = useState('');
 
-  // Editable items state (allowing admin to adjust prices for this order)
+  // Editable items state (allowing admin to adjust prices and quantities for this order)
   const [items, setItems] = useState(() =>
     (order.items || []).map(item => ({
       _id: item._id,
       productId: item.productId || item.id || item._id,
       name: item.name || 'Medical Product',
       sku: item.sku || '',
+      image: item.image || '',
       quantity: item.quantity || 1,
       price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
-      originalPrice: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0
+      originalPrice: item.originalPrice !== undefined && item.originalPrice !== null 
+        ? (parseFloat(item.originalPrice) || 0) 
+        : (item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0)
     }))
   );
   
@@ -43,21 +46,72 @@ export default function AdminInvoiceModal({
   const [isEditingStore, setIsEditingStore] = useState(false);
 
   const [saving, setSaving] = useState(false);
+  const [loadingFresh, setLoadingFresh] = useState(false);
   const [submittingInvoice, setSubmittingInvoice] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
+
+  // Guarantee fresh order data directly from backend on mount or when orderId changes
+  useEffect(() => {
+    let isMounted = true;
+    if (order?.orderId && token) {
+      setLoadingFresh(true);
+      fetch(getApiUrl(`/api/admin/orders/${order.orderId}`), {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(freshOrder => {
+        if (!isMounted || !freshOrder || freshOrder.error) return;
+        if (freshOrder.items && Array.isArray(freshOrder.items) && freshOrder.items.length > 0) {
+          setItems(freshOrder.items.map(item => ({
+            _id: item._id,
+            productId: item.productId || item.id || item._id,
+            name: item.name || 'Medical Product',
+            sku: item.sku || '',
+            image: item.image || '',
+            quantity: item.quantity || 1,
+            price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
+            originalPrice: item.originalPrice !== undefined && item.originalPrice !== null 
+              ? (parseFloat(item.originalPrice) || 0) 
+              : (item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0)
+          })));
+        }
+        if (freshOrder.deliveryCharge !== undefined) setDeliveryCharge(freshOrder.deliveryCharge);
+        if (freshOrder.orderStatus) setOrderStatus(freshOrder.orderStatus);
+        if (freshOrder.paymentStatus) setPaymentStatus(freshOrder.paymentStatus);
+        if (freshOrder.poNumber) setPoNumber(freshOrder.poNumber);
+        if (freshOrder.adminNotes) setAdminNotes(freshOrder.adminNotes);
+        if (freshOrder.store) {
+          setStoreName(freshOrder.store.name || '');
+          setStoreAddress(freshOrder.store.address || '');
+          setStorePhone(freshOrder.store.contactNumber || '');
+          setStoreEmail(freshOrder.store.email || '');
+        }
+      })
+      .catch(console.error)
+      .finally(() => {
+        if (isMounted) setLoadingFresh(false);
+      });
+    }
+    return () => { isMounted = false; };
+  }, [order?.orderId, token]);
 
   // Sync state if order prop changes
   useEffect(() => {
     if (order) {
-      setItems((order.items || []).map(item => ({
-        _id: item._id,
-        productId: item.productId || item.id || item._id,
-        name: item.name || 'Medical Product',
-        sku: item.sku || '',
-        quantity: item.quantity || 1,
-        price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
-        originalPrice: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0
-      })));
+      if (order.items && Array.isArray(order.items) && order.items.length > 0) {
+        setItems(order.items.map(item => ({
+          _id: item._id,
+          productId: item.productId || item.id || item._id,
+          name: item.name || 'Medical Product',
+          sku: item.sku || '',
+          image: item.image || '',
+          quantity: item.quantity || 1,
+          price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
+          originalPrice: item.originalPrice !== undefined && item.originalPrice !== null 
+            ? (parseFloat(item.originalPrice) || 0) 
+            : (item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0)
+        })));
+      }
       setDeliveryCharge(order.deliveryCharge !== undefined ? order.deliveryCharge : '');
       setOrderStatus(order.orderStatus || 'pending_invoice');
       setPaymentStatus(order.paymentStatus || 'pending_invoice');
@@ -88,9 +142,7 @@ export default function AdminInvoiceModal({
 
   // Helper to handle unit price edit without stripping decimals
   const handleItemPriceChange = (index, val) => {
-    // Strip leading currency symbols or commas
     const cleaned = val.replace(/[$, ]/g, '');
-    // Allow empty string or digits with optional decimal point
     if (cleaned !== '' && !/^\d*\.?\d*$/.test(cleaned)) {
       return;
     }
@@ -117,6 +169,19 @@ export default function AdminInvoiceModal({
     });
   };
 
+  // Quantity Change Handler
+  const handleItemQtyChange = (index, val) => {
+    const parsed = parseInt(val, 10);
+    setItems(prev => {
+      const next = [...prev];
+      next[index] = {
+        ...next[index],
+        quantity: isNaN(parsed) || parsed < 1 ? 1 : parsed
+      };
+      return next;
+    });
+  };
+
   // Reset item price back to original catalog price
   const handleResetPrice = (index) => {
     setItems(prev => {
@@ -136,6 +201,7 @@ export default function AdminInvoiceModal({
       productId: it.productId || it.id || (it._id ? String(it._id) : 'PROD'),
       name: it.name || '',
       sku: it.sku || '',
+      image: it.image || '',
       quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
       price: Math.max(0, parseFloat(it.price) || 0)
     }));
@@ -175,7 +241,7 @@ export default function AdminInvoiceModal({
 
       setFeedback({ 
         type: 'success', 
-        message: `Invoice #${order.invoiceNumber || order.orderId} updated successfully! New Total: $${(data.order?.finalInvoiceTotal || finalTotalIncGst).toFixed(2)} AUD` 
+        message: `Order #${order.invoiceNumber || order.orderId} updated! Custom Subtotal: $${(data.order?.subtotalExGst || subtotalExGst).toFixed(2)}, Final Total: $${(data.order?.finalInvoiceTotal || finalTotalIncGst).toFixed(2)} AUD` 
       });
       onOrderUpdated(data.order);
       setIsEditingStore(false);
@@ -282,6 +348,12 @@ export default function AdminInvoiceModal({
                 <Clock size={13} />
                 {new Date(order.createdAt).toLocaleString('en-AU')}
               </span>
+              {loadingFresh && (
+                <span className="date-chip" style={{ color: '#38bdf8' }}>
+                  <RefreshCw size={12} className="spinning" />
+                  Syncing live...
+                </span>
+              )}
             </div>
           </div>
           <button type="button" className="close-btn" onClick={onClose}>
@@ -298,7 +370,208 @@ export default function AdminInvoiceModal({
         )}
 
         <div className="manage-modal-body">
-          {/* Section 1: Customer, Company & Delivery Store */}
+          {/* SECTION 1: Ordered Products & Pricing Override (FRONT & CENTER) */}
+          <div className="order-items-box">
+            <div className="box-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FileText size={18} style={{ color: '#38bdf8' }} />
+                <span style={{ fontSize: '15px', fontWeight: 800, color: '#ffffff' }}>
+                  Ordered Products & Custom Client Pricing ({items.length} items)
+                </span>
+              </div>
+              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className="ex-gst-tag">Admin Editable Unit Prices (Ex GST)</span>
+                <button
+                  type="button"
+                  className="box-action-btn"
+                  onClick={handleSaveChanges}
+                  disabled={saving}
+                  title="Save edited item prices to invoice"
+                >
+                  <Save size={13} />
+                  <span>{saving ? 'Saving...' : 'Save Price Changes'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Admin Guidance Callout */}
+            <div className="price-override-callout">
+              <Tag size={15} style={{ color: '#38bdf8', flexShrink: 0 }} />
+              <span>
+                <strong>Admin Client Price Override:</strong> You can edit the unit price or quantity for any item below specifically for this order. Subtotals and official tax invoices will recalculate automatically in real time.
+              </span>
+            </div>
+
+            <table className="manage-items-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '42%' }}>Product & SKU</th>
+                  <th className="text-center" style={{ width: '12%' }}>Quantity</th>
+                  <th className="text-right" style={{ width: '16%' }}>Catalog Price (Ex GST)</th>
+                  <th className="text-right" style={{ width: '18%' }}>Client Unit Price (Ex GST)</th>
+                  <th className="text-right" style={{ width: '12%' }}>Line Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '32px', color: '#94a3b8' }}>
+                      <Package size={28} style={{ margin: '0 auto 8px auto', display: 'block', opacity: 0.5 }} />
+                      No items recorded for this order.
+                    </td>
+                  </tr>
+                ) : (
+                  items.map((item, i) => {
+                    const numPrice = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
+                    const origPrice = Number(item.originalPrice) || 0;
+                    const isModified = Math.abs(numPrice - origPrice) > 0.001;
+                    return (
+                      <tr key={i}>
+                        {/* Product info with thumbnail */}
+                        <td>
+                          <div className="manage-prod-cell">
+                            {item.image ? (
+                              <img src={item.image} alt={item.name} className="manage-prod-thumb" />
+                            ) : (
+                              <div className="manage-prod-thumb-fallback">
+                                <Package size={20} />
+                              </div>
+                            )}
+                            <div className="manage-prod-info">
+                              <strong className="manage-prod-title">{item.name || 'Medical Product'}</strong>
+                              <span className="manage-prod-sku">SKU: {item.sku || 'N/A'}</span>
+                              {isModified && (
+                                <div className="price-modified-badge">
+                                  Custom Price: Adjusted from ${origPrice.toFixed(2)}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* Quantity editor */}
+                        <td className="text-center">
+                          <input
+                            type="number"
+                            min="1"
+                            step="1"
+                            value={item.quantity}
+                            onChange={(e) => handleItemQtyChange(i, e.target.value)}
+                            className="manage-qty-input"
+                            title="Adjust quantity"
+                          />
+                        </td>
+
+                        {/* Catalog original price */}
+                        <td className="text-right">
+                          <span className="catalog-orig-price">
+                            ${origPrice.toFixed(2)}
+                          </span>
+                        </td>
+
+                        {/* Client Unit Price (Editable) */}
+                        <td className="text-right item-price-edit-cell">
+                          <div className={`item-price-input-wrapper ${isModified ? 'modified' : ''}`}>
+                            <span className="price-prefix">$</span>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              value={item.price === undefined || item.price === null ? '' : item.price}
+                              onChange={(e) => handleItemPriceChange(i, e.target.value)}
+                              onBlur={() => handleItemPriceBlur(i)}
+                              className="item-price-input"
+                              title="Click to edit unit price (Ex GST) for this client"
+                              placeholder="0.00"
+                            />
+                            {isModified && (
+                              <button
+                                type="button"
+                                className="price-reset-icon-btn"
+                                onClick={() => handleResetPrice(i)}
+                                title="Reset back to standard catalog price"
+                              >
+                                ↺
+                              </button>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Line Total */}
+                        <td className="text-right font-bold" style={{ color: '#38bdf8', fontSize: '14px' }}>
+                          ${(numPrice * (item.quantity || 1)).toFixed(2)}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* SECTION 2: Consolidated Delivery Charge & Real-Time Invoice Calculation */}
+          <div className="freight-calculation-card">
+            <div className="freight-header">
+              <div className="title-left">
+                <Truck size={20} className="icon-truck" />
+                <div>
+                  <h3>Consolidated Order Delivery Charge</h3>
+                  <p>Single freight fee calculated once for the entire order to the selected store location.</p>
+                </div>
+              </div>
+              <div className="quick-presets">
+                <span className="preset-label">Quick Presets:</span>
+                <button type="button" onClick={() => setQuickFreight(15)}>Metro ($15)</button>
+                <button type="button" onClick={() => setQuickFreight(25)}>Regional ($25)</button>
+                <button type="button" onClick={() => setQuickFreight(35)}>Heavy/Bulky ($35)</button>
+                <button type="button" onClick={() => setQuickFreight(0)}>Free ($0)</button>
+              </div>
+            </div>
+
+            <div className="freight-input-row">
+              <label htmlFor="deliveryFeeInput">
+                <span>Enter Consolidated Delivery Charge (AUD Ex GST):</span>
+              </label>
+              <div className="delivery-input-box">
+                <span className="currency-prefix">$</span>
+                <input
+                  id="deliveryFeeInput"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={deliveryCharge}
+                  onChange={(e) => setDeliveryCharge(e.target.value)}
+                  placeholder="0.00"
+                />
+                <span className="currency-suffix">AUD (Ex GST)</span>
+              </div>
+            </div>
+
+            {/* Live Calculation Panel */}
+            <div className="live-invoice-breakdown">
+              <div className="calc-row">
+                <span>Products Subtotal (Ex GST):</span>
+                <strong>${subtotalExGst.toFixed(2)} AUD</strong>
+              </div>
+              <div className="calc-row">
+                <span>Consolidated Delivery Charge (Ex GST):</span>
+                <span className="freight-highlight">+ ${parsedDelivery.toFixed(2)} AUD</span>
+              </div>
+              <div className="calc-row taxable">
+                <span>Net Taxable Subtotal (Ex GST):</span>
+                <strong>${taxableAmount.toFixed(2)} AUD</strong>
+              </div>
+              <div className="calc-row">
+                <span>Goods & Services Tax (10% GST):</span>
+                <span className="gst-val">+ ${calculatedGst.toFixed(2)} AUD</span>
+              </div>
+              <div className="calc-row grand-total">
+                <span>FINAL INVOICE TOTAL (Inc GST):</span>
+                <span className="total-val">${finalTotalIncGst.toFixed(2)} AUD</span>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION 3: Customer, Company & Delivery Destination Summary */}
           <div className="manage-grid-2col">
             {/* Customer & Company Details */}
             <div className="info-card">
@@ -411,7 +684,7 @@ export default function AdminInvoiceModal({
             </div>
           </div>
 
-          {/* Customer Special Instructions & PO */}
+          {/* Customer Special Instructions & PO Banner */}
           {(order.specialInstructions || order.poNumber) && (
             <div className="instructions-banner">
               {order.poNumber && (
@@ -427,161 +700,7 @@ export default function AdminInvoiceModal({
             </div>
           )}
 
-          {/* Section 2: Order Items (Editable Product Prices) */}
-          <div className="order-items-box">
-            <div className="box-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FileText size={16} />
-                <span>Requested Products ({items.length} items)</span>
-              </div>
-              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span className="ex-gst-tag">Admin Editable Unit Prices (Ex GST)</span>
-                <button
-                  type="button"
-                  className="box-action-btn"
-                  onClick={handleSaveChanges}
-                  disabled={saving}
-                  title="Save edited item prices to invoice"
-                >
-                  <Save size={13} />
-                  <span>{saving ? 'Saving...' : 'Save Price Changes'}</span>
-                </button>
-              </div>
-            </div>
-            <table className="manage-items-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>SKU</th>
-                  <th className="text-center">Qty</th>
-                  <th className="text-right">Unit Price (Ex GST)</th>
-                  <th className="text-right">Line Total (Ex GST)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', padding: '24px', color: '#94a3b8' }}>
-                      No items recorded for this order.
-                    </td>
-                  </tr>
-                ) : (
-                  items.map((item, i) => {
-                    const numPrice = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
-                    const origPrice = Number(item.originalPrice) || 0;
-                    const isModified = Math.abs(numPrice - origPrice) > 0.001;
-                    return (
-                      <tr key={i}>
-                        <td>
-                          <strong>{item.name || 'Medical Product'}</strong>
-                          {isModified && (
-                            <div className="price-modified-badge">
-                              Adjusted from ${origPrice.toFixed(2)}
-                            </div>
-                          )}
-                        </td>
-                        <td className="sku-cell">{item.sku || 'N/A'}</td>
-                        <td className="text-center">{item.quantity}</td>
-                        <td className="text-right item-price-edit-cell">
-                          <div className={`item-price-input-wrapper ${isModified ? 'modified' : ''}`}>
-                            <span className="price-prefix">$</span>
-                            <input
-                              type="text"
-                              inputMode="decimal"
-                              value={item.price === undefined || item.price === null ? '' : item.price}
-                              onChange={(e) => handleItemPriceChange(i, e.target.value)}
-                              onBlur={() => handleItemPriceBlur(i)}
-                              className="item-price-input"
-                              title="Click to edit unit price (Ex GST)"
-                              placeholder="0.00"
-                            />
-                            {isModified && (
-                              <button
-                                type="button"
-                                className="price-reset-icon-btn"
-                                onClick={() => handleResetPrice(i)}
-                                title="Reset back to original catalog price"
-                              >
-                                ↺
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                        <td className="text-right font-bold">
-                          ${(numPrice * (item.quantity || 1)).toFixed(2)}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Section 3: Delivery Charge & Real-Time Invoice Calculation */}
-          <div className="freight-calculation-card">
-            <div className="freight-header">
-              <div className="title-left">
-                <Truck size={20} className="icon-truck" />
-                <div>
-                  <h3>Consolidated Order Delivery Charge</h3>
-                  <p>Single freight fee calculated once for the entire order to the selected store location.</p>
-                </div>
-              </div>
-              <div className="quick-presets">
-                <span className="preset-label">Quick Presets:</span>
-                <button type="button" onClick={() => setQuickFreight(15)}>Metro ($15)</button>
-                <button type="button" onClick={() => setQuickFreight(25)}>Regional ($25)</button>
-                <button type="button" onClick={() => setQuickFreight(35)}>Heavy/Bulky ($35)</button>
-                <button type="button" onClick={() => setQuickFreight(0)}>Free ($0)</button>
-              </div>
-            </div>
-
-            <div className="freight-input-row">
-              <label htmlFor="deliveryFeeInput">
-                <span>Enter Consolidated Delivery Charge (AUD Ex GST):</span>
-              </label>
-              <div className="delivery-input-box">
-                <span className="currency-prefix">$</span>
-                <input
-                  id="deliveryFeeInput"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={deliveryCharge}
-                  onChange={(e) => setDeliveryCharge(e.target.value)}
-                  placeholder="0.00"
-                />
-                <span className="currency-suffix">AUD (Ex GST)</span>
-              </div>
-            </div>
-
-            {/* Live Calculation Panel */}
-            <div className="live-invoice-breakdown">
-              <div className="calc-row">
-                <span>Products Subtotal (Ex GST):</span>
-                <strong>${subtotalExGst.toFixed(2)} AUD</strong>
-              </div>
-              <div className="calc-row">
-                <span>Consolidated Delivery Charge (Ex GST):</span>
-                <span className="freight-highlight">+ ${parsedDelivery.toFixed(2)} AUD</span>
-              </div>
-              <div className="calc-row taxable">
-                <span>Net Taxable Subtotal (Ex GST):</span>
-                <strong>${taxableAmount.toFixed(2)} AUD</strong>
-              </div>
-              <div className="calc-row">
-                <span>Goods & Services Tax (10% GST):</span>
-                <span className="gst-val">+ ${calculatedGst.toFixed(2)} AUD</span>
-              </div>
-              <div className="calc-row grand-total">
-                <span>FINAL INVOICE TOTAL (Inc GST):</span>
-                <span className="total-val">${finalTotalIncGst.toFixed(2)} AUD</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Section 4: Operational Workflow & Status Updates */}
+          {/* SECTION 4: Operational Workflow & Status Updates */}
           <div className="workflow-panel-grid">
             <div className="status-control-box">
               <label>Update Order Status</label>

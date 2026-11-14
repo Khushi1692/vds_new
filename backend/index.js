@@ -1123,6 +1123,7 @@ function generateInvoiceRequestEmailHTML({
           <div><strong style="color: #ffffff;">Delivery Store / Branch:</strong> ${sanitizeHTML(store?.name || 'Main Practice')}</div>
           <div><strong style="color: #ffffff;">Store Address:</strong> ${sanitizeHTML(store?.address || 'Not specified')}</div>
           <div><strong style="color: #ffffff;">Store Contact:</strong> ${sanitizeHTML(store?.contactNumber || cleanPhone)}</div>
+          ${store?.email ? `<div><strong style="color: #ffffff;">Store Email:</strong> ${sanitizeHTML(store.email)}</div>` : ''}
           ${cleanPo ? `<div><strong style="color: #ffffff;">Purchase Order (PO) #:</strong> ${cleanPo}</div>` : ''}
           <div><strong style="color: #ffffff;">Contact Person:</strong> ${cleanName} (<a href="mailto:${cleanEmail}" style="color: #8fb3df;">${cleanEmail}</a>)</div>
         </div>
@@ -1266,6 +1267,7 @@ function generateFinalTaxInvoiceEmailHTML({
               <div style="font-size: 14px; font-weight: 700; color: #ffffff;">${sanitizeHTML(store?.name || 'Main Practice')}</div>
               <div style="font-size: 13px; color: #cbd5e1;">${sanitizeHTML(store?.address || 'Not specified')}</div>
               <div style="font-size: 13px; color: #cbd5e1;">Phone: ${sanitizeHTML(store?.contactNumber || 'N/A')}</div>
+              ${store?.email ? `<div style="font-size: 13px; color: #cbd5e1;">Email: ${sanitizeHTML(store.email)}</div>` : ''}
               ${cleanPo ? `<div style="font-size: 13px; color: #38bdf8; font-weight: 600; margin-top: 4px;">PO #: ${cleanPo}</div>` : ''}
             </td>
           </tr>
