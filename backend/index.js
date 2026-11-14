@@ -1931,13 +1931,15 @@ async function enrichOrderItems(orders) {
         if (prod) {
           if (!it.name || it.name === 'Medical Product') it.name = prod.name;
           if (!it.sku && prod.sku) it.sku = prod.sku;
-          if (it.price === undefined || it.price === null || isNaN(it.price) || it.price === 0) {
+          it.catalogPrice = prod.price !== undefined ? prod.price : 0;
+          if (it.price === undefined || it.price === null || isNaN(it.price)) {
             it.price = prod.price !== undefined ? prod.price : 0;
           }
           if (!it.image && prod.image) it.image = prod.image;
         }
         if (!it.name) it.name = 'Medical Product';
         if (it.price === undefined || it.price === null || isNaN(it.price)) it.price = 0;
+        if (it.catalogPrice === undefined) it.catalogPrice = it.price;
       }
     }
   } catch (enrichErr) {

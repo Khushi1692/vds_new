@@ -1,17 +1,26 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Search, Filter, Printer, Edit3, Truck, AlertCircle, 
-  CheckCircle2, Clock, ChevronRight, Store, Building2, Download
+  CheckCircle2, Clock, ChevronRight, Store, Building2, Download,
+  Tag, ChevronDown, ChevronUp
 } from 'lucide-react';
+import AdminOrderSummaryCard from './AdminOrderSummaryCard';
 
 export default function AdminOrders({ 
   orders, 
+  token,
+  onOrderUpdated,
   initialFilter = 'all', 
   onSelectOrder, 
   onOpenPrint 
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(initialFilter);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+
+  const toggleExpand = (orderId) => {
+    setExpandedOrderId(prev => prev === orderId ? null : orderId);
+  };
 
   // Filtered orders list
   const filteredOrders = useMemo(() => {
@@ -145,7 +154,8 @@ export default function AdminOrders({
               const totalIncGst = order.finalInvoiceTotal || (subtotal * 1.1);
 
               return (
-                <tr key={order.orderId} className={`order-row ${status}`}>
+                <React.Fragment key={order.orderId}>
+                  <tr className={`order-row ${status}`}>
                   {/* Order ID */}
                   <td className="cell-id">
                     <strong>{order.orderId}</strong>
@@ -241,6 +251,17 @@ export default function AdminOrders({
                     <div className="table-actions-row">
                       <button
                         type="button"
+                        className={`tbl-action-btn pricing-btn ${expandedOrderId === order.orderId ? 'active' : ''}`}
+                        onClick={() => toggleExpand(order.orderId)}
+                        title="Quick Edit Product Prices & Delivery"
+                      >
+                        <Tag size={14} />
+                        <span>{expandedOrderId === order.orderId ? 'Close Pricing' : 'Edit Pricing'}</span>
+                        {expandedOrderId === order.orderId ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                      </button>
+
+                      <button
+                        type="button"
                         className="tbl-action-btn primary"
                         onClick={() => onSelectOrder(order)}
                         title="Manage Order & Finalize Invoice"
@@ -260,6 +281,25 @@ export default function AdminOrders({
                     </div>
                   </td>
                 </tr>
+
+                {/* Inline Expandable Order Summary & Price Editor Drawer */}
+                {expandedOrderId === order.orderId && (
+                  <tr key={`${order.orderId}-expanded`} className="order-expanded-pricing-row">
+                    <td colSpan="10" className="order-expanded-pricing-cell">
+                      <div className="order-expanded-pricing-container">
+                        <AdminOrderSummaryCard
+                          order={order}
+                          token={token}
+                          onOrderUpdated={(updatedOrder) => {
+                            if (onOrderUpdated) onOrderUpdated(updatedOrder);
+                          }}
+                          onOpenPrint={onOpenPrint}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </React.Fragment>
               );
             })}
 

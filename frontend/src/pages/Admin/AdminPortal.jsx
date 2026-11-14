@@ -300,6 +300,8 @@ export default function AdminPortal() {
         {activeTab === 'orders' && (
           <AdminOrders
             orders={orders}
+            token={adminToken}
+            onOrderUpdated={handleOrderUpdated}
             initialFilter={ordersFilter}
             onSelectOrder={(order) => setSelectedOrderForManage(order)}
             onOpenPrint={(order) => setSelectedOrderForPrint(order)}
