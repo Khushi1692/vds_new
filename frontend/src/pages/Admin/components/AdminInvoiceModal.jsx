@@ -88,28 +88,30 @@ export default function AdminInvoiceModal({
 
   // Helper to handle unit price edit without stripping decimals
   const handleItemPriceChange = (index, val) => {
-    // Allow empty string or valid decimal numbers (up to 2 decimals)
-    if (val !== '' && !/^\d*\.?\d{0,2}$/.test(val)) {
+    // Strip leading currency symbols or commas
+    const cleaned = val.replace(/[$, ]/g, '');
+    // Allow empty string or digits with optional decimal point
+    if (cleaned !== '' && !/^\d*\.?\d*$/.test(cleaned)) {
       return;
     }
     setItems(prev => {
       const next = [...prev];
       next[index] = {
         ...next[index],
-        price: val
+        price: cleaned
       };
       return next;
     });
   };
 
-  // On blur, ensure valid numeric format
+  // On blur, ensure valid numeric format (max 2 decimals)
   const handleItemPriceBlur = (index) => {
     setItems(prev => {
       const next = [...prev];
       const parsed = parseFloat(next[index].price);
       next[index] = {
         ...next[index],
-        price: isNaN(parsed) ? 0 : parsed
+        price: isNaN(parsed) ? 0 : parseFloat(parsed.toFixed(2))
       };
       return next;
     });
@@ -171,7 +173,10 @@ export default function AdminInvoiceModal({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to update order');
 
-      setFeedback({ type: 'success', message: 'Order changes and delivery charge saved successfully.' });
+      setFeedback({ 
+        type: 'success', 
+        message: `Invoice #${order.invoiceNumber || order.orderId} updated successfully! New Total: $${(data.order?.finalInvoiceTotal || finalTotalIncGst).toFixed(2)} AUD` 
+      });
       onOrderUpdated(data.order);
       setIsEditingStore(false);
     } catch (err) {
@@ -215,7 +220,7 @@ export default function AdminInvoiceModal({
 
       setFeedback({ 
         type: 'success', 
-        message: `Order status successfully transitioned to ${newStatus.replace('_', ' ').toUpperCase()}!` 
+        message: `Order status transitioned to ${newStatus.replace('_', ' ').toUpperCase()}!` 
       });
       onOrderUpdated(data.order);
     } catch (err) {
@@ -227,12 +232,6 @@ export default function AdminInvoiceModal({
 
   // 2. Submit & Finalize Invoice (POST)
   const handleSubmitFinalInvoice = async () => {
-    if (parsedDelivery === 0 && deliveryCharge === '') {
-      if (!window.confirm('No delivery charge was entered ($0.00). Do you want to submit with FREE delivery?')) {
-        return;
-      }
-    }
-
     setSubmittingInvoice(true);
     setFeedback({ type: '', message: '' });
 
@@ -257,7 +256,7 @@ export default function AdminInvoiceModal({
       setOrderStatus('invoice_issued');
       setFeedback({ 
         type: 'success', 
-        message: data.message || 'Tax Invoice successfully issued and emailed to the customer!' 
+        message: data.message || `Official Tax Invoice #${data.order?.invoiceNumber || order.orderId} finalized and emailed to customer!` 
       });
       onOrderUpdated(data.order);
     } catch (err) {
@@ -431,9 +430,23 @@ export default function AdminInvoiceModal({
           {/* Section 2: Order Items (Editable Product Prices) */}
           <div className="order-items-box">
             <div className="box-header">
-              <FileText size={16} />
-              <span>Requested Products ({items.length} items)</span>
-              <span className="ex-gst-tag">Admin Editable Unit Prices (Ex GST)</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FileText size={16} />
+                <span>Requested Products ({items.length} items)</span>
+              </div>
+              <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className="ex-gst-tag">Admin Editable Unit Prices (Ex GST)</span>
+                <button
+                  type="button"
+                  className="box-action-btn"
+                  onClick={handleSaveChanges}
+                  disabled={saving}
+                  title="Save edited item prices to invoice"
+                >
+                  <Save size={13} />
+                  <span>{saving ? 'Saving...' : 'Save Price Changes'}</span>
+                </button>
+              </div>
             </div>
             <table className="manage-items-table">
               <thead>
@@ -706,16 +719,23 @@ export default function AdminInvoiceModal({
             </button>
             <button
               type="button"
-              className="action-btn outline"
+              className="action-btn save-update"
               onClick={handleSaveChanges}
               disabled={saving}
+              title="Save all changes, price updates, and recalculate invoice totals"
             >
               <Save size={16} />
-              <span>{saving ? 'Updating...' : 'Update Status & Details'}</span>
+              <span>{saving ? 'Updating...' : `Save & Update Invoice ($${finalTotalIncGst.toFixed(2)})`}</span>
             </button>
           </div>
 
           <div className="footer-right">
+            {feedback.message && (
+              <div className={`footer-feedback-inline ${feedback.type}`}>
+                {feedback.type === 'success' ? <CheckCircle2 size={15} /> : <AlertCircle size={15} />}
+                <span>{feedback.message}</span>
+              </div>
+            )}
             <button
               type="button"
               className="action-btn cancel"
@@ -734,8 +754,8 @@ export default function AdminInvoiceModal({
                 {submittingInvoice 
                   ? 'Finalizing & Sending...' 
                   : orderStatus === 'invoice_issued'
-                    ? 'Re-Issue & Email Official Tax Invoice'
-                    : 'Submit & Issue Official Final Tax Invoice'}
+                    ? 'Re-Issue & Email Tax Invoice'
+                    : 'Submit & Email Tax Invoice'}
               </span>
             </button>
           </div>

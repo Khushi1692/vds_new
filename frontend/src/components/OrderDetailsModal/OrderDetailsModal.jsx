@@ -174,8 +174,8 @@ export default function OrderDetailsModal({
         <div className="odm-items">
           {order.items && order.items.map((item, idx) => {
             const productInfo = (productsMap && productsMap[item.productId]) || { name: item.name || 'Product', image: '' };
-            const itemPrice = item.price != null ? item.price : (productInfo.price || 0);
-            const subtotal = (itemPrice * item.quantity).toFixed(2);
+            const itemPrice = item.price != null ? (Number(item.price) || 0) : (Number(productInfo.price) || 0);
+            const subtotal = (itemPrice * (item.quantity || 1)).toFixed(2);
             
             return (
               <div key={idx} className="odm-item">

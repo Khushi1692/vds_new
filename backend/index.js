@@ -2122,8 +2122,16 @@ app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
       };
     }
 
+    order.invoiceNumber = order.invoiceNumber || `INV-${order.orderId}`;
+    if (order.orderStatus === 'invoice_issued' && !order.invoiceIssuedAt) {
+      order.invoiceIssuedAt = new Date();
+    }
+
     await order.save();
-    res.json({ success: true, order });
+    const leanOrder = order.toObject();
+    await enrichOrderItems(leanOrder);
+    console.log(`[Admin] Order ${order.orderId} updated: Subtotal: $${order.subtotalExGst}, Delivery: $${order.deliveryCharge}, Final: $${order.finalInvoiceTotal}`);
+    res.json({ success: true, order: leanOrder });
   } catch (err) {
     console.error('Admin update order error:', err.message);
     res.status(500).json({ error: 'Failed to update order' });
@@ -2170,6 +2178,8 @@ app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (re
     if (adminNotes !== undefined) order.adminNotes = adminNotes;
 
     await order.save();
+    const leanOrder = order.toObject();
+    await enrichOrderItems(leanOrder);
 
     // Send official Tax Invoice email
     try {
@@ -2216,7 +2226,7 @@ app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (re
     res.json({
       success: true,
       message: `Tax Invoice #${invoiceNumber} successfully finalized with consolidated delivery charge ($${parsedDelivery.toFixed(2)}) and emailed to customer.`,
-      order
+      order: leanOrder
     });
   } catch (err) {
     console.error('Submit invoice error:', err.message);
