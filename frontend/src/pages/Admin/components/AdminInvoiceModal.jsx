@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, CheckCircle2, AlertCircle, Truck, DollarSign, Send, 
   Printer, Building2, Store, FileText, Phone, Mail, MapPin, 
@@ -25,7 +25,11 @@ export default function AdminInvoiceModal({
   // Editable items state (allowing admin to adjust prices for this order)
   const [items, setItems] = useState(() =>
     (order.items || []).map(item => ({
-      ...item,
+      _id: item._id,
+      productId: item.productId || item.id || item._id,
+      name: item.name || '',
+      sku: item.sku || '',
+      quantity: item.quantity || 1,
       price: item.price !== undefined ? item.price : 0,
       originalPrice: item.price !== undefined ? item.price : 0
     }))
@@ -42,9 +46,33 @@ export default function AdminInvoiceModal({
   const [submittingInvoice, setSubmittingInvoice] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
 
+  // Sync state if order prop changes
+  useEffect(() => {
+    if (order) {
+      setItems((order.items || []).map(item => ({
+        _id: item._id,
+        productId: item.productId || item.id || item._id,
+        name: item.name || '',
+        sku: item.sku || '',
+        quantity: item.quantity || 1,
+        price: item.price !== undefined ? item.price : 0,
+        originalPrice: item.price !== undefined ? item.price : 0
+      })));
+      setDeliveryCharge(order.deliveryCharge !== undefined ? order.deliveryCharge : '');
+      setOrderStatus(order.orderStatus || 'pending_invoice');
+      setPaymentStatus(order.paymentStatus || 'pending_invoice');
+      setPoNumber(order.poNumber || '');
+      setAdminNotes(order.adminNotes || '');
+      setStoreName(order.store?.name || '');
+      setStoreAddress(order.store?.address || '');
+      setStorePhone(order.store?.contactNumber || '');
+      setStoreEmail(order.store?.email || '');
+    }
+  }, [order]);
+
   // Real-time calculations with editable items
   const subtotalExGst = items.reduce((sum, item) => {
-    const p = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
+    const p = parseFloat(item.price) || 0;
     const q = item.quantity || 1;
     return sum + (p * q);
   }, 0);
@@ -58,13 +86,42 @@ export default function AdminInvoiceModal({
     setDeliveryCharge(amount);
   };
 
-  // Helper to handle unit price edit
+  // Helper to handle unit price edit without stripping decimals
   const handleItemPriceChange = (index, val) => {
+    // Allow empty string or valid decimal numbers (up to 2 decimals)
+    if (val !== '' && !/^\d*\.?\d{0,2}$/.test(val)) {
+      return;
+    }
     setItems(prev => {
       const next = [...prev];
       next[index] = {
         ...next[index],
-        price: val === '' ? '' : Math.max(0, parseFloat(val) || 0)
+        price: val
+      };
+      return next;
+    });
+  };
+
+  // On blur, ensure valid numeric format
+  const handleItemPriceBlur = (index) => {
+    setItems(prev => {
+      const next = [...prev];
+      const parsed = parseFloat(next[index].price);
+      next[index] = {
+        ...next[index],
+        price: isNaN(parsed) ? 0 : parsed
+      };
+      return next;
+    });
+  };
+
+  // Reset item price back to original catalog price
+  const handleResetPrice = (index) => {
+    setItems(prev => {
+      const next = [...prev];
+      next[index] = {
+        ...next[index],
+        price: next[index].originalPrice !== undefined ? next[index].originalPrice : 0
       };
       return next;
     });
@@ -73,11 +130,12 @@ export default function AdminInvoiceModal({
   // Sanitize items for API payload
   const getSanitizedItems = () => {
     return items.map(it => ({
-      productId: it.productId,
-      name: it.name,
+      _id: it._id,
+      productId: it.productId || it.id || (it._id ? String(it._id) : 'PROD'),
+      name: it.name || '',
       sku: it.sku || '',
-      quantity: it.quantity || 1,
-      price: typeof it.price === 'number' ? it.price : (parseFloat(it.price) || 0)
+      quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
+      price: Math.max(0, parseFloat(it.price) || 0)
     }));
   };
 
@@ -404,17 +462,28 @@ export default function AdminInvoiceModal({
                       <td className="sku-cell">{item.sku || 'N/A'}</td>
                       <td className="text-center">{item.quantity}</td>
                       <td className="text-right item-price-edit-cell">
-                        <div className="item-price-input-wrapper">
+                        <div className={`item-price-input-wrapper ${isModified ? 'modified' : ''}`}>
                           <span className="price-prefix">$</span>
                           <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            value={item.price === '' ? '' : item.price}
+                            type="text"
+                            inputMode="decimal"
+                            value={item.price === undefined || item.price === null ? '' : item.price}
                             onChange={(e) => handleItemPriceChange(i, e.target.value)}
+                            onBlur={() => handleItemPriceBlur(i)}
                             className="item-price-input"
-                            title="Edit product unit price for this order"
+                            title="Click to edit unit price (Ex GST)"
+                            placeholder="0.00"
                           />
+                          {isModified && (
+                            <button
+                              type="button"
+                              className="price-reset-icon-btn"
+                              onClick={() => handleResetPrice(i)}
+                              title="Reset back to original catalog price"
+                            >
+                              ↺
+                            </button>
+                          )}
                         </div>
                       </td>
                       <td className="text-right font-bold">

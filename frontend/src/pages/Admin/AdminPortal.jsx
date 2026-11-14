@@ -317,6 +317,7 @@ export default function AdminPortal() {
       {/* Slide-over / Modal: Manage Order & Issue Invoice */}
       {selectedOrderForManage && (
         <AdminInvoiceModal
+          key={selectedOrderForManage.orderId}
           order={selectedOrderForManage}
           token={adminToken}
           onClose={() => setSelectedOrderForManage(null)}

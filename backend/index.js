@@ -2036,8 +2036,9 @@ app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
     // Update item prices / quantities if provided by admin
     if (items && Array.isArray(items)) {
       order.items = items.map(it => ({
-        productId: it.productId,
-        name: it.name,
+        _id: it._id || undefined,
+        productId: it.productId || it.id || (it._id ? String(it._id) : 'PROD'),
+        name: it.name || 'Medical Product',
         sku: it.sku || '',
         quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
         price: Math.max(0, parseFloat(it.price) || 0)
@@ -2102,8 +2103,9 @@ app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (re
     // Update item prices / quantities if provided by admin
     if (items && Array.isArray(items)) {
       order.items = items.map(it => ({
-        productId: it.productId,
-        name: it.name,
+        _id: it._id || undefined,
+        productId: it.productId || it.id || (it._id ? String(it._id) : 'PROD'),
+        name: it.name || 'Medical Product',
         sku: it.sku || '',
         quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
         price: Math.max(0, parseFloat(it.price) || 0)

@@ -1228,6 +1228,30 @@
   -moz-appearance: textfield;
 }
 
+.item-price-input-wrapper.modified {
+  border-color: rgba(245, 158, 11, 0.6);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.item-price-input-wrapper.modified .price-prefix {
+  color: #fbbf24;
+}
+
+.price-reset-icon-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.price-reset-icon-btn:hover {
+  color: #38bdf8;
+}
+
 .price-modified-badge {
   display: inline-block;
   font-size: 10px;
