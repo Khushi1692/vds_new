@@ -3,6 +3,7 @@ import {
   Building2, Store, Plus, Edit2, Trash2, Search, Phone, 
   Mail, MapPin, CheckCircle2, AlertCircle, Save, X, UserPlus
 } from 'lucide-react';
+import { getApiUrl } from '../../../config/api';
 
 export default function AdminCompanies({ 
   companies, 
@@ -53,7 +54,7 @@ export default function AdminCompanies({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/companies/${editingCompany._id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/companies/${editingCompany._id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +94,7 @@ export default function AdminCompanies({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/companies/${addingStoreToCompany.companyId}/stores`, {
+      const res = await fetch(getApiUrl(`/api/admin/companies/${addingStoreToCompany.companyId}/stores`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +127,7 @@ export default function AdminCompanies({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/companies/${editingStore.companyId}/stores/${editingStore.store._id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/companies/${editingStore.companyId}/stores/${editingStore.store._id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +160,7 @@ export default function AdminCompanies({
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/companies/${companyId}/stores/${storeId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/companies/${companyId}/stores/${storeId}`), {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
@@ -197,7 +198,7 @@ export default function AdminCompanies({
         });
       }
 
-      const res = await fetch('http://localhost:3001/api/admin/companies', {
+      const res = await fetch(getApiUrl('/api/admin/companies'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

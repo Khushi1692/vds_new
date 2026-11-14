@@ -4,6 +4,7 @@ import {
   Printer, Building2, Store, FileText, Phone, Mail, MapPin, 
   Clock, ShieldAlert, Save, RefreshCw
 } from 'lucide-react';
+import { getApiUrl } from '../../../config/api';
 
 export default function AdminInvoiceModal({ 
   order, 
@@ -50,7 +51,7 @@ export default function AdminInvoiceModal({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/orders/${order.orderId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/orders/${order.orderId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export default function AdminInvoiceModal({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/orders/${order.orderId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/orders/${order.orderId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ export default function AdminInvoiceModal({
     setFeedback({ type: '', message: '' });
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/orders/${order.orderId}/submit-invoice`, {
+      const res = await fetch(getApiUrl(`/api/admin/orders/${order.orderId}/submit-invoice`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

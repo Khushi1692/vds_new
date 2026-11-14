@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, Mail, ShieldAlert, ArrowRight, Eye, EyeOff, Building2 } from 'lucide-react';
+import { getApiUrl } from '../../../config/api';
 
 export default function AdminLogin({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ export default function AdminLogin({ onLoginSuccess }) {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:3001/api/admin/login', {
+      const res = await fetch(getApiUrl('/api/admin/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password })

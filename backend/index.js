@@ -391,20 +391,38 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
 // Security Middleware
 app.use(helmet());
 
-// CORS — lock to your domains
+// CORS — lock to your domains and configured origins
+const extraOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+
+const baseClientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/$/, '') : null;
+
 const allowedOrigins = [
-  process.env.CLIENT_URL,
+  baseClientUrl,
+  baseClientUrl ? baseClientUrl.replace('https://', 'http://') : null,
+  baseClientUrl && !baseClientUrl.includes('://www.') ? baseClientUrl.replace('://', '://www.') : null,
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://localhost:4173',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+  ...extraOrigins
 ].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, Postman)
+    // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
+    // Allow any localhost / 127.0.0.1 port in dev/test
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+    console.warn(`[CORS Blocked] Origin "${origin}" not in allowed list:`, allowedOrigins);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
@@ -1786,7 +1804,7 @@ app.post('/api/orders/:orderId/remittance', authMiddleware, async (req, res) => 
 async function seedAdminUser() {
   try {
     const adminEmail = (process.env.ADMIN_SEED_EMAIL || 'admin@vds.com.au').toLowerCase().trim();
-    const adminPassword = process.env.ADMIN_SEED_PASSWORD || 'AdminVDS2026!Secure';
+    const adminPassword = process.env.ADMIN_SEED_PASSWORD || process.env.ADMIN_PASSWORD || 'AdminVDS2026!Secure';
 
     let admin = await User.findOne({ email: adminEmail });
     if (!admin) {
@@ -1813,9 +1831,27 @@ async function seedAdminUser() {
         admin.role = 'admin';
         changed = true;
       }
+      // Ensure admin password matches the defined password in .env or default
+      const passwordMatches = await bcrypt.compare(adminPassword, admin.password);
+      if (!passwordMatches) {
+        admin.password = await bcrypt.hash(adminPassword, 10);
+        changed = true;
+        console.log(`✅ Synchronized admin password for: ${adminEmail} to defined password`);
+      }
       if (changed) {
         await admin.save();
-        console.log(`✅ Ensured admin privileges for: ${adminEmail}`);
+        console.log(`✅ Verified admin privileges for: ${adminEmail}`);
+      }
+    }
+
+    // Also ensure the primary owner account (ADMIN_EMAIL) has admin role
+    if (process.env.ADMIN_EMAIL) {
+      const ownerEmail = process.env.ADMIN_EMAIL.toLowerCase().trim();
+      const owner = await User.findOne({ email: ownerEmail });
+      if (owner && owner.role !== 'admin') {
+        owner.role = 'admin';
+        await owner.save();
+        console.log(`✅ Verified admin role for owner account: ${ownerEmail}`);
       }
     }
   } catch (err) {

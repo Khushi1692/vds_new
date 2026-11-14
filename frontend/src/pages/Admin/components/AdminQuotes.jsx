@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MessageSquare, Clock, Building2, MapPin, Phone, Mail, CheckCircle2, ChevronDown } from 'lucide-react';
+import { getApiUrl } from '../../../config/api';
 
 export default function AdminQuotes({ quotes, token, onRefresh }) {
   const [filter, setFilter] = useState('all');
@@ -13,7 +14,7 @@ export default function AdminQuotes({ quotes, token, onRefresh }) {
   const handleStatusChange = async (quoteId, newStatus) => {
     setUpdatingId(quoteId);
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/quotes/${quoteId}`, {
+      const res = await fetch(getApiUrl(`/api/admin/quotes/${quoteId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

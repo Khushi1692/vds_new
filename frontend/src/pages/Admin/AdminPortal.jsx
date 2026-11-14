@@ -6,6 +6,7 @@ import AdminCompanies from './components/AdminCompanies';
 import AdminQuotes from './components/AdminQuotes';
 import AdminInvoiceModal from './components/AdminInvoiceModal';
 import PrintInvoiceModal from './components/PrintInvoiceModal';
+import { getApiUrl } from '../../config/api';
 import './AdminPortal.css';
 
 import { 
@@ -78,17 +79,17 @@ export default function AdminPortal() {
       const headers = { Authorization: `Bearer ${token}` };
 
       // 1. Verify token
-      const verifyRes = await fetch('http://localhost:3001/api/admin/verify', { headers });
+      const verifyRes = await fetch(getApiUrl('/api/admin/verify'), { headers });
       if (!verifyRes.ok) {
         throw new Error('Administrative session expired. Please sign in again.');
       }
 
       // 2. Fetch all operations collections in parallel
       const [overviewRes, ordersRes, companiesRes, quotesRes] = await Promise.all([
-        fetch('http://localhost:3001/api/admin/overview', { headers }),
-        fetch('http://localhost:3001/api/admin/orders', { headers }),
-        fetch('http://localhost:3001/api/admin/companies', { headers }),
-        fetch('http://localhost:3001/api/admin/quotes', { headers })
+        fetch(getApiUrl('/api/admin/overview'), { headers }),
+        fetch(getApiUrl('/api/admin/orders'), { headers }),
+        fetch(getApiUrl('/api/admin/companies'), { headers }),
+        fetch(getApiUrl('/api/admin/quotes'), { headers })
       ]);
 
       if (overviewRes.ok) {
@@ -146,7 +147,7 @@ export default function AdminPortal() {
     }
     // Refresh overview data in background
     if (adminToken) {
-      fetch('http://localhost:3001/api/admin/overview', {
+      fetch(getApiUrl('/api/admin/overview'), {
         headers: { Authorization: `Bearer ${adminToken}` }
       })
       .then(res => res.json())
