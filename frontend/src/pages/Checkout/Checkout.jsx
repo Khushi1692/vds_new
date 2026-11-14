@@ -5,6 +5,7 @@ import {
   Store, 
   MapPin, 
   Phone, 
+  Mail,
   FileText, 
   ShieldAlert, 
   ShieldCheck, 
@@ -36,7 +37,8 @@ export default function Checkout() {
   const [customStore, setCustomStore] = useState({
     name: '',
     address: '',
-    contactNumber: ''
+    contactNumber: '',
+    email: ''
   });
   const [saveStoreToProfile, setSaveStoreToProfile] = useState(true);
 
@@ -110,7 +112,8 @@ export default function Checkout() {
           store: {
             name: activeStore.name.trim(),
             address: activeStore.address.trim(),
-            contactNumber: (activeStore.contactNumber || contactPhone).trim()
+            contactNumber: (activeStore.contactNumber || contactPhone).trim(),
+            email: (activeStore.email || '').trim().toLowerCase()
           },
           poNumber: poNumber.trim(),
           specialInstructions: specialInstructions.trim(),
@@ -127,7 +130,8 @@ export default function Checkout() {
             const updatedStores = [...userStores, {
               name: customStore.name.trim(),
               address: customStore.address.trim(),
-              contactNumber: customStore.contactNumber.trim()
+              contactNumber: customStore.contactNumber.trim(),
+              email: (customStore.email || '').trim().toLowerCase()
             }];
             const profileRes = await fetch('/api/user/profile', {
               method: 'PUT',
@@ -261,6 +265,12 @@ export default function Checkout() {
                               <span>{store.contactNumber}</span>
                             </div>
                           )}
+                          {store.email && (
+                            <div className="checkout-store-phone">
+                              <Mail size={14} />
+                              <span>{store.email}</span>
+                            </div>
+                          )}
                         </div>
                       </label>
                     );
@@ -332,6 +342,17 @@ export default function Checkout() {
                       onChange={(e) => setCustomStore(prev => ({ ...prev, address: e.target.value }))}
                       placeholder="e.g. Suite 2, 45 Bridge Road, Richmond VIC 3121"
                       required={selectedStoreIndex === 'custom'}
+                    />
+                  </div>
+
+                  <div className="checkout-input-group" style={{ margin: 0 }}>
+                    <label htmlFor="custom-store-email">Store Email Address</label>
+                    <input
+                      type="email"
+                      id="custom-store-email"
+                      value={customStore.email || ''}
+                      onChange={(e) => setCustomStore(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="e.g. clinic.receiving@example.com.au"
                     />
                   </div>
 

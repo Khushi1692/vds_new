@@ -12,7 +12,8 @@ const orderSchema = new mongoose.Schema({
   store: {
     name: { type: String },
     address: { type: String },
-    contactNumber: { type: String }
+    contactNumber: { type: String },
+    email: { type: String }
   },
   poNumber: { type: String },
   specialInstructions: { type: String },

@@ -26,6 +26,7 @@ export default function AdminInvoiceModal({
   const [storeName, setStoreName] = useState(order.store?.name || '');
   const [storeAddress, setStoreAddress] = useState(order.store?.address || '');
   const [storePhone, setStorePhone] = useState(order.store?.contactNumber || '');
+  const [storeEmail, setStoreEmail] = useState(order.store?.email || '');
   const [isEditingStore, setIsEditingStore] = useState(false);
 
   const [saving, setSaving] = useState(false);
@@ -66,7 +67,8 @@ export default function AdminInvoiceModal({
           store: {
             name: storeName,
             address: storeAddress,
-            contactNumber: storePhone
+            contactNumber: storePhone,
+            email: storeEmail
           }
         })
       });
@@ -106,7 +108,8 @@ export default function AdminInvoiceModal({
           store: {
             name: storeName,
             address: storeAddress,
-            contactNumber: storePhone
+            contactNumber: storePhone,
+            email: storeEmail
           }
         })
       });
@@ -261,6 +264,12 @@ export default function AdminInvoiceModal({
                     <span className="lbl">Store Phone:</span>
                     <span className="val">{storePhone || 'N/A'}</span>
                   </div>
+                  {storeEmail && (
+                    <div className="info-row">
+                      <span className="lbl">Store Email:</span>
+                      <span className="val">{storeEmail}</span>
+                    </div>
+                  )}
                   {order.poNumber && (
                     <div className="info-row">
                       <span className="lbl">PO Number:</span>
@@ -287,6 +296,12 @@ export default function AdminInvoiceModal({
                     value={storePhone}
                     onChange={(e) => setStorePhone(e.target.value)}
                     placeholder="Store Contact Phone"
+                  />
+                  <input
+                    type="email"
+                    value={storeEmail}
+                    onChange={(e) => setStoreEmail(e.target.value)}
+                    placeholder="Store Email Address"
                   />
                   <button 
                     type="button" 

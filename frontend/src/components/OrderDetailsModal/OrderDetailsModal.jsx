@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  X, Store, MapPin, Phone, Building2, FileText, 
+  X, Store, MapPin, Phone, Mail, Building2, FileText, 
   AlertCircle, CheckCircle2, Clock, Truck, Printer, CreditCard 
 } from 'lucide-react';
 import './OrderDetailsModal.css';
@@ -154,6 +154,12 @@ export default function OrderDetailsModal({
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', marginTop: '2px' }}>
                 <Phone size={14} color="#38bdf8" />
                 <span>{order.store.contactNumber}</span>
+              </div>
+            )}
+            {order.store?.email && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', marginTop: '2px' }}>
+                <Mail size={14} color="#38bdf8" />
+                <span>{order.store.email}</span>
               </div>
             )}
             {order.poNumber && (

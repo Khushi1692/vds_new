@@ -27,7 +27,8 @@ export default function AdminCompanies({
     companyAbn: '',
     initialStoreName: 'Main Practice',
     initialStoreAddress: '',
-    initialStorePhone: ''
+    initialStorePhone: '',
+    initialStoreEmail: ''
   });
 
   // Feedback state
@@ -103,7 +104,8 @@ export default function AdminCompanies({
         body: JSON.stringify({
           name: addingStoreToCompany.name,
           address: addingStoreToCompany.address,
-          contactNumber: addingStoreToCompany.contactNumber
+          contactNumber: addingStoreToCompany.contactNumber,
+          email: addingStoreToCompany.email || ''
         })
       });
 
@@ -136,7 +138,8 @@ export default function AdminCompanies({
         body: JSON.stringify({
           name: editingStore.store.name,
           address: editingStore.store.address,
-          contactNumber: editingStore.store.contactNumber
+          contactNumber: editingStore.store.contactNumber,
+          email: editingStore.store.email || ''
         })
       });
 
@@ -194,7 +197,8 @@ export default function AdminCompanies({
         stores.push({
           name: newCompForm.initialStoreName,
           address: newCompForm.initialStoreAddress,
-          contactNumber: newCompForm.initialStorePhone
+          contactNumber: newCompForm.initialStorePhone,
+          email: newCompForm.initialStoreEmail || ''
         });
       }
 
@@ -227,7 +231,8 @@ export default function AdminCompanies({
         companyAbn: '',
         initialStoreName: 'Main Practice',
         initialStoreAddress: '',
-        initialStorePhone: ''
+        initialStorePhone: '',
+        initialStoreEmail: ''
       });
       onRefresh();
     } catch (err) {
@@ -337,10 +342,11 @@ export default function AdminCompanies({
                     className="add-store-quick-btn"
                     onClick={() => setAddingStoreToCompany({
                       companyId: comp._id,
-                      companyName: comp.companyName,
+                      companyName: comp.companyName || comp.name,
                       name: '',
                       address: '',
-                      contactNumber: comp.phone || ''
+                      contactNumber: comp.phone || '',
+                      email: ''
                     })}
                   >
                     <Plus size={14} />
@@ -363,6 +369,12 @@ export default function AdminCompanies({
                           <div className="store-pill-phone">
                             <Phone size={12} className="inline-icon" />
                             <span>{store.contactNumber}</span>
+                          </div>
+                        )}
+                        {store.email && (
+                          <div className="store-pill-email">
+                            <Mail size={12} className="inline-icon" />
+                            <span>{store.email}</span>
                           </div>
                         )}
                       </div>
@@ -514,6 +526,15 @@ export default function AdminCompanies({
                   placeholder="e.g. (03) 9555 1234"
                 />
               </div>
+              <div className="form-field">
+                <label>Store Email Address</label>
+                <input
+                  type="email"
+                  value={addingStoreToCompany.email || ''}
+                  onChange={(e) => setAddingStoreToCompany({ ...addingStoreToCompany, email: e.target.value })}
+                  placeholder="e.g. clinic.receiving@example.com.au"
+                />
+              </div>
 
               <div className="form-actions-row">
                 <button type="button" className="cancel-btn" onClick={() => setAddingStoreToCompany(null)}>Cancel</button>
@@ -568,6 +589,19 @@ export default function AdminCompanies({
                     ...editingStore,
                     store: { ...editingStore.store, contactNumber: e.target.value }
                   })}
+                  placeholder="e.g. (03) 9555 1234"
+                />
+              </div>
+              <div className="form-field">
+                <label>Store Email Address</label>
+                <input
+                  type="email"
+                  value={editingStore.store.email || ''}
+                  onChange={(e) => setEditingStore({
+                    ...editingStore,
+                    store: { ...editingStore.store, email: e.target.value }
+                  })}
+                  placeholder="e.g. clinic.receiving@example.com.au"
                 />
               </div>
 
@@ -647,7 +681,7 @@ export default function AdminCompanies({
               </div>
 
               <div className="form-section-title" style={{ marginTop: '16px' }}>Initial Delivery Store Location</div>
-              <div className="form-row-3col">
+              <div className="form-row-2col">
                 <div className="form-field">
                   <label>Store / Branch Name</label>
                   <input
@@ -657,13 +691,33 @@ export default function AdminCompanies({
                     placeholder="e.g. Main Clinic"
                   />
                 </div>
-                <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                <div className="form-field">
                   <label>Delivery Address</label>
                   <input
                     type="text"
                     value={newCompForm.initialStoreAddress}
                     onChange={(e) => setNewCompForm({ ...newCompForm, initialStoreAddress: e.target.value })}
                     placeholder="e.g. 100 Royal Parade, Parkville VIC 3052"
+                  />
+                </div>
+              </div>
+              <div className="form-row-2col" style={{ marginTop: '8px' }}>
+                <div className="form-field">
+                  <label>Store Phone Number</label>
+                  <input
+                    type="text"
+                    value={newCompForm.initialStorePhone}
+                    onChange={(e) => setNewCompForm({ ...newCompForm, initialStorePhone: e.target.value })}
+                    placeholder="e.g. (03) 9345 0000"
+                  />
+                </div>
+                <div className="form-field">
+                  <label>Store Email Address</label>
+                  <input
+                    type="email"
+                    value={newCompForm.initialStoreEmail}
+                    onChange={(e) => setNewCompForm({ ...newCompForm, initialStoreEmail: e.target.value })}
+                    placeholder="e.g. clinic.receiving@example.com.au"
                   />
                 </div>
               </div>

@@ -392,6 +392,9 @@ export default function PrintInvoiceModal({ order, onClose }) {
                 {order.store?.contactNumber && (
                   <p><strong>Site Contact:</strong> {order.store.contactNumber}</p>
                 )}
+                {order.store?.email && (
+                  <p><strong>Site Email:</strong> {order.store.email}</p>
+                )}
                 {order.specialInstructions && (
                   <p className="instructions"><strong>Special Instructions:</strong> {order.specialInstructions}</p>
                 )}

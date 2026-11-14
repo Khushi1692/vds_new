@@ -4,6 +4,7 @@ const storeSchema = new mongoose.Schema({
   name: { type: String, default: '', trim: true },
   address: { type: String, default: '', trim: true },
   contactNumber: { type: String, default: '', trim: true },
+  email: { type: String, default: '', trim: true, lowercase: true },
 }, { _id: true, timestamps: true });
 
 const userSchema = new mongoose.Schema({

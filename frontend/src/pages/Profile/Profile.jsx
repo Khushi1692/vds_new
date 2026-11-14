@@ -5,6 +5,7 @@ import {
   Store, 
   MapPin, 
   Phone, 
+  Mail,
   Plus, 
   Edit3, 
   Trash2, 
@@ -33,7 +34,7 @@ export default function Profile() {
   // Modal state for Add/Edit Store
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null); // null = adding new store
-  const [storeForm, setStoreForm] = useState({ name: '', address: '', contactNumber: '' });
+  const [storeForm, setStoreForm] = useState({ name: '', address: '', contactNumber: '', email: '' });
   const [saving, setSaving] = useState(false);
 
   // Modal state for Edit Company
@@ -73,7 +74,7 @@ export default function Profile() {
   // Open modal to add a new store
   const handleOpenAddStore = () => {
     setEditingIndex(null);
-    setStoreForm({ name: '', address: '', contactNumber: '' });
+    setStoreForm({ name: '', address: '', contactNumber: '', email: '' });
     setErrorMessage('');
     setIsModalOpen(true);
   };
@@ -85,7 +86,8 @@ export default function Profile() {
     setStoreForm({
       name: target.name || '',
       address: target.address || '',
-      contactNumber: target.contactNumber || target.phone || ''
+      contactNumber: target.contactNumber || target.phone || '',
+      email: target.email || ''
     });
     setErrorMessage('');
     setIsModalOpen(true);
@@ -118,13 +120,15 @@ export default function Profile() {
         ...updatedStores[editingIndex],
         name: storeForm.name.trim(),
         address: storeForm.address.trim(),
-        contactNumber: storeForm.contactNumber.trim()
+        contactNumber: storeForm.contactNumber.trim(),
+        email: storeForm.email.trim().toLowerCase()
       };
     } else {
       updatedStores.push({
         name: storeForm.name.trim(),
         address: storeForm.address.trim(),
-        contactNumber: storeForm.contactNumber.trim()
+        contactNumber: storeForm.contactNumber.trim(),
+        email: storeForm.email.trim().toLowerCase()
       });
     }
 
@@ -381,6 +385,13 @@ export default function Profile() {
                     </div>
                   )}
 
+                  {store.email && (
+                    <div className="profile-store-tile__detail profile-store-tile__email">
+                      <Mail size={16} />
+                      <a href={`mailto:${store.email}`}>{store.email}</a>
+                    </div>
+                  )}
+
                   <div className="profile-store-tile__actions">
                     <button
                       type="button"
@@ -450,6 +461,17 @@ export default function Profile() {
                   value={storeForm.contactNumber}
                   onChange={(e) => setStoreForm(prev => ({ ...prev, contactNumber: e.target.value }))}
                   placeholder="e.g. (03) 9123 4567"
+                />
+              </div>
+
+              <div className="auth-input-group">
+                <label htmlFor="modal-store-email">Store Email Address</label>
+                <input
+                  type="email"
+                  id="modal-store-email"
+                  value={storeForm.email}
+                  onChange={(e) => setStoreForm(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder="e.g. clinic.receiving@example.com.au"
                 />
               </div>
 

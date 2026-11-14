@@ -1673,7 +1673,8 @@
   margin-top: 2px;
 }
 
-.store-pill-phone {
+.store-pill-phone,
+.store-pill-email {
   display: flex;
   align-items: center;
   gap: 4px;

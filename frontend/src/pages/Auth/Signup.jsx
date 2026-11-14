@@ -25,7 +25,7 @@ export default function Signup() {
   
   // Store management state: array of stores
   const [stores, setStores] = useState([
-    { id: '1', name: '', address: '', contactNumber: '' }
+    { id: '1', name: '', address: '', contactNumber: '', email: '' }
   ]);
 
   // Google OAuth pending state if company details are needed
@@ -47,7 +47,7 @@ export default function Signup() {
   const handleAddStore = () => {
     setStores(prev => [
       ...prev,
-      { id: String(Date.now()), name: '', address: '', contactNumber: '' }
+      { id: String(Date.now()), name: '', address: '', contactNumber: '', email: '' }
     ]);
   };
 
@@ -421,6 +421,17 @@ export default function Signup() {
                         placeholder="e.g. (03) 9123 4567"
                       />
                     </div>
+                  </div>
+
+                  <div className="auth-input-group">
+                    <label htmlFor={`store-email-${index}`}>Store Email Address</label>
+                    <input
+                      type="email"
+                      id={`store-email-${index}`}
+                      value={store.email || ''}
+                      onChange={(e) => handleStoreChange(index, 'email', e.target.value)}
+                      placeholder="e.g. clinic.receiving@example.com.au"
+                    />
                   </div>
 
                   <div className="auth-input-group">

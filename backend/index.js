@@ -482,12 +482,13 @@ const adminMiddleware = async (req, res, next) => {
 function formatStores(stores) {
   if (!Array.isArray(stores)) return [];
   return stores
-    .filter(s => s && (s.name || s.address || s.contactNumber || s.phone))
+    .filter(s => s && (s.name || s.address || s.contactNumber || s.phone || s.email))
     .map(s => ({
       _id: s._id || undefined,
       name: (s.name || '').trim(),
       address: (s.address || '').trim(),
       contactNumber: (s.contactNumber || s.phone || '').trim(),
+      email: (s.email || '').toLowerCase().trim(),
     }));
 }
 
@@ -1409,7 +1410,8 @@ app.post('/api/checkout/invoice-request', authMiddleware, async (req, res) => {
       store: {
         name: store.name.trim(),
         address: store.address.trim(),
-        contactNumber: (store.contactNumber || '').trim()
+        contactNumber: (store.contactNumber || '').trim(),
+        email: (store.email || '').toLowerCase().trim()
       },
       poNumber: (poNumber || '').trim(),
       specialInstructions: (specialInstructions || '').trim(),
@@ -2065,7 +2067,8 @@ app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
       order.store = {
         name: (store.name || order.store?.name || '').trim(),
         address: (store.address || order.store?.address || '').trim(),
-        contactNumber: (store.contactNumber || order.store?.contactNumber || '').trim()
+        contactNumber: (store.contactNumber || order.store?.contactNumber || '').trim(),
+        email: (store.email || order.store?.email || '').toLowerCase().trim()
       };
     }
 
@@ -2255,7 +2258,7 @@ app.put('/api/admin/companies/:userId', adminMiddleware, async (req, res) => {
 // 11. Admin Add Store to Company
 app.post('/api/admin/companies/:userId/stores', adminMiddleware, async (req, res) => {
   try {
-    const { name, address, contactNumber } = req.body;
+    const { name, address, contactNumber, email } = req.body;
     if (!name || !address) {
       return res.status(400).json({ error: 'Store name and address are required' });
     }
@@ -2266,7 +2269,8 @@ app.post('/api/admin/companies/:userId/stores', adminMiddleware, async (req, res
     user.stores.push({
       name: name.trim(),
       address: address.trim(),
-      contactNumber: (contactNumber || '').trim()
+      contactNumber: (contactNumber || '').trim(),
+      email: (email || '').toLowerCase().trim()
     });
 
     await user.save();
@@ -2280,7 +2284,7 @@ app.post('/api/admin/companies/:userId/stores', adminMiddleware, async (req, res
 // 12. Admin Edit Store in Company
 app.put('/api/admin/companies/:userId/stores/:storeId', adminMiddleware, async (req, res) => {
   try {
-    const { name, address, contactNumber } = req.body;
+    const { name, address, contactNumber, email } = req.body;
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ error: 'Company account not found' });
 
@@ -2290,6 +2294,7 @@ app.put('/api/admin/companies/:userId/stores/:storeId', adminMiddleware, async (
     if (name) store.name = name.trim();
     if (address) store.address = address.trim();
     if (contactNumber !== undefined) store.contactNumber = contactNumber.trim();
+    if (email !== undefined) store.email = email.toLowerCase().trim();
 
     await user.save();
     res.json({ success: true, stores: user.stores });
