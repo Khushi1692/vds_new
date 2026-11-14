@@ -1174,6 +1174,72 @@
 
 .font-bold { font-weight: 700; color: #ffffff; }
 
+.item-price-edit-cell {
+  width: 140px;
+}
+
+.item-price-input-wrapper {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  padding: 4px 8px;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.item-price-input-wrapper:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+}
+
+.item-price-input-wrapper:focus-within {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+  background: #0f172a;
+}
+
+.item-price-input-wrapper .price-prefix {
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 13px;
+  user-select: none;
+}
+
+.item-price-input {
+  width: 75px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  outline: none;
+  font-family: var(--admin-font-mono, monospace);
+  padding: 0;
+}
+
+.item-price-input::-webkit-outer-spin-button,
+.item-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.item-price-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.price-modified-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  margin-top: 4px;
+}
+
 /* Delivery Charge Calculation Box */
 .freight-calculation-card {
   background: linear-gradient(180deg, rgba(56, 189, 248, 0.08), var(--admin-bg-card));

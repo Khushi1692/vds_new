@@ -21,6 +21,15 @@ export default function AdminInvoiceModal({
   const [poNumber, setPoNumber] = useState(order.poNumber || '');
   const [adminNotes, setAdminNotes] = useState(order.adminNotes || '');
   const [invoiceNotes, setInvoiceNotes] = useState('');
+
+  // Editable items state (allowing admin to adjust prices for this order)
+  const [items, setItems] = useState(() =>
+    (order.items || []).map(item => ({
+      ...item,
+      price: item.price !== undefined ? item.price : 0,
+      originalPrice: item.price !== undefined ? item.price : 0
+    }))
+  );
   
   // Store editing
   const [storeName, setStoreName] = useState(order.store?.name || '');
@@ -33,8 +42,12 @@ export default function AdminInvoiceModal({
   const [submittingInvoice, setSubmittingInvoice] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
 
-  // Real-time calculations
-  const subtotalExGst = order.subtotalExGst || (order.totalAmount ? order.totalAmount / 100 : 0);
+  // Real-time calculations with editable items
+  const subtotalExGst = items.reduce((sum, item) => {
+    const p = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
+    const q = item.quantity || 1;
+    return sum + (p * q);
+  }, 0);
   const parsedDelivery = Math.max(0, parseFloat(deliveryCharge) || 0);
   const taxableAmount = subtotalExGst + parsedDelivery;
   const calculatedGst = parseFloat((taxableAmount * 0.10).toFixed(2));
@@ -43,6 +56,29 @@ export default function AdminInvoiceModal({
   // Quick preset delivery charges for staff convenience
   const setQuickFreight = (amount) => {
     setDeliveryCharge(amount);
+  };
+
+  // Helper to handle unit price edit
+  const handleItemPriceChange = (index, val) => {
+    setItems(prev => {
+      const next = [...prev];
+      next[index] = {
+        ...next[index],
+        price: val === '' ? '' : Math.max(0, parseFloat(val) || 0)
+      };
+      return next;
+    });
+  };
+
+  // Sanitize items for API payload
+  const getSanitizedItems = () => {
+    return items.map(it => ({
+      productId: it.productId,
+      name: it.name,
+      sku: it.sku || '',
+      quantity: it.quantity || 1,
+      price: typeof it.price === 'number' ? it.price : (parseFloat(it.price) || 0)
+    }));
   };
 
   // 1. Save standard order modifications (PUT)
@@ -60,6 +96,7 @@ export default function AdminInvoiceModal({
         },
         body: JSON.stringify({
           deliveryCharge: parsedDelivery,
+          items: getSanitizedItems(),
           orderStatus,
           paymentStatus,
           adminNotes,
@@ -101,6 +138,7 @@ export default function AdminInvoiceModal({
         },
         body: JSON.stringify({
           deliveryCharge: parsedDelivery,
+          items: getSanitizedItems(),
           orderStatus: newStatus,
           paymentStatus: newStatus === 'paid' ? 'paid' : paymentStatus,
           adminNotes,
@@ -149,6 +187,7 @@ export default function AdminInvoiceModal({
         },
         body: JSON.stringify({
           deliveryCharge: parsedDelivery,
+          items: getSanitizedItems(),
           adminNotes,
           invoiceNotes
         })
@@ -331,12 +370,12 @@ export default function AdminInvoiceModal({
             </div>
           )}
 
-          {/* Section 2: Order Items */}
+          {/* Section 2: Order Items (Editable Product Prices) */}
           <div className="order-items-box">
             <div className="box-header">
               <FileText size={16} />
-              <span>Requested Products ({order.items?.length || 0} items)</span>
-              <span className="ex-gst-tag">All catalog prices exclude GST</span>
+              <span>Requested Products ({items.length} items)</span>
+              <span className="ex-gst-tag">Admin Editable Unit Prices (Ex GST)</span>
             </div>
             <table className="manage-items-table">
               <thead>
@@ -349,19 +388,41 @@ export default function AdminInvoiceModal({
                 </tr>
               </thead>
               <tbody>
-                {(order.items || []).map((item, i) => (
-                  <tr key={i}>
-                    <td>
-                      <strong>{item.name}</strong>
-                    </td>
-                    <td className="sku-cell">{item.sku || 'N/A'}</td>
-                    <td className="text-center">{item.quantity}</td>
-                    <td className="text-right">${item.price ? item.price.toFixed(2) : '0.00'}</td>
-                    <td className="text-right font-bold">
-                      ${item.price ? (item.price * item.quantity).toFixed(2) : '0.00'}
-                    </td>
-                  </tr>
-                ))}
+                {items.map((item, i) => {
+                  const numPrice = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
+                  const isModified = item.originalPrice !== undefined && Math.abs(numPrice - item.originalPrice) > 0.001;
+                  return (
+                    <tr key={i}>
+                      <td>
+                        <strong>{item.name}</strong>
+                        {isModified && (
+                          <div className="price-modified-badge">
+                            Adjusted from ${item.originalPrice.toFixed(2)}
+                          </div>
+                        )}
+                      </td>
+                      <td className="sku-cell">{item.sku || 'N/A'}</td>
+                      <td className="text-center">{item.quantity}</td>
+                      <td className="text-right item-price-edit-cell">
+                        <div className="item-price-input-wrapper">
+                          <span className="price-prefix">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={item.price === '' ? '' : item.price}
+                            onChange={(e) => handleItemPriceChange(i, e.target.value)}
+                            className="item-price-input"
+                            title="Edit product unit price for this order"
+                          />
+                        </div>
+                      </td>
+                      <td className="text-right font-bold">
+                        ${(numPrice * (item.quantity || 1)).toFixed(2)}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

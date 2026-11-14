@@ -2026,24 +2026,36 @@ app.get('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
   }
 });
 
-// 6. Admin Update Order (add delivery charge, change status, internal notes)
+// 6. Admin Update Order (add delivery charge, change status, internal notes, item prices)
 app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
   try {
-    const { deliveryCharge, orderStatus, paymentStatus, adminNotes, poNumber, store } = req.body;
+    const { deliveryCharge, orderStatus, paymentStatus, adminNotes, poNumber, store, items } = req.body;
     const order = await Order.findOne({ orderId: req.params.orderId });
     if (!order) return res.status(404).json({ error: 'Order not found' });
 
-    if (deliveryCharge !== undefined) {
-      const parsedDelivery = Math.max(0, parseFloat(deliveryCharge) || 0);
-      const subtotal = order.subtotalExGst || (order.totalAmount / 100);
-      const taxable = subtotal + parsedDelivery;
-      const gst = parseFloat((taxable * 0.10).toFixed(2));
-      const finalTotal = parseFloat((taxable + gst).toFixed(2));
-
-      order.deliveryCharge = parsedDelivery;
-      order.gstAmount = gst;
-      order.finalInvoiceTotal = finalTotal;
+    // Update item prices / quantities if provided by admin
+    if (items && Array.isArray(items)) {
+      order.items = items.map(it => ({
+        productId: it.productId,
+        name: it.name,
+        sku: it.sku || '',
+        quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
+        price: Math.max(0, parseFloat(it.price) || 0)
+      }));
+      const newSubtotal = order.items.reduce((acc, it) => acc + (it.price * it.quantity), 0);
+      order.subtotalExGst = parseFloat(newSubtotal.toFixed(2));
+      order.totalAmount = Math.round(order.subtotalExGst * 100);
+      order.estimatedGst = parseFloat((order.subtotalExGst * 0.10).toFixed(2));
     }
+
+    if (deliveryCharge !== undefined) {
+      order.deliveryCharge = Math.max(0, parseFloat(deliveryCharge) || 0);
+    }
+
+    const subtotal = order.subtotalExGst || (order.totalAmount / 100) || 0;
+    const taxable = subtotal + (order.deliveryCharge || 0);
+    order.gstAmount = parseFloat((taxable * 0.10).toFixed(2));
+    order.finalInvoiceTotal = parseFloat((taxable + order.gstAmount).toFixed(2));
 
     if (orderStatus) {
       order.orderStatus = orderStatus;
@@ -2072,15 +2084,6 @@ app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
       };
     }
 
-    // Ensure finalInvoiceTotal and gstAmount are accurately set
-    if (!order.finalInvoiceTotal || order.finalInvoiceTotal === 0) {
-      const subtotal = order.subtotalExGst || (order.totalAmount / 100);
-      const delivery = order.deliveryCharge || 0;
-      const taxable = subtotal + delivery;
-      order.gstAmount = parseFloat((taxable * 0.10).toFixed(2));
-      order.finalInvoiceTotal = parseFloat((taxable + order.gstAmount).toFixed(2));
-    }
-
     await order.save();
     res.json({ success: true, order });
   } catch (err) {
@@ -2089,15 +2092,30 @@ app.put('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
   }
 });
 
-// 7. Admin Submit/Issue Official Final Tax Invoice with Delivery Charge
+// 7. Admin Submit/Issue Official Final Tax Invoice with Delivery Charge & Custom Prices
 app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (req, res) => {
   try {
-    const { deliveryCharge, adminNotes, invoiceNotes } = req.body;
+    const { deliveryCharge, adminNotes, invoiceNotes, items } = req.body;
     const order = await Order.findOne({ orderId: req.params.orderId });
     if (!order) return res.status(404).json({ error: 'Order not found' });
 
+    // Update item prices / quantities if provided by admin
+    if (items && Array.isArray(items)) {
+      order.items = items.map(it => ({
+        productId: it.productId,
+        name: it.name,
+        sku: it.sku || '',
+        quantity: Math.max(1, parseInt(it.quantity, 10) || 1),
+        price: Math.max(0, parseFloat(it.price) || 0)
+      }));
+      const newSubtotal = order.items.reduce((acc, it) => acc + (it.price * it.quantity), 0);
+      order.subtotalExGst = parseFloat(newSubtotal.toFixed(2));
+      order.totalAmount = Math.round(order.subtotalExGst * 100);
+      order.estimatedGst = parseFloat((order.subtotalExGst * 0.10).toFixed(2));
+    }
+
     const parsedDelivery = Math.max(0, parseFloat(deliveryCharge !== undefined ? deliveryCharge : order.deliveryCharge) || 0);
-    const subtotal = order.subtotalExGst || (order.totalAmount / 100);
+    const subtotal = order.subtotalExGst || (order.totalAmount / 100) || 0;
     const taxable = subtotal + parsedDelivery;
     const gst = parseFloat((taxable * 0.10).toFixed(2));
     const finalTotal = parseFloat((taxable + gst).toFixed(2));
