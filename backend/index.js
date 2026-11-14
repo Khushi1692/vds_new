@@ -1911,6 +1911,40 @@ app.get('/api/admin/verify', adminMiddleware, async (req, res) => {
   });
 });
 
+// Helper: Ensure order items are enriched with catalog product details (name, sku, price, image)
+async function enrichOrderItems(orders) {
+  if (!orders) return orders;
+  const isArray = Array.isArray(orders);
+  const list = isArray ? orders : [orders];
+
+  try {
+    const allProducts = await Product.find({}, 'id name sku price image category').lean();
+    const prodMap = new Map(allProducts.map(p => [p.id, p]));
+
+    for (const o of list) {
+      if (!o || !o.items || !Array.isArray(o.items)) continue;
+      for (let it of o.items) {
+        const pid = it.productId || it.id;
+        const prod = prodMap.get(pid);
+        if (prod) {
+          if (!it.name || it.name === 'Medical Product') it.name = prod.name;
+          if (!it.sku && prod.sku) it.sku = prod.sku;
+          if (it.price === undefined || it.price === null || isNaN(it.price) || it.price === 0) {
+            it.price = prod.price !== undefined ? prod.price : 0;
+          }
+          if (!it.image && prod.image) it.image = prod.image;
+        }
+        if (!it.name) it.name = 'Medical Product';
+        if (it.price === undefined || it.price === null || isNaN(it.price)) it.price = 0;
+      }
+    }
+  } catch (enrichErr) {
+    console.error('Error enriching order items:', enrichErr.message);
+  }
+
+  return isArray ? list : list[0];
+}
+
 // 3. Admin Overview Dashboard Analytics
 app.get('/api/admin/overview', adminMiddleware, async (req, res) => {
   try {
@@ -1946,7 +1980,8 @@ app.get('/api/admin/overview', adminMiddleware, async (req, res) => {
     const totalQuotes = await Quote.countDocuments();
     const pendingQuotes = await Quote.countDocuments({ status: { $in: ['pending', 'new'] } });
 
-    const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(6);
+    const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(6).lean();
+    await enrichOrderItems(recentOrders);
     const recentQuotes = await Quote.find().sort({ createdAt: -1 }).limit(5);
 
     res.json({
@@ -2006,7 +2041,8 @@ app.get('/api/admin/orders', adminMiddleware, async (req, res) => {
       ];
     }
 
-    const orders = await Order.find(query).sort({ createdAt: -1 });
+    const orders = await Order.find(query).sort({ createdAt: -1 }).lean();
+    await enrichOrderItems(orders);
     res.json(orders);
   } catch (err) {
     console.error('Admin orders error:', err.message);
@@ -2017,8 +2053,9 @@ app.get('/api/admin/orders', adminMiddleware, async (req, res) => {
 // 5. Admin Single Order Details
 app.get('/api/admin/orders/:orderId', adminMiddleware, async (req, res) => {
   try {
-    const order = await Order.findOne({ orderId: req.params.orderId });
+    const order = await Order.findOne({ orderId: req.params.orderId }).lean();
     if (!order) return res.status(404).json({ error: 'Order not found' });
+    await enrichOrderItems(order);
     res.json(order);
   } catch (err) {
     console.error('Admin get order error:', err.message);
@@ -2363,6 +2400,53 @@ app.put('/api/admin/quotes/:quoteId', adminMiddleware, async (req, res) => {
   } catch (err) {
     console.error('Admin update quote error:', err.message);
     res.status(500).json({ error: 'Failed to update quote' });
+  }
+});
+
+// 16. Admin Products List (Full catalog with prices and stock)
+app.get('/api/admin/products', adminMiddleware, async (req, res) => {
+  try {
+    const products = await Product.find({}).sort({ category: 1, name: 1 });
+    res.json(products);
+  } catch (err) {
+    console.error('Admin get products error:', err.message);
+    res.status(500).json({ error: 'Failed to load products' });
+  }
+});
+
+// 17. Admin Update Product (Pricing, Stock, Live Status)
+app.put('/api/admin/products/:id', adminMiddleware, async (req, res) => {
+  try {
+    const { price, stockStatus, liveStock, name, sku, category } = req.body;
+    const product = await Product.findOne({ id: req.params.id });
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+
+    if (price !== undefined) {
+      const parsedPrice = parseFloat(price);
+      if (isNaN(parsedPrice) || parsedPrice < 0) {
+        return res.status(400).json({ error: 'Invalid product price' });
+      }
+      product.price = parseFloat(parsedPrice.toFixed(2));
+      product.priceLabel = `$${product.price.toFixed(2)} Ex GST`;
+    }
+
+    if (stockStatus !== undefined) product.stockStatus = stockStatus;
+    if (liveStock !== undefined) product.liveStock = Math.max(0, parseInt(liveStock, 10) || 0);
+    if (name !== undefined && name.trim()) product.name = name.trim();
+    if (sku !== undefined) product.sku = sku.trim();
+    if (category !== undefined) product.category = category.trim();
+
+    await product.save();
+
+    // Reset public products cache so store clients see updated price immediately
+    productsCache = null;
+    productsCacheTime = 0;
+
+    console.log(`[Admin] Product "${product.name}" (${product.id}) updated. Price: $${product.price}`);
+    res.json({ success: true, product });
+  } catch (err) {
+    console.error('Admin update product error:', err.message);
+    res.status(500).json({ error: 'Failed to update product' });
   }
 });
 

@@ -127,6 +127,7 @@ export default function AdminOrders({
               <th>Order ID & Date</th>
               <th>Trade Company & Contact</th>
               <th>Delivery Destination Store</th>
+              <th>Ordered Products & Pricing</th>
               <th>Customer PO #</th>
               <th className="text-right">Subtotal (Ex GST)</th>
               <th className="text-right">Delivery Charge</th>
@@ -172,6 +173,27 @@ export default function AdminOrders({
                     </div>
                     <div className="store-address" title={order.store?.address}>
                       {order.store?.address || 'Address on file'}
+                    </div>
+                  </td>
+
+                  {/* Ordered Products & Pricing Preview */}
+                  <td className="cell-products">
+                    <div className="order-items-preview">
+                      {(order.items && order.items.length > 0) ? (
+                        order.items.map((it, idx) => (
+                          <div 
+                            key={idx} 
+                            className="item-preview-pill" 
+                            title={`${it.name || 'Medical Product'} (${it.quantity}x @ $${(Number(it.price) || 0).toFixed(2)})`}
+                          >
+                            <span className="qty-tag">{it.quantity}x</span>
+                            <span className="prod-title">{it.name || 'Medical Product'}</span>
+                            <span className="unit-price-pill">${(Number(it.price) || 0).toFixed(2)}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <span className="no-val">No items listed</span>
+                      )}
                     </div>
                   </td>
 
@@ -243,7 +265,7 @@ export default function AdminOrders({
 
             {filteredOrders.length === 0 && (
               <tr>
-                <td colSpan="9" className="empty-table-cell">
+                <td colSpan="10" className="empty-table-cell">
                   <div className="empty-state-wrap">
                     <AlertCircle size={32} />
                     <p>No orders match your current filter and search criteria.</p>

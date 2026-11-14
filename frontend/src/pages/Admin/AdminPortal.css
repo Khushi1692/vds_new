@@ -2580,6 +2580,294 @@
 .invoice-doc-footer p { margin: 2px 0; }
 
 /* --------------------------------------------------------------------------
+   10. PRODUCTS & PRICING MANAGEMENT TAB + ORDERS PREVIEW
+   -------------------------------------------------------------------------- */
+.admin-products-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.products-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 8px;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+}
+
+.category-filter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.category-filter-wrap .filter-icon {
+  color: #38bdf8;
+}
+
+.category-select {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.category-select option {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.products-catalog-table .product-thumb-cell {
+  padding: 8px 12px;
+}
+
+.product-thumb-img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #0f172a;
+}
+
+.product-thumb-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+}
+
+.product-name-title {
+  color: #ffffff;
+  font-size: 14px;
+  display: block;
+}
+
+.product-tagline {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.product-id-tag {
+  font-size: 10px;
+  color: #64748b;
+  font-family: var(--admin-font-mono, monospace);
+  margin-top: 2px;
+}
+
+.category-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.sku-code {
+  font-family: var(--admin-font-mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.artg-pill {
+  display: inline-block;
+  font-size: 10px;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-top: 3px;
+}
+
+.stock-status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stock-status-pill.instock {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.stock-status-pill.backorder {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.price-edit-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.catalog-price-input-wrapper {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  padding: 4px 8px;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.catalog-price-input-wrapper:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+}
+
+.catalog-price-input-wrapper:focus-within {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+  background: #0f172a;
+}
+
+.catalog-price-input-wrapper.modified {
+  border-color: rgba(245, 158, 11, 0.7);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.catalog-price-input-wrapper .price-prefix {
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.catalog-price-input-wrapper.modified .price-prefix {
+  color: #fbbf24;
+}
+
+.catalog-price-input {
+  width: 85px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  outline: none;
+  font-family: var(--admin-font-mono, monospace);
+  padding: 0;
+}
+
+.price-diff-hint {
+  font-size: 10px;
+  color: #fbbf24;
+  font-style: italic;
+}
+
+.product-save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.product-save-btn.needs-save {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.product-save-btn.needs-save:hover {
+  background: linear-gradient(135deg, #0369a1, #075985);
+  transform: translateY(-1px);
+}
+
+.product-save-btn.saved {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.product-save-error {
+  font-size: 10px;
+  color: #ef4444;
+  margin-top: 3px;
+}
+
+/* Orders table products preview */
+.cell-products {
+  max-width: 250px;
+  min-width: 170px;
+}
+
+.order-items-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-preview-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 4px;
+  padding: 3px 7px;
+  font-size: 11px;
+}
+
+.item-preview-pill .qty-tag {
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.item-preview-pill .prod-title {
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.item-preview-pill .unit-price-pill {
+  margin-left: auto;
+  color: #fbbf24;
+  font-weight: 600;
+  font-family: var(--admin-font-mono, monospace);
+  font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
    11. PRINT MEDIA STYLES
    -------------------------------------------------------------------------- */
 @media print {

@@ -4,6 +4,7 @@ import AdminOverview from './components/AdminOverview';
 import AdminOrders from './components/AdminOrders';
 import AdminCompanies from './components/AdminCompanies';
 import AdminQuotes from './components/AdminQuotes';
+import AdminProducts from './components/AdminProducts';
 import AdminInvoiceModal from './components/AdminInvoiceModal';
 import PrintInvoiceModal from './components/PrintInvoiceModal';
 import { getApiUrl } from '../../config/api';
@@ -249,6 +250,14 @@ export default function AdminPortal() {
 
         <button
           type="button"
+          className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+          onClick={() => setActiveTab('products')}
+        >
+          <span>Products & Pricing</span>
+        </button>
+
+        <button
+          type="button"
           className={`tab-btn ${activeTab === 'companies' ? 'active' : ''}`}
           onClick={() => setActiveTab('companies')}
         >
@@ -294,6 +303,12 @@ export default function AdminPortal() {
             initialFilter={ordersFilter}
             onSelectOrder={(order) => setSelectedOrderForManage(order)}
             onOpenPrint={(order) => setSelectedOrderForPrint(order)}
+          />
+        )}
+
+        {activeTab === 'products' && (
+          <AdminProducts
+            token={adminToken}
           />
         )}
 

@@ -6,11 +6,11 @@ export default function PrintInvoiceModal({ order, onClose }) {
   if (!order) return null;
 
   const invoiceNum = order.invoiceNumber || `INV-${order.orderId}`;
-  const subtotal = order.subtotalExGst || (order.totalAmount ? order.totalAmount / 100 : 0);
-  const delivery = order.deliveryCharge || 0;
+  const subtotal = order.subtotalExGst !== undefined ? Number(order.subtotalExGst) : (order.totalAmount ? Number(order.totalAmount) / 100 : 0);
+  const delivery = Number(order.deliveryCharge) || 0;
   const taxable = subtotal + delivery;
-  const gst = order.gstAmount || parseFloat((taxable * 0.10).toFixed(2));
-  const total = order.finalInvoiceTotal || parseFloat((taxable + gst).toFixed(2));
+  const gst = order.gstAmount !== undefined ? Number(order.gstAmount) : parseFloat((taxable * 0.10).toFixed(2));
+  const total = order.finalInvoiceTotal !== undefined ? Number(order.finalInvoiceTotal) : parseFloat((taxable + gst).toFixed(2));
   const isPaid = order.orderStatus === 'paid' || order.paymentStatus === 'paid';
 
   const formattedDate = order.invoiceIssuedAt 

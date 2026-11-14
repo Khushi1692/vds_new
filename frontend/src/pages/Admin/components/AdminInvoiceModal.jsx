@@ -27,11 +27,11 @@ export default function AdminInvoiceModal({
     (order.items || []).map(item => ({
       _id: item._id,
       productId: item.productId || item.id || item._id,
-      name: item.name || '',
+      name: item.name || 'Medical Product',
       sku: item.sku || '',
       quantity: item.quantity || 1,
-      price: item.price !== undefined ? item.price : 0,
-      originalPrice: item.price !== undefined ? item.price : 0
+      price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
+      originalPrice: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0
     }))
   );
   
@@ -52,11 +52,11 @@ export default function AdminInvoiceModal({
       setItems((order.items || []).map(item => ({
         _id: item._id,
         productId: item.productId || item.id || item._id,
-        name: item.name || '',
+        name: item.name || 'Medical Product',
         sku: item.sku || '',
         quantity: item.quantity || 1,
-        price: item.price !== undefined ? item.price : 0,
-        originalPrice: item.price !== undefined ? item.price : 0
+        price: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0,
+        originalPrice: item.price !== undefined && item.price !== null ? (parseFloat(item.price) || 0) : 0
       })));
       setDeliveryCharge(order.deliveryCharge !== undefined ? order.deliveryCharge : '');
       setOrderStatus(order.orderStatus || 'pending_invoice');
@@ -446,52 +446,61 @@ export default function AdminInvoiceModal({
                 </tr>
               </thead>
               <tbody>
-                {items.map((item, i) => {
-                  const numPrice = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
-                  const isModified = item.originalPrice !== undefined && Math.abs(numPrice - item.originalPrice) > 0.001;
-                  return (
-                    <tr key={i}>
-                      <td>
-                        <strong>{item.name}</strong>
-                        {isModified && (
-                          <div className="price-modified-badge">
-                            Adjusted from ${item.originalPrice.toFixed(2)}
-                          </div>
-                        )}
-                      </td>
-                      <td className="sku-cell">{item.sku || 'N/A'}</td>
-                      <td className="text-center">{item.quantity}</td>
-                      <td className="text-right item-price-edit-cell">
-                        <div className={`item-price-input-wrapper ${isModified ? 'modified' : ''}`}>
-                          <span className="price-prefix">$</span>
-                          <input
-                            type="text"
-                            inputMode="decimal"
-                            value={item.price === undefined || item.price === null ? '' : item.price}
-                            onChange={(e) => handleItemPriceChange(i, e.target.value)}
-                            onBlur={() => handleItemPriceBlur(i)}
-                            className="item-price-input"
-                            title="Click to edit unit price (Ex GST)"
-                            placeholder="0.00"
-                          />
+                {items.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '24px', color: '#94a3b8' }}>
+                      No items recorded for this order.
+                    </td>
+                  </tr>
+                ) : (
+                  items.map((item, i) => {
+                    const numPrice = typeof item.price === 'number' ? item.price : (parseFloat(item.price) || 0);
+                    const origPrice = Number(item.originalPrice) || 0;
+                    const isModified = Math.abs(numPrice - origPrice) > 0.001;
+                    return (
+                      <tr key={i}>
+                        <td>
+                          <strong>{item.name || 'Medical Product'}</strong>
                           {isModified && (
-                            <button
-                              type="button"
-                              className="price-reset-icon-btn"
-                              onClick={() => handleResetPrice(i)}
-                              title="Reset back to original catalog price"
-                            >
-                              ↺
-                            </button>
+                            <div className="price-modified-badge">
+                              Adjusted from ${origPrice.toFixed(2)}
+                            </div>
                           )}
-                        </div>
-                      </td>
-                      <td className="text-right font-bold">
-                        ${(numPrice * (item.quantity || 1)).toFixed(2)}
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td className="sku-cell">{item.sku || 'N/A'}</td>
+                        <td className="text-center">{item.quantity}</td>
+                        <td className="text-right item-price-edit-cell">
+                          <div className={`item-price-input-wrapper ${isModified ? 'modified' : ''}`}>
+                            <span className="price-prefix">$</span>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              value={item.price === undefined || item.price === null ? '' : item.price}
+                              onChange={(e) => handleItemPriceChange(i, e.target.value)}
+                              onBlur={() => handleItemPriceBlur(i)}
+                              className="item-price-input"
+                              title="Click to edit unit price (Ex GST)"
+                              placeholder="0.00"
+                            />
+                            {isModified && (
+                              <button
+                                type="button"
+                                className="price-reset-icon-btn"
+                                onClick={() => handleResetPrice(i)}
+                                title="Reset back to original catalog price"
+                              >
+                                ↺
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                        <td className="text-right font-bold">
+                          ${(numPrice * (item.quantity || 1)).toFixed(2)}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
