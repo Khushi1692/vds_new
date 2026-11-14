@@ -32,7 +32,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function LayoutWrapper({ children }) {
   const location = useLocation();
-  const isAdminPath = location.pathname.startsWith('/vds-internal-ops');
+  const isAdminPath = location.pathname.startsWith('/vds-internal-ops') || location.pathname.startsWith('/admin');
 
   return (
     <>
@@ -78,7 +78,10 @@ export default function App() {
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/request-quote" element={<RequestQuote />} />
             <Route path="/success" element={<Success />} />
-            {/* Unlisted Private Staff Operations Portal */}
+            {/* Operations & Admin Portal */}
+            <Route path="/admin" element={<AdminPortal />} />
+            <Route path="/admin/*" element={<AdminPortal />} />
+            <Route path="/vds-internal-ops" element={<AdminPortal />} />
             <Route path="/vds-internal-ops/*" element={<AdminPortal />} />
           </Routes>
         </LayoutWrapper>
