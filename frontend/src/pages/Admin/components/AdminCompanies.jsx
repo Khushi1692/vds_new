@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   Building2, Store, Plus, Edit2, Trash2, Search, Phone, 
-  Mail, MapPin, CheckCircle2, AlertCircle, Save, X, UserPlus
+  Mail, MapPin, CheckCircle2, AlertCircle, Save, X, UserPlus,
+  Eye, EyeOff, Copy, Check, Key
 } from 'lucide-react';
 import { getApiUrl } from '../../../config/api';
 
@@ -17,11 +18,14 @@ export default function AdminCompanies({
   const [addingStoreToCompany, setAddingStoreToCompany] = useState(null);
   const [editingStore, setEditingStore] = useState(null); // { companyId, store }
   const [isOnboardingNew, setIsOnboardingNew] = useState(false);
+  const [createdCredentials, setCreatedCredentials] = useState(null);
+  const [copiedField, setCopiedField] = useState(null);
 
   // Form states for new company onboarding
   const [newCompForm, setNewCompForm] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     companyName: '',
     companyAbn: '',
@@ -30,6 +34,36 @@ export default function AdminCompanies({
     initialStorePhone: '',
     initialStoreEmail: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showEditPassword, setShowEditPassword] = useState(false);
+
+  // Helper to copy text to clipboard
+  const copyToClipboard = (text, fieldName) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+    setCopiedField(fieldName);
+    setTimeout(() => setCopiedField(null), 2500);
+  };
+
+  // Helper to generate a strong random password
+  const generatePassword = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%&*';
+    let rand = '';
+    for (let i = 0; i < 6; i++) {
+      rand += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    const generated = `VDS-${rand}2026!`;
+    setNewCompForm(prev => ({ ...prev, password: generated }));
+    setShowPassword(true);
+  };
 
   // Feedback state
   const [feedback, setFeedback] = useState({ type: '', message: '' });
@@ -55,19 +89,24 @@ export default function AdminCompanies({
     setFeedback({ type: '', message: '' });
 
     try {
+      const payload = {
+        name: editingCompany.name,
+        email: editingCompany.email,
+        phone: editingCompany.phone,
+        companyName: editingCompany.companyName,
+        companyAbn: editingCompany.companyAbn
+      };
+      if (editingCompany.password && editingCompany.password.trim()) {
+        payload.password = editingCompany.password.trim();
+      }
+
       const res = await fetch(getApiUrl(`/api/admin/companies/${editingCompany._id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          name: editingCompany.name,
-          email: editingCompany.email,
-          phone: editingCompany.phone,
-          companyName: editingCompany.companyName,
-          companyAbn: editingCompany.companyAbn
-        })
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -75,6 +114,7 @@ export default function AdminCompanies({
 
       setFeedback({ type: 'success', message: 'Company information updated successfully.' });
       setEditingCompany(null);
+      setShowEditPassword(false);
       onRefresh();
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
@@ -202,6 +242,8 @@ export default function AdminCompanies({
         });
       }
 
+      const assignedPassword = (newCompForm.password && newCompForm.password.trim()) ? newCompForm.password.trim() : 'VDSClient2026!';
+
       const res = await fetch(getApiUrl('/api/admin/companies'), {
         method: 'POST',
         headers: {
@@ -211,6 +253,7 @@ export default function AdminCompanies({
         body: JSON.stringify({
           name: newCompForm.name,
           email: newCompForm.email,
+          password: assignedPassword,
           phone: newCompForm.phone,
           companyName: newCompForm.companyName,
           companyAbn: newCompForm.companyAbn,
@@ -221,11 +264,21 @@ export default function AdminCompanies({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to onboard company');
 
+      const portalUrl = `${window.location.origin}/login`;
+      setCreatedCredentials({
+        companyName: newCompForm.companyName,
+        contactName: newCompForm.name,
+        email: newCompForm.email.toLowerCase().trim(),
+        password: data.initialPassword || assignedPassword,
+        loginUrl: portalUrl
+      });
+
       setFeedback({ type: 'success', message: `Trade partner "${newCompForm.companyName}" successfully onboarded!` });
       setIsOnboardingNew(false);
       setNewCompForm({
         name: '',
         email: '',
+        password: '',
         phone: '',
         companyName: '',
         companyAbn: '',
@@ -234,6 +287,7 @@ export default function AdminCompanies({
         initialStorePhone: '',
         initialStoreEmail: ''
       });
+      setShowPassword(false);
       onRefresh();
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
@@ -477,6 +531,40 @@ export default function AdminCompanies({
                 />
               </div>
 
+              <div className="form-field">
+                <label>Reset / Change Account Password (Optional)</label>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type={showEditPassword ? 'text' : 'password'}
+                    value={editingCompany.password || ''}
+                    onChange={(e) => setEditingCompany({ ...editingCompany, password: e.target.value })}
+                    placeholder="Enter new password to reset, or leave blank to keep unchanged"
+                    style={{ paddingRight: '40px', width: '100%' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowEditPassword(!showEditPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '10px',
+                      background: 'none',
+                      border: 'none',
+                      color: '#94a3b8',
+                      cursor: 'pointer',
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                    title={showEditPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showEditPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+                <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                  Setting a password here immediately updates the trade partner&apos;s login credential.
+                </span>
+              </div>
+
               <div className="form-actions-row">
                 <button type="button" className="cancel-btn" onClick={() => setEditingCompany(null)}>Cancel</button>
                 <button type="submit" className="save-btn" disabled={submitting}>
@@ -680,6 +768,86 @@ export default function AdminCompanies({
                 </div>
               </div>
 
+              {/* Login Credentials Section */}
+              <div className="form-section-title" style={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>Account Login Credentials</span>
+                <button
+                  type="button"
+                  onClick={generatePassword}
+                  style={{
+                    background: 'rgba(56, 189, 248, 0.12)',
+                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                    color: '#38bdf8',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px'
+                  }}
+                >
+                  <Key size={13} /> Generate Password
+                </button>
+              </div>
+
+              <div className="form-row-2col">
+                <div className="form-field">
+                  <label>Create Account Password *</label>
+                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={newCompForm.password}
+                      onChange={(e) => setNewCompForm({ ...newCompForm, password: e.target.value })}
+                      placeholder="e.g. TradeClient2026! (or leave blank for default)"
+                      style={{ paddingRight: '40px', width: '100%' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        color: '#94a3b8',
+                        cursor: 'pointer',
+                        padding: '4px',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                      title={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                    Set custom password or click <strong>Generate Password</strong>. If left blank, default is <code>VDSClient2026!</code>.
+                  </span>
+                </div>
+
+                <div className="form-field">
+                  <label>Trade Partner Access Level</label>
+                  <div style={{
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: 'rgba(16, 185, 129, 0.08)',
+                    border: '1px solid rgba(16, 185, 129, 0.25)',
+                    color: '#10b981',
+                    fontSize: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    minHeight: '42px',
+                    boxSizing: 'border-box'
+                  }}>
+                    <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+                    <span>Instant full portal access upon creation. Ready to log in immediately.</span>
+                  </div>
+                </div>
+              </div>
+
               <div className="form-section-title" style={{ marginTop: '16px' }}>Initial Delivery Store Location</div>
               <div className="form-row-2col">
                 <div className="form-field">
@@ -729,6 +897,175 @@ export default function AdminCompanies({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- MODAL 5: CREDENTIALS CREATED & READY TO SHARE --- */}
+      {createdCredentials && (
+        <div className="admin-modal-overlay">
+          <div className="admin-form-modal" style={{ maxWidth: '580px', border: '1px solid #10b981' }}>
+            <div className="form-modal-header" style={{ borderBottom: '1px solid rgba(16, 185, 129, 0.25)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '8px', borderRadius: '8px' }}>
+                  <CheckCircle2 size={24} />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, color: '#f1f5f9' }}>Trade Partner Onboarded</h3>
+                  <span style={{ fontSize: '12px', color: '#10b981', fontWeight: 500 }}>
+                    Credentials active and ready to share with client
+                  </span>
+                </div>
+              </div>
+              <button type="button" onClick={() => setCreatedCredentials(null)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ padding: '20px 24px' }}>
+              <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
+                Trade account for <strong style={{ color: '#f8fafc' }}>{createdCredentials.companyName}</strong> has been created with direct login access.
+                You can copy these credentials and share them with <strong style={{ color: '#f8fafc' }}>{createdCredentials.contactName}</strong>:
+              </p>
+
+              {/* Credentials summary box */}
+              <div style={{
+                background: '#09101d',
+                border: '1px solid #1e293b',
+                borderRadius: '10px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}>
+                {/* Login Portal URL */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', fontWeight: 600 }}>
+                      Login Portal URL
+                    </span>
+                    <span style={{ fontSize: '13px', color: '#38bdf8', fontFamily: 'monospace' }}>
+                      {createdCredentials.loginUrl}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(createdCredentials.loginUrl, 'url')}
+                    style={{
+                      background: 'rgba(56, 189, 248, 0.1)',
+                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                      color: '#38bdf8',
+                      borderRadius: '6px',
+                      padding: '6px 10px',
+                      fontSize: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {copiedField === 'url' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy URL</>}
+                  </button>
+                </div>
+
+                {/* Email */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #1e293b', paddingTop: '10px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', fontWeight: 600 }}>
+                      Username / Email
+                    </span>
+                    <span style={{ fontSize: '14px', color: '#f8fafc', fontWeight: 600, fontFamily: 'monospace' }}>
+                      {createdCredentials.email}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(createdCredentials.email, 'email')}
+                    style={{
+                      background: 'rgba(56, 189, 248, 0.1)',
+                      border: '1px solid rgba(56, 189, 248, 0.3)',
+                      color: '#38bdf8',
+                      borderRadius: '6px',
+                      padding: '6px 10px',
+                      fontSize: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {copiedField === 'email' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
+                  </button>
+                </div>
+
+                {/* Password */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #1e293b', paddingTop: '10px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', fontWeight: 600 }}>
+                      Assigned Password
+                    </span>
+                    <span style={{ fontSize: '14px', color: '#10b981', fontWeight: 700, fontFamily: 'monospace', letterSpacing: '0.03em' }}>
+                      {createdCredentials.password}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(createdCredentials.password, 'password')}
+                    style={{
+                      background: 'rgba(16, 185, 129, 0.12)',
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      color: '#10b981',
+                      borderRadius: '6px',
+                      padding: '6px 10px',
+                      fontSize: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      cursor: 'pointer',
+                      fontWeight: 500
+                    }}
+                  >
+                    {copiedField === 'password' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy Password</>}
+                  </button>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', gap: '12px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const fullBrief = `Victoria Diagnostic Supplies - Trade Partner Portal\nAccount: ${createdCredentials.companyName}\nContact: ${createdCredentials.contactName}\nPortal URL: ${createdCredentials.loginUrl}\nEmail: ${createdCredentials.email}\nPassword: ${createdCredentials.password}\n\nYou can log in immediately to view trade catalog pricing and submit purchase orders.`;
+                    copyToClipboard(fullBrief, 'all');
+                  }}
+                  style={{
+                    background: '#1e293b',
+                    border: '1px solid #334155',
+                    color: '#e2e8f0',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {copiedField === 'all' ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
+                  {copiedField === 'all' ? 'Copied Full Welcome Message!' : 'Copy Full Message for Client'}
+                </button>
+
+                <button
+                  type="button"
+                  className="save-btn"
+                  style={{ margin: 0, padding: '10px 24px' }}
+                  onClick={() => setCreatedCredentials(null)}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

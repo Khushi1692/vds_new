@@ -2280,7 +2280,7 @@ app.post('/api/admin/companies', adminMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'An account with this email already exists' });
     }
 
-    const rawPassword = password || 'VDSClient2026!';
+    const rawPassword = (password && password.trim()) ? password.trim() : 'VDSClient2026!';
     const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
     const newUser = new User({
@@ -2295,7 +2295,7 @@ app.post('/api/admin/companies', adminMiddleware, async (req, res) => {
     });
 
     await newUser.save();
-    res.json({ success: true, company: newUser });
+    res.json({ success: true, company: newUser, initialPassword: rawPassword });
   } catch (err) {
     console.error('Admin create company error:', err.message);
     res.status(500).json({ error: 'Failed to create company' });
@@ -2305,12 +2305,15 @@ app.post('/api/admin/companies', adminMiddleware, async (req, res) => {
 // 10. Admin Update Company & Stores
 app.put('/api/admin/companies/:userId', adminMiddleware, async (req, res) => {
   try {
-    const { name, email, phone, companyName, companyAbn, stores } = req.body;
+    const { name, email, password, phone, companyName, companyAbn, stores } = req.body;
     const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ error: 'Company account not found' });
 
     if (name) user.name = name.trim();
     if (email) user.email = email.toLowerCase().trim();
+    if (password && password.trim()) {
+      user.password = await bcrypt.hash(password.trim(), 10);
+    }
     if (phone !== undefined) user.phone = phone.trim();
     if (companyName !== undefined) user.companyName = companyName.trim();
     if (companyAbn !== undefined) user.companyAbn = companyAbn.trim();
