@@ -46,11 +46,11 @@ async function resetToProduction() {
       role: 'admin',
       companyName: 'Victoria Diagnostic Supplies (Internal HQ)',
       companyAbn: '84 123 456 789',
-      phone: '+61 3 9000 0000',
+      phone: '0422 228 496',
       stores: [{
-        name: 'Melbourne Distribution Hub',
-        address: 'Building 4, 120-130 St Kilda Rd, Melbourne VIC 3004',
-        contactNumber: '+61 3 9000 0000'
+        name: 'Victoria Diagnostic Supplies',
+        address: '16 Welsh Cres, Clyde North VIC 3978',
+        contactNumber: '0422 228 496'
       }]
     });
     await admin.save();

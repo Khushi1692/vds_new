@@ -745,7 +745,7 @@ app.post('/api/contact', contactLimiter, upload.single('document'), async (req, 
 
     const mailOptions = {
       from: `"VDS Website" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
       subject: `New Enquiry: ${sanitizeHTML(need)} - ${sanitizeHTML(name)} (${sanitizeHTML(organization)})`,
       html: `
         <h2>New Enquiry from VDS Website</h2>
@@ -1369,13 +1369,14 @@ function generateFinalTaxInvoiceEmailHTML({
             <div><strong>Payment Reference:</strong> <span style="background: #1e293b; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #38bdf8;">${displayInvoiceNum}</span></div>
           </div>
           <div style="font-size: 12px; color: #94a3b8; margin-top: 10px;">
-            Please email your payment remittance advice to <a href="mailto:accounts@vdsupplies.com.au" style="color: #38bdf8;">accounts@vdsupplies.com.au</a> referencing your Invoice #.
+            Please email your payment remittance advice to <a href="mailto:info@vdsupplies.com.au" style="color: #38bdf8;">info@vdsupplies.com.au</a> referencing your Invoice #.
           </div>
         </div>
 
         <div style="margin-top: 28px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #64748b; text-align: center;">
           Victoria Diagnostic Supplies Pty Ltd · ABN 84 123 456 789 · Melbourne, Victoria<br/>
-          Orders & Dispatch: (03) 9000 0000 · dispatch@vdsupplies.com.au
+          16 Welsh Cres, Clyde North VIC 3978<br/>
+          Orders: 0422 228 496 · info@vdsupplies.com.au
         </div>
       </div>
     </body>
@@ -1492,7 +1493,7 @@ app.post('/api/checkout/invoice-request', authMiddleware, async (req, res) => {
 
         const adminMailOptions = {
           from: `"VDS Order System" <${process.env.SMTP_USER}>`,
-          to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+          to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
           subject: `[ACTION REQUIRED] New Final Invoice Request - #${newOrder.orderId} (${user.companyName || user.name})`,
           html: generateInvoiceRequestEmailHTML({
             orderId: newOrder.orderId,
@@ -1575,7 +1576,7 @@ app.post('/api/quote/request', async (req, res) => {
 
     const adminMailOptions = {
       from: `"VDS Website" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
       subject: `New Quote Request - ${sanitizeHTML(name)}`,
       html: `
         <h2>New Quote Request (${quoteId})</h2>
@@ -1813,7 +1814,7 @@ app.post('/api/orders/:orderId/remittance', authMiddleware, async (req, res) => 
       `;
       await transporter.sendMail({
         from: `"VDS Remittance Alert" <${process.env.SMTP_USER}>`,
-        to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+        to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
         subject: `[EFT REMITTANCE] Payment Confirmed for #${order.orderId} (${order.companyName || user.name})`,
         html: emailContent
       });
@@ -1848,11 +1849,12 @@ async function seedAdminUser() {
         role: 'admin',
         companyName: 'Victoria Diagnostic Supplies (HQ)',
         companyAbn: '84 123 456 789',
-        phone: '+61 3 9000 0000',
+        phone: '0422 228 496',
         stores: [{
-          name: 'Melbourne Distribution Hub',
-          address: 'Building 4, 120-130 St Kilda Rd, Melbourne VIC 3004',
-          contactNumber: '+61 3 9000 0000'
+          name: 'Victoria Diagnostic Supplies',
+          address: '16 Welsh Cres, Clyde North VIC 3978',
+          contactNumber: '0422 228 496',
+          email: 'info@vdsupplies.com.au'
         }]
       });
       await admin.save();
@@ -1863,6 +1865,20 @@ async function seedAdminUser() {
         admin.role = 'admin';
         changed = true;
       }
+      if (admin.phone !== '0422 228 496') {
+        admin.phone = '0422 228 496';
+        changed = true;
+      }
+      if (admin.stores && Array.isArray(admin.stores)) {
+        admin.stores.forEach(s => {
+          if (s.address && (s.address.includes('St Kilda') || s.address.includes('Building 4'))) {
+            s.address = '16 Welsh Cres, Clyde North VIC 3978';
+            s.contactNumber = '0422 228 496';
+            s.email = 'info@vdsupplies.com.au';
+            changed = true;
+          }
+        });
+      }
       // Ensure admin password matches the defined password in .env or default
       const passwordMatches = await bcrypt.compare(adminPassword, admin.password);
       if (!passwordMatches) {
@@ -1872,7 +1888,7 @@ async function seedAdminUser() {
       }
       if (changed) {
         await admin.save();
-        console.log(`✅ Verified admin privileges for: ${adminEmail}`);
+        console.log(`✅ Updated admin contact details & privileges for: ${adminEmail}`);
       }
     }
 
@@ -2243,7 +2259,7 @@ app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (re
 
       const adminCopyOptions = {
         from: `"VDS Dispatch System" <${process.env.SMTP_USER}>`,
-        to: process.env.ADMIN_EMAIL || 'admin@vdsupplies.com.au',
+        to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
         subject: `[ISSUED] Tax Invoice #${invoiceNumber} Sent to ${order.companyName || order.customerName}`,
         html: emailHtml
       };

@@ -333,8 +333,8 @@ export default function PrintInvoiceModal({ order, onClose }) {
               </div>
               <div className="brand-details">
                 <p><strong>ABN:</strong> 84 123 456 789</p>
-                <p>Building 4, 120-130 St Kilda Rd, Melbourne VIC 3004</p>
-                <p>Orders: (03) 9000 0000 · dispatch@vdsupplies.com.au</p>
+                <p>16 Welsh Cres, Clyde North VIC 3978</p>
+                <p>Orders: 0422 228 496 · info@vdsupplies.com.au</p>
               </div>
             </div>
 
@@ -452,7 +452,7 @@ export default function PrintInvoiceModal({ order, onClose }) {
                 <div className="eft-ref"><strong>Payment Reference:</strong> <span>{invoiceNum}</span></div>
               </div>
               <p className="remittance-note">
-                Please quote reference <strong>{invoiceNum}</strong> on transfer. Remittance advice to: <strong>accounts@vdsupplies.com.au</strong>
+                Please quote reference <strong>{invoiceNum}</strong> on transfer. Remittance advice to: <strong>info@vdsupplies.com.au</strong>
               </p>
             </div>
 
