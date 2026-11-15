@@ -18,6 +18,7 @@ import {
 import { CartContext } from '../../context/CartContext';
 import { AuthContext } from '../../context/AuthContext';
 import Button from '../../components/Button/Button';
+import AddressAutocomplete from '../../components/AddressAutocomplete/AddressAutocomplete';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -335,12 +336,11 @@ export default function Checkout() {
 
                   <div className="checkout-input-group" style={{ margin: 0 }}>
                     <label htmlFor="custom-store-address">Store Delivery Address <span className="req">*</span></label>
-                    <input
-                      type="text"
+                    <AddressAutocomplete
                       id="custom-store-address"
                       value={customStore.address}
-                      onChange={(e) => setCustomStore(prev => ({ ...prev, address: e.target.value }))}
-                      placeholder="e.g. Suite 2, 45 Bridge Road, Richmond VIC 3121"
+                      onChange={(val) => setCustomStore(prev => ({ ...prev, address: val }))}
+                      placeholder="Start typing clinic address (e.g. 45 Bridge Road, Richmond)..."
                       required={selectedStoreIndex === 'custom'}
                     />
                   </div>

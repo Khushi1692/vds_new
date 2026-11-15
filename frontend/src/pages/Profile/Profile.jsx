@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
 import Button from '../../components/Button/Button';
+import AddressAutocomplete from '../../components/AddressAutocomplete/AddressAutocomplete';
 import './Profile.css';
 
 export default function Profile() {
@@ -477,12 +478,11 @@ export default function Profile() {
 
               <div className="auth-input-group">
                 <label htmlFor="modal-store-address">Store Address <span className="req">*</span></label>
-                <input
-                  type="text"
+                <AddressAutocomplete
                   id="modal-store-address"
                   value={storeForm.address}
-                  onChange={(e) => setStoreForm(prev => ({ ...prev, address: e.target.value }))}
-                  placeholder="e.g. 120 Collins Street, Melbourne VIC 3000"
+                  onChange={(val) => setStoreForm(prev => ({ ...prev, address: val }))}
+                  placeholder="Start typing clinic address (e.g. 120 Collins Street, Melbourne)..."
                   required
                 />
               </div>

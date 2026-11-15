@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { INDS } from '../../data/industries';
+import AddressAutocomplete from '../../components/AddressAutocomplete/AddressAutocomplete';
 import './TradeAccount.css';
 
 export default function TradeAccount() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     document.title = "Open a trade account | VDS";
@@ -96,7 +98,13 @@ export default function TradeAccount() {
               </div>
               <div className="field">
                 <label htmlFor="a-addr">Delivery address</label>
-                <input id="a-addr" type="text" required autoComplete="street-address" />
+                <AddressAutocomplete
+                  id="a-addr"
+                  value={address}
+                  onChange={setAddress}
+                  placeholder="Start typing Australian delivery address (e.g. 120 Collins St)..."
+                  required
+                />
               </div>
               <div>
                 <button className="btn primary" type="submit" disabled={loading}>

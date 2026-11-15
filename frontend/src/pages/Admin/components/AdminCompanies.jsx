@@ -5,6 +5,7 @@ import {
   Eye, EyeOff, Copy, Check, Key
 } from 'lucide-react';
 import { getApiUrl } from '../../../config/api';
+import AddressAutocomplete from '../../../components/AddressAutocomplete/AddressAutocomplete';
 
 export default function AdminCompanies({ 
   companies, 
@@ -596,12 +597,11 @@ export default function AdminCompanies({
                 />
               </div>
               <div className="form-field">
-                <label>Delivery Address</label>
-                <input
-                  type="text"
+                <label>Delivery Address *</label>
+                <AddressAutocomplete
                   value={addingStoreToCompany.address}
-                  onChange={(e) => setAddingStoreToCompany({ ...addingStoreToCompany, address: e.target.value })}
-                  placeholder="e.g. Level 2, 45 Collins St, Melbourne VIC 3000"
+                  onChange={(val) => setAddingStoreToCompany({ ...addingStoreToCompany, address: val })}
+                  placeholder="Start typing clinic address (e.g. 45 Collins St, Melbourne)..."
                   required
                 />
               </div>
@@ -657,14 +657,14 @@ export default function AdminCompanies({
                 />
               </div>
               <div className="form-field">
-                <label>Delivery Address</label>
-                <input
-                  type="text"
+                <label>Delivery Address *</label>
+                <AddressAutocomplete
                   value={editingStore.store.address}
-                  onChange={(e) => setEditingStore({
+                  onChange={(val) => setEditingStore({
                     ...editingStore,
-                    store: { ...editingStore.store, address: e.target.value }
+                    store: { ...editingStore.store, address: val }
                   })}
+                  placeholder="Start typing clinic address (e.g. 45 Collins St, Melbourne)..."
                   required
                 />
               </div>
@@ -861,11 +861,10 @@ export default function AdminCompanies({
                 </div>
                 <div className="form-field">
                   <label>Delivery Address</label>
-                  <input
-                    type="text"
+                  <AddressAutocomplete
                     value={newCompForm.initialStoreAddress}
-                    onChange={(e) => setNewCompForm({ ...newCompForm, initialStoreAddress: e.target.value })}
-                    placeholder="e.g. 100 Royal Parade, Parkville VIC 3052"
+                    onChange={(val) => setNewCompForm({ ...newCompForm, initialStoreAddress: val })}
+                    placeholder="Start typing clinic address (e.g. 100 Royal Parade, Parkville)..."
                   />
                 </div>
               </div>

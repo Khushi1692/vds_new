@@ -795,6 +795,34 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+// Locio Australian Address Autocomplete Proxy
+app.get('/api/addresses/autocomplete', async (req, res) => {
+  try {
+    const q = (req.query.q || req.query.query || '').trim();
+    if (!q || q.length < 2) {
+      return res.json({ data: [] });
+    }
+    const apiKey = process.env.LOCIO_API_KEY || 'lc_live_mcekcmhbkxsw43fwnurez74vndu5nadenhscywhfbhlus7e53vja';
+    const locioUrl = `https://api.locio.com.au/v1/addresses?q=${encodeURIComponent(q)}&country=AU`;
+    const response = await fetch(locioUrl, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Accept': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Locio API error:', response.status, errText);
+      return res.status(response.status).json({ error: 'Locio API request failed', details: errText });
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('Address autocomplete proxy error:', err.message);
+    res.status(500).json({ error: 'Failed to search addresses' });
+  }
+});
+
 app.get('/api/products', async (req, res) => {
   try {
     const now = Date.now();
