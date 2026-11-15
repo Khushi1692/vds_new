@@ -250,6 +250,13 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
           existingInvoice.stripeSessionId = sessionOrIntent.id;
           await existingInvoice.save();
           console.log(`✅ Webhook: Existing invoice #${orderId} marked as PAID.`);
+
+          // Send official payment receipt and order confirmation to customer and admin
+          sendPaymentReceiptNotification(existingInvoice, {
+            paymentMethod: 'card',
+            transactionRef: sessionOrIntent.id
+          }).catch(mailErr => console.error('Failed to send webhook payment receipt:', mailErr.message));
+
           return res.send();
         }
       }
@@ -1365,7 +1372,7 @@ function generateFinalTaxInvoiceEmailHTML({
             <div><strong>Bank:</strong> National Australia Bank (NAB)</div>
             <div><strong>Account Name:</strong> Victoria Diagnostic Supplies Pty Ltd</div>
             <div><strong>BSB:</strong> 083-004</div>
-            <div><strong>Account Number:</strong> 8492 1045</div>
+            <div><strong>Account Number:</strong> 78-740-2934</div>
             <div><strong>Payment Reference:</strong> <span style="background: #1e293b; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #38bdf8;">${displayInvoiceNum}</span></div>
           </div>
           <div style="font-size: 12px; color: #94a3b8; margin-top: 10px;">
@@ -1382,6 +1389,263 @@ function generateFinalTaxInvoiceEmailHTML({
     </body>
     </html>
   `;
+}
+
+// Official Payment Receipt & Order Confirmation Email Template
+function generatePaymentReceiptEmailHTML({
+  orderId,
+  invoiceNumber,
+  customerName,
+  customerEmail,
+  companyName,
+  companyAbn,
+  store,
+  poNumber,
+  items,
+  subtotalExGst,
+  deliveryCharge,
+  taxableAmount,
+  gstAmount,
+  finalInvoiceTotal,
+  paymentMethod,
+  paymentReference,
+  paidAt
+}) {
+  const formattedDate = getMelbourneDateTime(paidAt || new Date());
+  const cleanName = sanitizeHTML(customerName) || 'Valued Trade Partner';
+  const cleanEmail = sanitizeHTML(customerEmail) || 'N/A';
+  const cleanCompany = sanitizeHTML(companyName) || 'N/A';
+  const cleanAbn = sanitizeHTML(companyAbn) || 'N/A';
+  const cleanPo = sanitizeHTML(poNumber);
+  const displayInvoiceNum = sanitizeHTML(invoiceNumber || `INV-${orderId}`);
+  const cleanRef = sanitizeHTML(paymentReference) || `PAY-${orderId}`;
+  const methodLabel = paymentMethod === 'eft' 
+    ? 'Direct Bank EFT (NAB Transfer)' 
+    : (paymentMethod === 'card' ? 'Credit / Debit Card (Stripe)' : sanitizeHTML(paymentMethod || 'Electronic Transfer'));
+
+  const itemsTableRows = (items || []).map(item => {
+    const unitPrice = item.price != null ? `$${item.price.toFixed(2)}` : 'N/A';
+    const subtotalFormatted = item.price != null ? `$${(item.price * item.quantity).toFixed(2)}` : 'N/A';
+    return `
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding: 10px 8px 10px 0; color: #ffffff; font-size: 14px; vertical-align: top;">
+          <strong>${sanitizeHTML(item.name)}</strong>
+          ${item.sku ? `<div style="font-size: 12px; color: #94a3b8;">SKU: ${sanitizeHTML(item.sku)}</div>` : ''}
+        </td>
+        <td style="padding: 10px 8px; text-align: center; color: #ffffff; font-size: 14px; vertical-align: top;">${item.quantity}</td>
+        <td style="padding: 10px 8px; text-align: right; color: #94a3b8; font-size: 14px; vertical-align: top;">${unitPrice}</td>
+        <td style="padding: 10px 0 10px 8px; text-align: right; color: #ffffff; font-size: 14px; font-weight: 500; vertical-align: top;">${subtotalFormatted}</td>
+      </tr>
+    `;
+  }).join('');
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Payment Receipt & Order Confirmed - ${displayInvoiceNum} [PAID]</title>
+    </head>
+    <body style="margin: 0; padding: 24px 12px; background-color: #060f1e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #ffffff;">
+      <div style="max-width: 640px; margin: 0 auto; background-color: #0b1a2e; border-radius: 12px; padding: 32px 28px; border: 1px solid rgba(143, 179, 223, 0.25);">
+        
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid rgba(143, 179, 223, 0.3); padding-bottom: 20px; margin-bottom: 24px;">
+          <div>
+            <div style="display: inline-block; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: #4ade80; padding: 4px 12px; border-radius: 9999px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+              ✓ Payment Received · Order Placed & Confirmed
+            </div>
+            <h1 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0 0 4px 0; letter-spacing: -0.02em;">TAX INVOICE RECEIPT</h1>
+            <div style="font-size: 13px; color: #94a3b8;">Victoria Diagnostic Supplies Pty Ltd</div>
+            <div style="font-size: 12px; color: #64748b;">ABN: 84 123 456 789 · Melbourne, VIC</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">${displayInvoiceNum}</div>
+            <div style="font-size: 12px; color: #94a3b8;">Paid: ${formattedDate}</div>
+            <div style="font-size: 12px; color: #4ade80; font-weight: 700; margin-top: 4px; text-transform: uppercase;">STATUS: PAID IN FULL</div>
+          </div>
+        </div>
+
+        <p style="font-size: 15px; line-height: 1.6; color: #cbd5e1; margin: 0 0 20px 0;">
+          Hi ${cleanName},<br/>
+          Thank you for your payment! We have successfully received payment for Tax Invoice <strong>${displayInvoiceNum}</strong> (Order <strong>#${sanitizeHTML(orderId)}</strong>). 
+          Your order has been officially placed and queued for immediate warehouse picking and dispatch to your designated clinic store.
+        </p>
+
+        <!-- Payment Details Summary Box -->
+        <div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+          <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #4ade80; font-weight: 700; margin-bottom: 8px;">PAYMENT TRANSACTION DETAILS</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; color: #e2e8f0;">
+            <tr>
+              <td style="padding: 4px 0; width: 40%; color: #94a3b8;">Payment Method:</td>
+              <td style="padding: 4px 0; font-weight: 600; color: #ffffff;">${methodLabel}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #94a3b8;">Payment Reference / ID:</td>
+              <td style="padding: 4px 0; font-family: monospace; color: #38bdf8;">${cleanRef}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #94a3b8;">Date & Time Processed:</td>
+              <td style="padding: 4px 0; color: #ffffff;">${formattedDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #94a3b8;">Amount Paid:</td>
+              <td style="padding: 4px 0; font-size: 15px; font-weight: 700; color: #4ade80;">$${finalInvoiceTotal.toFixed(2)} AUD</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px 0; color: #94a3b8;">Balance Due:</td>
+              <td style="padding: 4px 0; font-weight: 700; color: #4ade80;">$0.00 AUD</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Company & Delivery Store Box -->
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+          <tr>
+            <td style="width: 50%; vertical-align: top; padding: 12px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">BILLED TO</div>
+              <div style="font-size: 14px; font-weight: 700; color: #ffffff;">${cleanCompany}</div>
+              <div style="font-size: 13px; color: #cbd5e1;">ABN: ${cleanAbn}</div>
+              <div style="font-size: 13px; color: #cbd5e1;">Attn: ${cleanName}</div>
+              <div style="font-size: 13px; color: #8fb3df;">${cleanEmail}</div>
+            </td>
+            <td style="width: 50%; vertical-align: top; padding: 12px; border-left: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 700; margin-bottom: 6px;">DISPATCH DESTINATION STORE</div>
+              <div style="font-size: 14px; font-weight: 700; color: #ffffff;">${sanitizeHTML(store?.name || 'Main Practice')}</div>
+              <div style="font-size: 13px; color: #cbd5e1;">${sanitizeHTML(store?.address || 'Not specified')}</div>
+              <div style="font-size: 13px; color: #cbd5e1;">Phone: ${sanitizeHTML(store?.contactNumber || 'N/A')}</div>
+              ${cleanPo ? `<div style="font-size: 13px; color: #38bdf8; font-weight: 600; margin-top: 4px;">PO #: ${cleanPo}</div>` : ''}
+            </td>
+          </tr>
+        </table>
+
+        <!-- Line Items -->
+        <h3 style="font-size: 15px; font-weight: 700; margin: 20px 0 10px 0; color: #ffffff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
+          Items Ordered & Paid
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <thead>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.15); text-align: left;">
+              <th style="padding: 8px 8px 8px 0; font-size: 12px; color: #94a3b8;">Description</th>
+              <th style="padding: 8px; text-align: center; font-size: 12px; color: #94a3b8;">Qty</th>
+              <th style="padding: 8px; text-align: right; font-size: 12px; color: #94a3b8;">Unit (Ex GST)</th>
+              <th style="padding: 8px 0 8px 8px; text-align: right; font-size: 12px; color: #94a3b8;">Total (Ex GST)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsTableRows}
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <td style="padding: 10px 8px 10px 0; color: #ffffff; font-size: 14px;">
+                <strong>Consolidated Freight & Delivery Charge</strong>
+                <div style="font-size: 12px; color: #94a3b8;">Single consolidated delivery charge</div>
+              </td>
+              <td style="padding: 10px 8px; text-align: center; color: #ffffff; font-size: 14px;">1</td>
+              <td style="padding: 10px 8px; text-align: right; color: #94a3b8; font-size: 14px;">$${deliveryCharge.toFixed(2)}</td>
+              <td style="padding: 10px 0 10px 8px; text-align: right; color: #ffffff; font-size: 14px; font-weight: 500;">$${deliveryCharge.toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Totals Box -->
+        <div style="background: rgba(255,255,255,0.04); border-radius: 8px; padding: 16px; margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: #cbd5e1;">
+            <span>Products Subtotal (Ex GST):</span>
+            <span style="color: #ffffff;">$${subtotalExGst.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: #cbd5e1;">
+            <span>Consolidated Delivery Charge (Ex GST):</span>
+            <span style="color: #ffffff;">$${deliveryCharge.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: #cbd5e1;">
+            <span>Net Taxable Total (Ex GST):</span>
+            <span style="color: #ffffff;">$${taxableAmount.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; color: #cbd5e1;">
+            <span>GST (10%):</span>
+            <span style="color: #8fb3df;">$${gstAmount.toFixed(2)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 10px; color: #4ade80;">
+            <span>TOTAL PAID IN FULL:</span>
+            <span>$${finalInvoiceTotal.toFixed(2)} AUD</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 28px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #64748b; text-align: center;">
+          Victoria Diagnostic Supplies Pty Ltd · ABN 84 123 456 789 · Melbourne, Victoria<br/>
+          16 Welsh Cres, Clyde North VIC 3978<br/>
+          Inquiries: 0422 228 496 · info@vdsupplies.com.au
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+// Dispatches customer payment receipt and admin notification
+async function sendPaymentReceiptNotification(order, { paymentMethod = 'card', transactionRef = '' } = {}) {
+  try {
+    if (!order) return;
+    
+    // Ensure items are enriched with catalog details
+    const leanOrder = order.toObject ? order.toObject() : { ...order };
+    await enrichOrderItems(leanOrder);
+
+    const subtotal = leanOrder.subtotalExGst || ((leanOrder.totalAmount || 0) / 100) || 0;
+    const delivery = leanOrder.deliveryCharge || 0;
+    const taxable = subtotal + delivery;
+    const gst = leanOrder.gstAmount !== undefined && leanOrder.gstAmount !== null 
+      ? leanOrder.gstAmount 
+      : parseFloat((taxable * 0.10).toFixed(2));
+    const finalTotal = leanOrder.finalInvoiceTotal || parseFloat((taxable + gst).toFixed(2));
+    const invoiceNum = leanOrder.invoiceNumber || `INV-${leanOrder.orderId}`;
+    const targetEmail = leanOrder.customerEmail;
+
+    const emailHtml = generatePaymentReceiptEmailHTML({
+      orderId: leanOrder.orderId,
+      invoiceNumber: invoiceNum,
+      customerName: leanOrder.customerName,
+      customerEmail: targetEmail,
+      companyName: leanOrder.companyName,
+      companyAbn: leanOrder.companyAbn,
+      store: leanOrder.store,
+      poNumber: leanOrder.poNumber,
+      items: leanOrder.items,
+      subtotalExGst: subtotal,
+      deliveryCharge: delivery,
+      taxableAmount: taxable,
+      gstAmount: gst,
+      finalInvoiceTotal: finalTotal,
+      paymentMethod,
+      paymentReference: transactionRef,
+      paidAt: new Date()
+    });
+
+    // 1. Send receipt to the customer who made the payment
+    if (targetEmail && targetEmail.includes('@') && targetEmail !== 'no-email-provided@stripe.com') {
+      const customerMailOptions = {
+        from: `"Victoria Diagnostic Supplies - Accounts" <${process.env.SMTP_USER}>`,
+        to: targetEmail,
+        subject: `Order Placed & Payment Confirmed - Tax Invoice #${invoiceNum} [PAID] - Victoria Diagnostic Supplies`,
+        html: emailHtml
+      };
+      await transporter.sendMail(customerMailOptions);
+      console.log(`✅ [Payment Receipt] Dispatched customer receipt for #${invoiceNum} to ${targetEmail}`);
+    } else {
+      console.warn(`[Payment Receipt] No customer email available for order ${leanOrder.orderId}, skipping customer receipt.`);
+    }
+
+    // 2. Send copy / alert to admin so warehouse can pack and ship
+    const adminMailOptions = {
+      from: `"VDS Payment Gateway" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+      subject: `[PAYMENT CONFIRMED] Tax Invoice #${invoiceNum} Paid in Full (${leanOrder.companyName || leanOrder.customerName})`,
+      html: emailHtml
+    };
+    await transporter.sendMail(adminMailOptions);
+    console.log(`✅ [Payment Receipt] Admin notification dispatched for #${invoiceNum}`);
+  } catch (err) {
+    console.error(`❌ [Payment Receipt] Failed to dispatch payment receipt email for order ${order?.orderId}:`, err.message);
+  }
 }
 
 // B2B Final Tax Invoice Checkout Endpoint (No payment required upfront)
@@ -1760,6 +2024,13 @@ app.post('/api/orders/:orderId/verify-payment', authMiddleware, async (req, res)
       await order.save();
 
       console.log(`✅ Payment confirmed for Order #${order.orderId}. Status updated to PAID.`);
+
+      // Send official payment receipt and order confirmation to customer and admin
+      sendPaymentReceiptNotification(order, {
+        paymentMethod: 'card',
+        transactionRef: sessionId || `CARD-${Date.now().toString().slice(-6)}`
+      }).catch(mailErr => console.error('Failed to send card payment receipt:', mailErr.message));
+
       return res.json({ success: true, order });
     } else {
       return res.status(400).json({ error: 'Payment could not be verified' });
@@ -1797,6 +2068,12 @@ app.post('/api/orders/:orderId/remittance', authMiddleware, async (req, res) => 
     
     await order.save();
     console.log(`✅ EFT Remittance submitted for Order #${order.orderId}. Marked as PAID.`);
+
+    // Send official payment receipt and order confirmation to customer and admin
+    sendPaymentReceiptNotification(order, {
+      paymentMethod: 'eft',
+      transactionRef: remittanceRef
+    }).catch(mailErr => console.error('Failed to send EFT payment receipt:', mailErr.message));
 
     // Send email alert to admin
     try {
