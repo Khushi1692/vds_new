@@ -23,8 +23,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 203847',
     tagline: 'Versatile electric 2-motor positioning for clinics & ultrasound suites',
     image: '/images/exam_couch.webp',
-    x: 26,
-    y: 78,
+    x: 20.0,
+    y: 76.5,
     tooltipPlacement: 'top'
   },
   {
@@ -38,8 +38,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 102934',
     tagline: '240 × 70 cm · Non-woven fluid-resistant barrier for examination couches',
     image: '/images/exam_bed_sheet_10.webp',
-    x: 23,
-    y: 64,
+    x: 27.5,
+    y: 62.5,
     tooltipPlacement: 'top'
   },
   {
@@ -51,10 +51,10 @@ const ROOM_HOTSPOTS = [
     sku: 'EX-ROLL-01',
     price: '$58.20 / Carton',
     artg: null,
-    tagline: 'Continuous couch roll dispenser protection with easy-tear perforations',
+    tagline: 'Carton of 20 continuous couch roll dispensers with easy-tear perforations',
     image: '/images/ultra_medical_roll.webp',
-    x: 66.8,
-    y: 55.3,
+    x: 72.5,
+    y: 61.2,
     tooltipPlacement: 'top'
   },
   {
@@ -68,8 +68,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 401823',
     tagline: '0.50mm Pb radiation protection for imaging staff & radiologists',
     image: '/images/x_ray_protective_apron.webp',
-    x: 20.5,
-    y: 48,
+    x: 21.0,
+    y: 48.5,
     tooltipPlacement: 'top'
   },
   {
@@ -81,10 +81,10 @@ const ROOM_HOTSPOTS = [
     sku: 'EX-GOWN-REG',
     price: '$76.00 / Box of 100',
     artg: 'ARTG 394857',
-    tagline: 'Single-use breathable non-woven patient gowns on examination table',
+    tagline: 'Single-use breathable non-woven patient gowns on clinical hanger rack',
     image: '/images/patient_examination_gown.webp',
-    x: 61.2,
-    y: 53.5,
+    x: 12.5,
+    y: 48.5,
     tooltipPlacement: 'top'
   },
   {
@@ -98,8 +98,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 530981',
     tagline: 'VDS is direct ARTG sponsor · Acoustically correct clear transmission formula',
     image: '/images/ultrasound_gel_250ML.webp',
-    x: 40.3,
-    y: 55.3,
+    x: 66.0,
+    y: 51.5,
     tooltipPlacement: 'top'
   },
   {
@@ -113,8 +113,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 530981',
     tagline: 'Bulk supply cubitainer with free 250ml dispensing bottle included',
     image: '/images/ultrasound_gel_5L.webp',
-    x: 77.0,
-    y: 53.0,
+    x: 70.0,
+    y: 50.5,
     tooltipPlacement: 'top'
   },
   {
@@ -128,8 +128,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 495823',
     tagline: 'Rapid microprocessor-controlled heating for optimal patient comfort',
     image: '/images/thermasonic_gel_warmer.webp',
-    x: 72.7,
-    y: 53.5,
+    x: 62.2,
+    y: 50.5,
     tooltipPlacement: 'top'
   },
   {
@@ -143,8 +143,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 412890',
     tagline: 'Stainless steel heated cabinet for blankets, fluids, and clinical linens',
     image: '/images/medical_warming_cabinet.webp',
-    x: 63.5,
-    y: 68.0,
+    x: 64.7,
+    y: 65.5,
     tooltipPlacement: 'top'
   },
   {
@@ -158,8 +158,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 582910',
     tagline: 'High-level disinfection in under 60 seconds with no harmful chemicals',
     image: '/images/ultrasound_probe_disinfector.webp',
-    x: 54.7,
-    y: 54.5,
+    x: 55.6,
+    y: 67.5,
     tooltipPlacement: 'top'
   },
   {
@@ -173,8 +173,8 @@ const ROOM_HOTSPOTS = [
     artg: null,
     tagline: 'Ultra-soft 2-ply clinical tissues for ultrasound gel clean-up',
     image: '/images/tisora_facial_tissue.webp',
-    x: 80.5,
-    y: 54.0,
+    x: 78.8,
+    y: 52.5,
     tooltipPlacement: 'top'
   },
   {
@@ -188,8 +188,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 318290',
     tagline: 'High-gloss A6 black & white thermal print media for ultrasound diagnostics',
     image: '/images/sony_upp_110hg_print_media.webp',
-    x: 43.5,
-    y: 74.5,
+    x: 43.0,
+    y: 74.8,
     tooltipPlacement: 'top'
   },
   {
@@ -203,8 +203,8 @@ const ROOM_HOTSPOTS = [
     artg: 'ARTG 298412',
     tagline: '100% non-magnetic polymer construction tested for up to 3.0 Tesla MRI zones',
     image: '/images/non_metal_wheelchair.webp',
-    x: 88.0,
-    y: 70.3,
+    x: 87.5,
+    y: 69.5,
     tooltipPlacement: 'top'
   },
   {
@@ -218,8 +218,8 @@ const ROOM_HOTSPOTS = [
     artg: null,
     tagline: 'Hospital & clinic facility grade 2-ply soft embossed rolls',
     image: '/images/tisora_toilet_tissue_paper.webp',
-    x: 70.8,
-    y: 71.0,
+    x: 73.5,
+    y: 69.5,
     tooltipPlacement: 'top'
   }
 ];

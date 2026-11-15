@@ -448,7 +448,7 @@ export default function PrintInvoiceModal({ order, onClose }) {
                 <div><strong>Bank:</strong> National Australia Bank (NAB)</div>
                 <div><strong>Account Name:</strong> Victoria Diagnostic Supplies Pty Ltd</div>
                 <div><strong>BSB:</strong> 083-004</div>
-                <div><strong>Account Number:</strong> 8492 1045</div>
+                <div><strong>Account Number:</strong> 78-740-2934</div>
                 <div className="eft-ref"><strong>Payment Reference:</strong> <span>{invoiceNum}</span></div>
               </div>
               <p className="remittance-note">

@@ -6,8 +6,8 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import InteractiveRoom from '../../components/InteractiveRoom/InteractiveRoom';
 import { fetchFeaturedProducts, fetchProducts } from '../../data/products';
 import './Home.css';
-import { INDS } from '../../data/industries';
 
+import { INDS } from '../../data/industries';
 const ART = {
   gel: '<path d="M44 46h32v52a6 6 0 0 1-6 6H50a6 6 0 0 1-6-6z"/><path d="M48 46l3-8h18l3 8"/><path d="M55 38l2-12h6l2 12"/><circle class="accf" cx="60" cy="18" r="3.2"/><path class="dim" d="M32 46v58M29 46h6M29 104h6"/><path class="acc" d="M48 70h24"/>',
   apron: '<path d="M40 32q20 8 40 0l6 14-4 56q-22 6-44 0l-4-56z"/><path d="M48 32q12-14 24 0"/><path class="acc" d="M37 66h46"/><path class="dim" d="M94 46v56M91 46h6M91 102h6"/>',

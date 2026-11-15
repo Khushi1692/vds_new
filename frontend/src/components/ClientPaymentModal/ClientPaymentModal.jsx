@@ -312,11 +312,11 @@ export default function ClientPaymentModal({
                 <div className="cpm-bank-row">
                   <span>Account Number:</span>
                   <div className="cpm-copyable-val">
-                    <span>8492 1045</span>
+                    <span>78-740-2934</span>
                     <button
                       type="button"
                       className="cpm-copy-icon-btn"
-                      onClick={() => copyToClipboard('84921045', 'acc')}
+                      onClick={() => copyToClipboard('78-740-2934', 'acc')}
                       title="Copy Account Number"
                     >
                       {copiedField === 'acc' ? <Check size={14} color="#4ade80" /> : <Copy size={14} />}
