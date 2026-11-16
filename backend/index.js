@@ -69,6 +69,19 @@ function getMelbourneDateTime(date = new Date()) {
   return `${dateStr}, ${timeStr.toUpperCase()}`;
 }
 
+// Get unified admin recipient list including kathrotiyakhushi@gmail.com and info@vdsupplies.com.au
+function getAdminEmailRecipients() {
+  const envAdmins = process.env.ADMIN_EMAIL
+    ? process.env.ADMIN_EMAIL.split(',').map(e => e.trim()).filter(Boolean)
+    : [];
+  const defaults = ['kathrotiyakhushi@gmail.com', 'info@vdsupplies.com.au'];
+  const unique = Array.from(new Set([...envAdmins, ...defaults]));
+  return unique.join(', ');
+}
+
+// Official sender email for all outgoing correspondence
+const SENDER_EMAIL = process.env.SMTP_FROM || 'info@vdsupplies.com.au';
+
 // Generate Order ID in Melbourne timezone: ORD-YYYYMMDD-HHMMSS-XXXX
 function generateOrderId() {
   const now = new Date();
@@ -345,7 +358,8 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
       }
 
       const customerMailOptions = {
-        from: `"Victoria Diagnostic Supplies" <${process.env.SMTP_USER}>`,
+        from: `"Victoria Diagnostic Supplies" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
         to: customerEmail,
         subject: `Order Confirmation - #${newOrder.orderId}`,
         html: generateOrderEmailHTML({
@@ -362,8 +376,9 @@ app.post('/api/webhook', express.raw({ type: '*/*' }), async (req, res) => {
       };
 
       const adminMailOptions = {
-        from: `"Victoria Diagnostic Supplies System" <${process.env.SMTP_USER}>`,
-        to: process.env.ADMIN_EMAIL,
+        from: `"Victoria Diagnostic Supplies System" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
+        to: getAdminEmailRecipients(),
         subject: `New Order Received - #${newOrder.orderId}`,
         html: generateOrderEmailHTML({
           orderId: newOrder.orderId,
@@ -751,8 +766,9 @@ app.post('/api/contact', contactLimiter, upload.single('document'), async (req, 
     }
 
     const mailOptions = {
-      from: `"VDS Website" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+      from: `"VDS Website" <${SENDER_EMAIL}>`,
+      replyTo: email || SENDER_EMAIL,
+      to: getAdminEmailRecipients(),
       subject: `New Enquiry: ${sanitizeHTML(need)} - ${sanitizeHTML(name)} (${sanitizeHTML(organization)})`,
       html: `
         <h2>New Enquiry from VDS Website</h2>
@@ -1029,7 +1045,8 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
         }
 
         const customerMailOptions = {
-          from: `"Victoria Diagnostic Supplies" <${process.env.SMTP_USER}>`,
+          from: `"Victoria Diagnostic Supplies" <${SENDER_EMAIL}>`,
+          replyTo: SENDER_EMAIL,
           to: customerEmail,
           subject: `Order Confirmation - #${newOrder.orderId}`,
           html: generateOrderEmailHTML({
@@ -1046,8 +1063,9 @@ app.post('/api/checkout/confirm', authMiddleware, async (req, res) => {
         };
 
         const adminMailOptions = {
-          from: `"Victoria Diagnostic Supplies System" <${process.env.SMTP_USER}>`,
-          to: process.env.ADMIN_EMAIL,
+          from: `"Victoria Diagnostic Supplies System" <${SENDER_EMAIL}>`,
+          replyTo: SENDER_EMAIL,
+          to: getAdminEmailRecipients(),
           subject: `New Order Received - #${newOrder.orderId}`,
           html: generateOrderEmailHTML({
             orderId: newOrder.orderId,
@@ -1623,7 +1641,8 @@ async function sendPaymentReceiptNotification(order, { paymentMethod = 'card', t
     // 1. Send receipt to the customer who made the payment
     if (targetEmail && targetEmail.includes('@') && targetEmail !== 'no-email-provided@stripe.com') {
       const customerMailOptions = {
-        from: `"Victoria Diagnostic Supplies - Accounts" <${process.env.SMTP_USER}>`,
+        from: `"Victoria Diagnostic Supplies - Accounts" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
         to: targetEmail,
         subject: `Order Placed & Payment Confirmed - Tax Invoice #${invoiceNum} [PAID] - Victoria Diagnostic Supplies`,
         html: emailHtml
@@ -1636,8 +1655,9 @@ async function sendPaymentReceiptNotification(order, { paymentMethod = 'card', t
 
     // 2. Send copy / alert to admin so warehouse can pack and ship
     const adminMailOptions = {
-      from: `"VDS Payment Gateway" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+      from: `"VDS Payment Gateway" <${SENDER_EMAIL}>`,
+      replyTo: SENDER_EMAIL,
+      to: getAdminEmailRecipients(),
       subject: `[PAYMENT CONFIRMED] Tax Invoice #${invoiceNum} Paid in Full (${leanOrder.companyName || leanOrder.customerName})`,
       html: emailHtml
     };
@@ -1734,7 +1754,8 @@ app.post('/api/checkout/invoice-request', authMiddleware, async (req, res) => {
     (async () => {
       try {
         const customerMailOptions = {
-          from: `"Victoria Diagnostic Supplies" <${process.env.SMTP_USER}>`,
+          from: `"Victoria Diagnostic Supplies" <${SENDER_EMAIL}>`,
+          replyTo: SENDER_EMAIL,
           to: user.email,
           subject: `Final Tax Invoice Request - #${newOrder.orderId}`,
           html: generateInvoiceRequestEmailHTML({
@@ -1756,8 +1777,9 @@ app.post('/api/checkout/invoice-request', authMiddleware, async (req, res) => {
         };
 
         const adminMailOptions = {
-          from: `"VDS Order System" <${process.env.SMTP_USER}>`,
-          to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+          from: `"VDS Order System" <${SENDER_EMAIL}>`,
+          replyTo: SENDER_EMAIL,
+          to: getAdminEmailRecipients(),
           subject: `[ACTION REQUIRED] New Final Invoice Request - #${newOrder.orderId} (${user.companyName || user.name})`,
           html: generateInvoiceRequestEmailHTML({
             orderId: newOrder.orderId,
@@ -1839,8 +1861,9 @@ app.post('/api/quote/request', async (req, res) => {
     orderItemsHTML += '</ul>';
 
     const adminMailOptions = {
-      from: `"VDS Website" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+      from: `"VDS Website" <${SENDER_EMAIL}>`,
+      replyTo: email || SENDER_EMAIL,
+      to: getAdminEmailRecipients(),
       subject: `New Quote Request - ${sanitizeHTML(name)}`,
       html: `
         <h2>New Quote Request (${quoteId})</h2>
@@ -2090,8 +2113,9 @@ app.post('/api/orders/:orderId/remittance', authMiddleware, async (req, res) => 
         </div>
       `;
       await transporter.sendMail({
-        from: `"VDS Remittance Alert" <${process.env.SMTP_USER}>`,
-        to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+        from: `"VDS Remittance Alert" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
+        to: getAdminEmailRecipients(),
         subject: `[EFT REMITTANCE] Payment Confirmed for #${order.orderId} (${order.companyName || user.name})`,
         html: emailContent
       });
@@ -2169,9 +2193,15 @@ async function seedAdminUser() {
       }
     }
 
-    // Also ensure the primary owner account (ADMIN_EMAIL) has admin role
+    // Also ensure primary owner accounts have admin role
+    const ownerEmails = ['kathrotiyakhushi@gmail.com', 'info@vdsupplies.com.au'];
     if (process.env.ADMIN_EMAIL) {
-      const ownerEmail = process.env.ADMIN_EMAIL.toLowerCase().trim();
+      process.env.ADMIN_EMAIL.split(',').forEach(e => {
+        const clean = e.trim().toLowerCase();
+        if (clean && !ownerEmails.includes(clean)) ownerEmails.push(clean);
+      });
+    }
+    for (const ownerEmail of ownerEmails) {
       const owner = await User.findOne({ email: ownerEmail });
       if (owner && owner.role !== 'admin') {
         owner.role = 'admin';
@@ -2528,15 +2558,17 @@ app.post('/api/admin/orders/:orderId/submit-invoice', adminMiddleware, async (re
       });
 
       const customerMailOptions = {
-        from: `"Victoria Diagnostic Supplies - Invoicing" <${process.env.SMTP_USER}>`,
+        from: `"Victoria Diagnostic Supplies - Invoicing" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
         to: order.customerEmail,
         subject: `Official Tax Invoice #${invoiceNumber} - Victoria Diagnostic Supplies`,
         html: emailHtml
       };
 
       const adminCopyOptions = {
-        from: `"VDS Dispatch System" <${process.env.SMTP_USER}>`,
-        to: process.env.ADMIN_EMAIL || 'info@vdsupplies.com.au',
+        from: `"VDS Dispatch System" <${SENDER_EMAIL}>`,
+        replyTo: SENDER_EMAIL,
+        to: getAdminEmailRecipients(),
         subject: `[ISSUED] Tax Invoice #${invoiceNumber} Sent to ${order.companyName || order.customerName}`,
         html: emailHtml
       };

@@ -61,14 +61,16 @@ async function resetToProduction() {
     console.log(`✅ Verified official admin: ${adminEmail}`);
   }
 
-  // 5. Ensure Owner Account (kathrotiyakhushi@gmail.com) has admin role
-  const ownerEmail = (process.env.ADMIN_EMAIL || 'kathrotiyakhushi@gmail.com').toLowerCase().trim();
-  let owner = await User.findOne({ email: ownerEmail });
-  if (owner) {
-    owner.role = 'admin';
-    owner.companyName = owner.companyName || 'Victoria Diagnostic Supplies';
-    await owner.save();
-    console.log(`✅ Verified admin privileges for owner account: ${ownerEmail}`);
+  // 5. Ensure Owner Accounts (kathrotiyakhushi@gmail.com & info@vdsupplies.com.au) have admin role
+  const ownerEmails = ['kathrotiyakhushi@gmail.com', 'info@vdsupplies.com.au'];
+  for (const ownerEmail of ownerEmails) {
+    let owner = await User.findOne({ email: ownerEmail });
+    if (owner) {
+      owner.role = 'admin';
+      owner.companyName = owner.companyName || 'Victoria Diagnostic Supplies';
+      await owner.save();
+      console.log(`✅ Verified admin privileges for owner account: ${ownerEmail}`);
+    }
   }
 
   // 6. Verify Catalog Products
