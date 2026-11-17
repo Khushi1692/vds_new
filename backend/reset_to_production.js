@@ -18,19 +18,9 @@ async function resetToProduction() {
   const deletedQuotes = await Quote.deleteMany({});
   console.log(`✅ Cleared all testing quote requests (${deletedQuotes.deletedCount} quotes removed).`);
 
-  // 3. Clean Users (Remove test accounts, retain real owner and official admin)
-  const testEmails = [
-    'test_1790847737395@example.com',
-    'dr.vance.test@radiologymelb.com.au',
-    'elena.rostova@healthvic.com.au',
-    'tutflix1@gmail.com',
-    'chatrolamitbhai1@gmail.com',
-    'lakhaniraj2006@gmail.com',
-    'raghavshoor41@gmail.com'
-  ];
-
-  const deletedUsers = await User.deleteMany({ email: { $in: testEmails } });
-  console.log(`✅ Removed ${deletedUsers.deletedCount} testing user accounts.`);
+  // 3. Clean Users (Remove all non-admin test accounts, retain real owner and official admin)
+  const deletedUsers = await User.deleteMany({ role: { $ne: 'admin' } });
+  console.log(`✅ Removed ${deletedUsers.deletedCount} non-admin testing user accounts.`);
 
   // 4. Ensure Official Admin Account
   const adminEmail = (process.env.ADMIN_SEED_EMAIL || 'admin@vds.com.au').toLowerCase().trim();
