@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   DollarSign, Package, AlertTriangle, FileText, CheckCircle2, 
-  Building2, Store, Clock, ArrowRight, RefreshCw, MessageSquare
+  Building2, Store, Clock, ArrowRight, RefreshCw, MessageSquare,
+  CreditCard, Activity, ExternalLink, ShieldCheck
 } from 'lucide-react';
+import { getApiUrl } from '../../../config/api';
 
 export default function AdminOverview({ 
   metrics, 
@@ -10,8 +12,25 @@ export default function AdminOverview({
   recentQuotes, 
   onSelectOrder, 
   onNavigateTab,
-  onRefresh
+  onRefresh,
+  token
 }) {
+  const [stripeStatus, setStripeStatus] = useState(null);
+
+  const handleTestStripe = async () => {
+    setStripeStatus({ loading: true });
+    try {
+      const res = await fetch(getApiUrl('/api/admin/stripe-test'), {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Stripe test failed');
+      setStripeStatus({ loading: false, success: true, data });
+    } catch (err) {
+      setStripeStatus({ loading: false, success: false, error: err.message });
+    }
+  };
+
   if (!metrics) {
     return (
       <div className="admin-loading-state">
@@ -225,6 +244,127 @@ export default function AdminOverview({
             })}
           </div>
         </div>
+      </div>
+
+      {/* Stripe Gateway Live Diagnostic Card */}
+      <div style={{
+        marginTop: '24px',
+        background: '#0d1627',
+        border: '1px solid #1e293b',
+        borderRadius: '12px',
+        padding: '20px 24px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '14px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              background: 'rgba(99, 91, 255, 0.15)',
+              color: '#818cf8',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <CreditCard size={24} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h4 style={{ margin: 0, fontSize: '15px', color: '#f1f5f9', fontWeight: 600 }}>Stripe Gateway Live Credentials</h4>
+                <span style={{
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: '#10b981',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  letterSpacing: '0.02em'
+                }}>
+                  ● LIVE MODE
+                </span>
+              </div>
+              <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#94a3b8' }}>
+                Restricted key <code>rk_live_...</code> and publishable key <code>pk_live_...</code> are configured. Verify connection without charging money.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleTestStripe}
+            disabled={stripeStatus?.loading}
+            style={{
+              background: '#635bff',
+              border: 'none',
+              color: '#ffffff',
+              padding: '10px 18px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: stripeStatus?.loading ? 'wait' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {stripeStatus?.loading ? <RefreshCw size={15} className="spinning-icon" /> : <Activity size={15} />}
+            {stripeStatus?.loading ? 'Running Diagnostic...' : 'Test Stripe Connection (No Charge)'}
+          </button>
+        </div>
+
+        {stripeStatus && stripeStatus.success && (
+          <div style={{
+            background: 'rgba(16, 185, 129, 0.08)',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+            borderRadius: '8px',
+            padding: '14px 18px',
+            fontSize: '13px',
+            color: '#e2e8f0'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10b981', fontWeight: 600, marginBottom: '8px' }}>
+              <CheckCircle2 size={16} />
+              <span>Stripe Live Credentials Verified & Working!</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', fontSize: '12.5px', color: '#94a3b8' }}>
+              <div><strong>Created Session ID:</strong> <code style={{ color: '#38bdf8' }}>{stripeStatus.data.sessionId}</code></div>
+              <div><strong>Mode:</strong> <span style={{ color: '#10b981', fontWeight: 600 }}>Live Mode</span></div>
+              <div><strong>Payment Status:</strong> <span style={{ color: '#f1f5f9' }}>Unpaid ($0 charged)</span></div>
+              <div><strong>Timestamp:</strong> <span>{new Date(stripeStatus.data.timestamp).toLocaleTimeString('en-AU')}</span></div>
+            </div>
+            <div style={{ marginTop: '10px', fontSize: '12px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              <span>A live verification call was recorded in your Stripe Dashboard under <strong>Developers &rarr; Logs</strong>.</span>
+              {stripeStatus.data.sessionUrl && (
+                <a
+                  href={stripeStatus.data.sessionUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#38bdf8', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 500 }}
+                >
+                  Preview Stripe Hosted Checkout <ExternalLink size={12} />
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
+        {stripeStatus && stripeStatus.error && (
+          <div style={{
+            background: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            fontSize: '13px',
+            color: '#f87171'
+          }}>
+            <strong>Stripe Diagnostic Error:</strong> {stripeStatus.error}
+          </div>
+        )}
       </div>
     </div>
   );

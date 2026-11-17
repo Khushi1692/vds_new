@@ -2820,6 +2820,54 @@ app.put('/api/admin/products/:id', adminMiddleware, async (req, res) => {
   }
 });
 
+// Admin Test Stripe Live Connection (Safely tests authentication & session creation without paying)
+app.get('/api/admin/stripe-test', adminMiddleware, async (req, res) => {
+  try {
+    const isLive = process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY.includes('_live_');
+    const balance = await stripe.balance.retrieve();
+    const origin = req.headers.origin || process.env.CLIENT_URL || 'http://localhost:5173';
+
+    const testSession = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'aud',
+          product_data: {
+            name: 'VDS Live Stripe Diagnostic Check (No Charge)',
+            description: 'Automated verification to test live keys and log to Stripe Dashboard'
+          },
+          unit_amount: 100 // $1.00 AUD (test open session, not charged)
+        },
+        quantity: 1
+      }],
+      mode: 'payment',
+      success_url: `${origin}/admin?stripe_test=success`,
+      cancel_url: `${origin}/admin?stripe_test=cancel`,
+      metadata: {
+        test_verification: 'true',
+        environment: isLive ? 'live' : 'test',
+        triggered_by: req.adminUser ? req.adminUser.email : 'admin',
+        timestamp: new Date().toISOString()
+      }
+    });
+
+    console.log(`[Stripe Test] Diagnostic session created: ${testSession.id} (Livemode: ${testSession.livemode})`);
+
+    res.json({
+      success: true,
+      livemode: testSession.livemode,
+      sessionId: testSession.id,
+      sessionUrl: testSession.url,
+      paymentStatus: testSession.payment_status,
+      balance: balance.available,
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('Stripe test diagnostic error:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('Connected to MongoDB');

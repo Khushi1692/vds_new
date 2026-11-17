@@ -291,6 +291,7 @@ export default function AdminPortal() {
             metrics={overviewData?.metrics}
             recentOrders={orders}
             recentQuotes={quotes}
+            token={adminToken}
             onSelectOrder={(order) => setSelectedOrderForManage(order)}
             onNavigateTab={navigateTabWithFilter}
             onRefresh={() => loadPortalData(adminToken)}
